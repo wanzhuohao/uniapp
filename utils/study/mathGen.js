@@ -16,13 +16,17 @@ export function generateMathQuestion(level) {
   let a, b, answer, expression
 
   if (isAdd) {
-    answer = Math.floor(Math.random() * (config.max + 1))
-    a = Math.floor(Math.random() * (answer + 1))
-    b = answer - a
+    // 确保至少 1+1，避免 0+0
+    a = Math.floor(Math.random() * config.max) + 1
+    b = Math.floor(Math.random() * (config.max - a + 1))
+    if (b === 0) b = 1
+    if (a + b > config.max) b = config.max - a
+    answer = a + b
     expression = `${a} + ${b}`
   } else {
-    a = Math.floor(Math.random() * (config.max + 1))
-    b = Math.floor(Math.random() * (a + 1))
+    // 确保至少 2-1，避免 0-0
+    a = Math.floor(Math.random() * (config.max - 1)) + 2
+    b = Math.floor(Math.random() * a) + 1
     answer = a - b
     expression = `${a} - ${b}`
   }

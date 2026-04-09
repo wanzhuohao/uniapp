@@ -80,17 +80,32 @@ function handleClick(opt) {
 
 <style scoped>
 .question-card {
-  padding: 32rpx;
+  padding: 40rpx 32rpx;
 }
 .question-area {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 32rpx;
+}
+.char-display {
+  font-size: 120rpx;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.3;
+  color: #333;
+  min-height: 140rpx;
+}
+.pinyin-display {
+  font-size: 72rpx;
+  font-family: serif;
+  text-align: center;
+  color: #E65100;
 }
 .speak-btn {
-  margin-top: 16rpx;
-  margin-bottom: 24rpx;
+  margin-top: 20rpx;
+  margin-bottom: 8rpx;
   font-size: 44rpx;
   width: 72rpx;
   height: 72rpx;
@@ -105,16 +120,43 @@ function handleClick(opt) {
   transform: scale(0.9);
 }
 .question-text {
-  font-size: 56rpx;
+  font-size: 64rpx;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 48rpx;
-  color: var(--color-text);
+  color: #333;
 }
 .options-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24rpx;
   padding: 0 24rpx;
+}
+.option-btn {
+  background: #fff;
+  border: 3rpx solid #BDBDBD;
+  border-radius: 20rpx;
+  padding: 32rpx 16rpx;
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: 500;
+  color: #333;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+.option-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.1);
+}
+.option-btn.correct {
+  border-color: #66BB6A;
+  background: #E8F5E9;
+  color: #2E7D32;
+  box-shadow: 0 0 0 4rpx rgba(102,187,106,0.3);
+}
+.option-btn.wrong {
+  border-color: #EF5350;
+  background: #FFEBEE;
+  color: #C62828;
+  box-shadow: 0 0 0 4rpx rgba(239,83,80,0.3);
 }
 </style>

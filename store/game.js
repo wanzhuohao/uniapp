@@ -2,12 +2,6 @@
 import { defineStore } from 'pinia'
 import { loadState, saveState } from '../utils/common/storage.js'
 
-const THEME_THRESHOLDS = [
-  { stars: 50, id: 'theme_blue', name: '海洋蓝' },
-  { stars: 100, id: 'theme_pink', name: '樱花粉' },
-  { stars: 200, id: 'theme_gold', name: '金色王冠' },
-]
-
 export const useGameStore = defineStore('game', {
   state: () => {
     const saved = loadState()
@@ -15,25 +9,13 @@ export const useGameStore = defineStore('game', {
       totalStars: saved?.totalStars ?? 0,
       mathLevel: saved?.mathLevel ?? 1,
       mathHistory: saved?.mathHistory ?? [],
-      unlockedThemes: saved?.unlockedThemes ?? [],
-      currentUnit: saved?.currentUnit ?? '1-1', // 默认一年级上册第1单元
+      currentUnit: saved?.currentUnit ?? '1-1',
     }
-  },
-
-  getters: {
-    nextThreshold(state) {
-      return THEME_THRESHOLDS.find(t => !state.unlockedThemes.includes(t.id)) || null
-    },
   },
 
   actions: {
     addStars(count) {
       this.totalStars += count
-      for (const t of THEME_THRESHOLDS) {
-        if (this.totalStars >= t.stars && !this.unlockedThemes.includes(t.id)) {
-          this.unlockedThemes.push(t.id)
-        }
-      }
       this._persist()
     },
 
@@ -65,7 +47,6 @@ export const useGameStore = defineStore('game', {
       this.totalStars = 0
       this.mathLevel = 1
       this.mathHistory = []
-      this.unlockedThemes = []
       this.currentUnit = '1-1'
       this._persist()
     },
@@ -75,7 +56,6 @@ export const useGameStore = defineStore('game', {
         totalStars: this.totalStars,
         mathLevel: this.mathLevel,
         mathHistory: this.mathHistory,
-        unlockedThemes: this.unlockedThemes,
         currentUnit: this.currentUnit,
       })
     },

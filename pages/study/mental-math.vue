@@ -306,27 +306,32 @@ onUnmounted(() => {
   margin-bottom: 48rpx;
 }
 .level-opt {
-  padding: 16rpx 32rpx;
-  border-radius: 24rpx;
+  padding: 20rpx 36rpx;
+  border-radius: 28rpx;
   font-size: 28rpx;
-  background: #eee;
-  color: #aaa;
+  background: #fff;
+  color: #666;
+  border: 3rpx solid #BDBDBD;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
 }
 .level-opt:active { transform: scale(0.95); }
 .level-opt.active {
   background: #9C27B0;
   color: #fff;
   font-weight: bold;
+  border-color: #9C27B0;
+  box-shadow: 0 4rpx 16rpx rgba(156,39,176,0.3);
 }
 .start-btn {
-  padding: 24rpx 96rpx;
-  background: #9C27B0;
+  padding: 28rpx 120rpx;
+  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
   color: #fff;
-  border-radius: var(--radius-btn);
+  border-radius: 40rpx;
   font-size: 36rpx;
   font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(156,39,176,0.3);
 }
-.start-btn:active { transform: scale(0.97); }
+.start-btn:active { transform: scale(0.97); opacity: 0.9; }
 
 /* 答题列表 */
 .question-list {
@@ -338,11 +343,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 12rpx;
-  padding: 16rpx 20rpx;
-  margin-bottom: 8rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 12rpx;
   background: #fff;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
   border-left: 6rpx solid transparent;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
 }
 .q-row.current {
   border-left-color: #9C27B0;

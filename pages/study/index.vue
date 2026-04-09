@@ -23,10 +23,6 @@
       >第{{ u }}单元</view>
     </view>
 
-    <view v-if="store.nextThreshold" class="unlock-hint">
-      再获得 {{ store.nextThreshold.stars - store.totalStars }} 颗星解锁「{{ store.nextThreshold.name }}」
-    </view>
-
     <view class="modules">
       <view class="module-card pinyin-card" @click="goTo('/pages/study/pinyin')">
         <text class="module-icon">📖</text>
