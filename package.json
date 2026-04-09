@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "element-plus": "^2.13.6",
     "hanzi-writer": "^3.7.3",
-    "pinia": "^3.0.4"
+    "html2canvas": "^1.4.1",
+    "pinia": "^3.0.4",
+    "vuedraggable": "^4.1.0"
   }
 }
