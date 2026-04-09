@@ -4,7 +4,17 @@
 
     <!-- 题型筛选 -->
     <view v-if="!started" class="filter-area">
-      <text class="filter-title">选择题型</text>
+      <!-- 单元选择 -->
+      <text class="filter-title">选择单元</text>
+      <view class="unit-tags">
+        <view v-for="u in 8" :key="u"
+          :class="['unit-tag', store.currentUnit === '2-' + u && 'active']"
+          @click="store.setUnit('2-' + u)"
+        >第{{ u }}单元</view>
+      </view>
+
+      <!-- 题型选择 -->
+      <text class="filter-title" style="margin-top: 32rpx;">选择题型</text>
       <view class="filter-tags">
         <view :class="['filter-tag', filterType === '' && 'active']" @click="filterType = ''">全部混合</view>
         <view :class="['filter-tag', filterType === 'char2pinyin' && 'active']" @click="filterType = 'char2pinyin'">看汉字选拼音</view>
@@ -159,7 +169,29 @@ onShow(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80rpx 48rpx;
+  padding: 48rpx 32rpx;
+}
+.unit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+.unit-tag {
+  padding: 14rpx 28rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  background: #fff;
+  color: #666;
+  border: 3rpx solid #E0E0E0;
+}
+.unit-tag:active { transform: scale(0.95); }
+.unit-tag.active {
+  background: #FFA726;
+  color: #fff;
+  border-color: #FFA726;
+  font-weight: bold;
 }
 .filter-title {
   font-size: 36rpx;

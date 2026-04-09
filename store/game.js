@@ -9,7 +9,7 @@ export const useGameStore = defineStore('game', {
       totalStars: saved?.totalStars ?? 0,
       mathLevel: saved?.mathLevel ?? 1,
       mathHistory: saved?.mathHistory ?? [],
-      currentUnit: saved?.currentUnit ?? '1-1',
+      currentUnit: saved?.currentUnit ?? '2-1',
     }
   },
 
@@ -47,7 +47,7 @@ export const useGameStore = defineStore('game', {
       this.totalStars = 0
       this.mathLevel = 1
       this.mathHistory = []
-      this.currentUnit = '1-1'
+      this.currentUnit = '2-1'
       this._persist()
     },
 
