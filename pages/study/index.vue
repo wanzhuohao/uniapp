@@ -29,15 +29,10 @@
         <text class="module-name">拼音</text>
         <text class="module-desc">看字选拼音</text>
       </view>
-      <view class="module-card stroke-card" @click="goTo('/pages/study/stroke')">
+      <view class="module-card hanzi-card" @click="goTo('/pages/study/hanzi')">
         <text class="module-icon">✏️</text>
-        <text class="module-name">笔顺</text>
-        <text class="module-desc">选对笔顺</text>
-      </view>
-      <view class="module-card math-card" @click="goTo('/pages/study/math')">
-        <text class="module-icon">🔢</text>
-        <text class="module-name">算术</text>
-        <text class="module-desc">加减法练习</text>
+        <text class="module-name">汉字</text>
+        <text class="module-desc">笔顺、部首、结构、笔画</text>
       </view>
       <view class="module-card mental-card" @click="goTo('/pages/study/mental-math')">
         <text class="module-icon">⏱️</text>
@@ -160,7 +155,7 @@ function goTo(url) {
 }
 .module-card:active { transform: scale(0.97); }
 .pinyin-card { border-left-color: var(--color-pinyin); }
-.stroke-card { border-left-color: var(--color-stroke); }
+.hanzi-card { border-left-color: #42A5F5; }
 .math-card { border-left-color: var(--color-math); }
 .mental-card { border-left-color: #9C27B0; }
 .wrong-book-card { border-left-color: #FF5722; }

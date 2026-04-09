@@ -11,6 +11,7 @@
 
     { "path": "pages/study/index", "style": { "navigationBarTitleText": "学习小天地", "navigationStyle": "custom" } },
     { "path": "pages/study/pinyin", "style": { "navigationBarTitleText": "拼音练习", "navigationStyle": "custom" } },
+    { "path": "pages/study/hanzi", "style": { "navigationBarTitleText": "汉字练习", "navigationStyle": "custom" } },
     { "path": "pages/study/stroke", "style": { "navigationBarTitleText": "笔顺练习", "navigationStyle": "custom" } },
     { "path": "pages/study/math", "style": { "navigationBarTitleText": "算术练习", "navigationStyle": "custom" } },
     { "path": "pages/study/mental-math", "style": { "navigationBarTitleText": "口算计时", "navigationStyle": "custom" } },
