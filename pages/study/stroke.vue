@@ -9,28 +9,50 @@
 
     <!-- 答题模式 -->
     <view v-if="!showAnim && currentChar" class="quiz-area">
-      <!-- HanziWriter 汉字轮廓展示 -->
+      <!-- HanziWriter 汉字轮廓 -->
       <view class="char-outline-wrap">
         <view :id="outlineId" class="char-outline-target"></view>
       </view>
       <view class="speak-btn" @click="speakChar">🔊</view>
-      <text class="hint-text">哪个是正确的笔顺？</text>
+      <text class="hint-text">按正确笔顺依次点击笔画</text>
 
-      <view class="stroke-options">
-        <view
-          v-for="(opt, i) in currentOptions"
-          :key="i"
-          class="stroke-option"
-          :class="optionClass(i)"
-          @click="handleSelect(i)"
-        >
-          <view class="stroke-seq">
-            <view v-for="(s, j) in opt.strokes" :key="j" class="stroke-item">
-              <text class="stroke-num">{{ j + 1 }}</text>
-              <text>{{ s }}</text>
-            </view>
-          </view>
+      <!-- 已选序列 -->
+      <view class="selected-area">
+        <view v-for="(s, i) in selectedStrokes" :key="i" class="selected-item">
+          <text class="selected-num">{{ i + 1 }}</text>
+          <text class="selected-name">{{ s }}</text>
         </view>
+        <view v-if="selectedStrokes.length === 0" class="selected-placeholder">
+          <text>点击下方笔画按钮</text>
+        </view>
+      </view>
+
+      <!-- 反馈提示 -->
+      <view v-if="feedback" class="feedback" :class="feedbackType">
+        <text>{{ feedback }}</text>
+      </view>
+
+      <!-- 笔画按钮池 -->
+      <view class="stroke-pool">
+        <view
+          v-for="(s, i) in shuffledStrokes"
+          :key="'pool-' + i"
+          class="stroke-btn"
+          :class="{ used: usedIndexes.includes(i), wrong: wrongBtn === i }"
+          @click="pickStroke(i)"
+        >
+          {{ s }}
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="action-row">
+        <view class="clear-btn" @click="clearSelection">清空重选</view>
+        <view
+          v-if="selectedStrokes.length === correctStrokes.length"
+          class="submit-btn"
+          @click="checkAnswer"
+        >确认提交</view>
       </view>
     </view>
 
@@ -49,7 +71,7 @@ import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import HanziWriter from 'hanzi-writer'
 import { useGameStore } from '../../store/game.js'
-import { sampleWithout, shuffle, generateStrokeDistractors } from '../../utils/study/questionHelper.js'
+import { sampleWithout, shuffle } from '../../utils/study/questionHelper.js'
 import { speak } from '../../utils/common/speech.js'
 import StarBar from '../../components/study/StarBar.vue'
 import StrokeAnim from '../../components/study/StrokeAnim.vue'
@@ -69,7 +91,7 @@ const isCloudData = ref(false)
 const outlineId = ref('outline-' + Date.now())
 let outlineWriter = null
 
-// 初始化题干区域的 HanziWriter 轮廓展示
+// HanziWriter 轮廓
 async function initOutline() {
   await nextTick()
   const el = document.getElementById(outlineId.value)
@@ -90,69 +112,120 @@ async function initOutline() {
   }
 }
 
+const showAnim = ref(false)
+const roundFinished = ref(false)
+const roundChars = ref([])
+const totalQuestions = computed(() => roundChars.value.length)
+const currentChar = computed(() => roundChars.value[currentIndex.value] || null)
+
+// 正确笔顺
+const correctStrokes = computed(() => currentChar.value?.strokes || [])
+
+// 打乱后的笔画按钮池
+const shuffledStrokes = ref([])
+
+// 用户已选笔画序列
+const selectedStrokes = ref([])
+// 已选按钮的索引
+const usedIndexes = ref([])
+// 反馈
+const feedback = ref('')
+const feedbackType = ref('')
+// 标记错误按钮
+const wrongBtn = ref(-1)
+
+// 当题目变化时，重新打乱按钮池
+watch(currentChar, () => {
+  resetSelection()
+  if (currentChar.value) {
+    shuffledStrokes.value = shuffle([...currentChar.value.strokes])
+  }
+}, { immediate: true })
+
 watch(currentIndex, () => {
   if (!showAnim.value) initOutline()
 })
 
-const answered = ref(false)
-const selectedIndex = ref(-1)
-const showAnim = ref(false)
-const roundFinished = ref(false)
-
-const roundChars = ref([])
-const totalQuestions = computed(() => roundChars.value.length)
-
-const currentChar = computed(() => roundChars.value[currentIndex.value] || null)
-
-// 为当前字生成 4 个选项
-const currentOptions = computed(() => {
-  if (!currentChar.value) return []
-  const correct = currentChar.value.strokes
-  const distractors = generateStrokeDistractors(correct, 3)
-  const options = [
-    { strokes: correct, isCorrect: true },
-    ...distractors.map(d => ({ strokes: d, isCorrect: false })),
-  ]
-  return shuffle(options)
-})
-
-function optionClass(i) {
-  if (!answered.value) return ''
-  if (currentOptions.value[i]?.isCorrect) return 'correct'
-  if (i === selectedIndex.value && !currentOptions.value[i]?.isCorrect) return 'wrong'
-  return ''
+function resetSelection() {
+  selectedStrokes.value = []
+  usedIndexes.value = []
+  feedback.value = ''
+  feedbackType.value = ''
+  wrongBtn.value = -1
 }
 
-function handleSelect(i) {
-  if (answered.value) return
-  answered.value = true
-  selectedIndex.value = i
+function clearSelection() {
+  resetSelection()
+}
 
-  const isCorrect = currentOptions.value[i].isCorrect
-  if (isCorrect) {
-    correctCount.value++
-  } else {
-    // 答错：如果是云端数据且有 _id，异步记录错题
-    const item = currentChar.value
-    if (isCloudData.value && item?._id) {
-      recordWrong(getUsername(), {
-        type: 'stroke',
-        char: item.char,
-        unit: item.unit,
-        question_id: item._id
-      })
-    }
+// 点击一个笔画按钮
+function pickStroke(poolIndex) {
+  if (usedIndexes.value.includes(poolIndex)) return
+  if (selectedStrokes.value.length >= correctStrokes.value.length) return
+
+  const strokeName = shuffledStrokes.value[poolIndex]
+  const nextCorrectIndex = selectedStrokes.value.length
+  const expectedStroke = correctStrokes.value[nextCorrectIndex]
+
+  // 实时校验：点错了立即提示
+  if (strokeName !== expectedStroke) {
+    wrongBtn.value = poolIndex
+    feedback.value = `第 ${nextCorrectIndex + 1} 笔应该是「${expectedStroke}」`
+    feedbackType.value = 'wrong'
+    setTimeout(() => { wrongBtn.value = -1 }, 600)
+    return
   }
 
-  const delay = isCorrect ? 800 : 1500
+  // 点对了
+  selectedStrokes.value.push(strokeName)
+  usedIndexes.value.push(poolIndex)
+  feedback.value = ''
+  feedbackType.value = ''
+
+  // 全部选完自动检查
+  if (selectedStrokes.value.length === correctStrokes.value.length) {
+    handleCorrect()
+  }
+}
+
+function checkAnswer() {
+  // 比较顺序
+  const isCorrect = selectedStrokes.value.every((s, i) => s === correctStrokes.value[i])
+  if (isCorrect) {
+    handleCorrect()
+  } else {
+    handleWrong()
+  }
+}
+
+function handleCorrect() {
+  correctCount.value++
+  feedback.value = '正确！'
+  feedbackType.value = 'correct'
 
   setTimeout(() => {
-    if (isCorrect) {
-      showAnim.value = true
-    } else {
-      nextQuestion()
-    }
-  }, delay)
+    showAnim.value = true
+  }, 500)
+}
+
+function handleWrong() {
+  feedback.value = '笔顺不对，再试一次'
+  feedbackType.value = 'wrong'
+
+  // 记录错题
+  const item = currentChar.value
+  if (isCloudData.value && item?._id) {
+    recordWrong(getUsername(), {
+      type: 'stroke',
+      char: item.char,
+      unit: item.unit,
+      question_id: item._id
+    })
+  }
+
+  setTimeout(() => {
+    resetSelection()
+  }, 1200)
 }
 
 function speakChar() {
@@ -163,18 +236,24 @@ function goBack() {
   uni.navigateBack()
 }
 
-function nextQuestion() {
-  answered.value = false
-  selectedIndex.value = -1
+function onAnimComplete() {
+  showAnim.value = false
+  feedback.value = ''
+  feedbackType.value = ''
 
   if (currentIndex.value < totalQuestions.value - 1) {
     currentIndex.value++
+    resetSelection()
+    if (currentChar.value) {
+      shuffledStrokes.value = shuffle([...currentChar.value.strokes])
+    }
+    initOutline()
   } else {
+    // 轮次结束
     const earned = correctCount.value + (correctCount.value === totalQuestions.value ? 3 : 0)
     const oldTotal = store.totalStars
     store.addStars(earned)
     roundFinished.value = true
-    // 异步记录练习日志，不阻塞跳转
     recordPractice(getUsername(), {
       type: 'stroke',
       totalCount: totalQuestions.value,
@@ -184,12 +263,6 @@ function nextQuestion() {
       url: `/pages/study/result?module=stroke&correct=${correctCount.value}&total=${totalQuestions.value}&earned=${earned}&oldTotal=${oldTotal}`
     })
   }
-}
-
-function onAnimComplete() {
-  showAnim.value = false
-  nextQuestion()
-  initOutline()
 }
 
 function buildRoundChars(dataSource) {
@@ -215,6 +288,9 @@ async function initRound() {
 
 onMounted(async () => {
   await initRound()
+  if (currentChar.value) {
+    shuffledStrokes.value = shuffle([...currentChar.value.strokes])
+  }
   initOutline()
 })
 
@@ -223,11 +299,13 @@ onShow(async () => {
     await initRound()
     currentIndex.value = 0
     correctCount.value = 0
-    answered.value = false
-    selectedIndex.value = -1
     showAnim.value = false
     roundFinished.value = false
     roundKey.value++
+    resetSelection()
+    if (currentChar.value) {
+      shuffledStrokes.value = shuffle([...currentChar.value.strokes])
+    }
   }
 })
 </script>
@@ -245,21 +323,28 @@ onShow(async () => {
   align-items: center;
   justify-content: center;
   padding: 120rpx 48rpx;
-  color: var(--color-text-light);
+  color: #888;
   font-size: 32rpx;
 }
 .back-btn {
   margin-top: 32rpx;
   padding: 20rpx 48rpx;
-  background: var(--color-primary);
+  background: #66BB6A;
   color: #fff;
-  border-radius: var(--radius-btn);
+  border-radius: 20rpx;
   font-size: 28rpx;
 }
 .char-outline-wrap {
   display: flex;
   justify-content: center;
   margin-bottom: 16rpx;
+}
+.char-outline-target {
+  width: 150px;
+  height: 150px;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
 }
 .speak-btn {
   margin: 12rpx auto;
@@ -273,57 +358,136 @@ onShow(async () => {
   border-radius: 50%;
 }
 .speak-btn:active { transform: scale(0.9); }
-.char-outline-target {
-  width: 150px;
-  height: 150px;
-  background: #fff;
-  border-radius: 12rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
-}
 .hint-text {
   display: block;
   text-align: center;
-  color: var(--color-text-light);
+  color: #888;
   font-size: 28rpx;
-  margin-bottom: 32rpx;
+  margin-bottom: 24rpx;
 }
-.stroke-options {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-  padding: 0 16rpx;
-}
-.stroke-option {
-  background: #fff;
-  border: 4rpx solid #E0E0E0;
-  border-radius: var(--radius-btn);
-  padding: 24rpx;
-  transition: all 0.2s;
-}
-.stroke-option:active { transform: scale(0.97); }
-.stroke-option.correct { border-color: var(--color-primary); background: #E8F5E9; }
-.stroke-option.wrong { border-color: var(--color-danger); background: #FFEBEE; }
-.stroke-seq {
+
+/* 已选序列 */
+.selected-area {
   display: flex;
   flex-wrap: wrap;
   gap: 12rpx;
-  align-items: center;
+  justify-content: center;
+  min-height: 80rpx;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  border: 3rpx dashed #BDBDBD;
+  margin-bottom: 24rpx;
 }
-.stroke-item {
+.selected-item {
   display: flex;
   align-items: center;
   gap: 6rpx;
-  font-size: 28rpx;
+  background: #E3F2FD;
+  padding: 8rpx 20rpx;
+  border-radius: 12rpx;
 }
-.stroke-num {
+.selected-num {
   width: 32rpx;
   height: 32rpx;
   border-radius: 50%;
-  background: var(--color-stroke);
+  background: #42A5F5;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20rpx;
 }
+.selected-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+.selected-placeholder {
+  color: #ccc;
+  font-size: 26rpx;
+}
+
+/* 反馈 */
+.feedback {
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  padding: 12rpx;
+  margin-bottom: 16rpx;
+  border-radius: 12rpx;
+}
+.feedback.correct {
+  color: #2E7D32;
+  background: #E8F5E9;
+}
+.feedback.wrong {
+  color: #C62828;
+  background: #FFEBEE;
+}
+
+/* 笔画按钮池 */
+.stroke-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+.stroke-btn {
+  padding: 20rpx 36rpx;
+  background: #fff;
+  border: 3rpx solid #BDBDBD;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+  transition: all 0.2s;
+}
+.stroke-btn:active {
+  transform: scale(0.95);
+}
+.stroke-btn.used {
+  background: #E0E0E0;
+  color: #aaa;
+  border-color: #E0E0E0;
+  box-shadow: none;
+}
+.stroke-btn.wrong {
+  background: #FFEBEE;
+  border-color: #EF5350;
+  color: #C62828;
+  animation: shake 0.3s;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8rpx); }
+  75% { transform: translateX(8rpx); }
+}
+
+/* 操作按钮 */
+.action-row {
+  display: flex;
+  gap: 24rpx;
+  justify-content: center;
+}
+.clear-btn {
+  padding: 20rpx 48rpx;
+  background: #fff;
+  border: 3rpx solid #BDBDBD;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+.clear-btn:active { transform: scale(0.95); }
+.submit-btn {
+  padding: 20rpx 48rpx;
+  background: #66BB6A;
+  color: #fff;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.submit-btn:active { transform: scale(0.95); }
 </style>
