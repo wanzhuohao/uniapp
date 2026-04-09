@@ -45,8 +45,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick, onMounted } from 'vue'
-import { onShow } from '@dcloudio/uni-app'
+import { ref, computed, watch, nextTick } from 'vue'
+import { onShow, onMounted } from '@dcloudio/uni-app'
 import HanziWriter from 'hanzi-writer'
 import { useGameStore } from '../../store/game.js'
 import { sampleWithout, shuffle, generateStrokeDistractors } from '../../utils/study/questionHelper.js'
@@ -54,11 +54,17 @@ import { speak } from '../../utils/common/speech.js'
 import StarBar from '../../components/study/StarBar.vue'
 import StrokeAnim from '../../components/study/StrokeAnim.vue'
 import strokesData from '../../static/data/strokes.json'
+import { getQuestions } from '../../utils/common/cloudDb.js'
+import { recordWrong } from '../../utils/study/wrongBook.js'
+import { recordPractice } from '../../utils/study/practiceLog.js'
+import { useAuth } from '../../composables/common/useAuth.js'
 
 const store = useGameStore()
+const { getUsername } = useAuth()
 const currentIndex = ref(0)
 const correctCount = ref(0)
 const roundKey = ref(0)
+const isCloudData = ref(false)
 
 const outlineId = ref('outline-' + Date.now())
 let outlineWriter = null
@@ -93,7 +99,7 @@ const selectedIndex = ref(-1)
 const showAnim = ref(false)
 const roundFinished = ref(false)
 
-const roundChars = ref(sampleWithout(strokesData.filter(d => d.unit === store.currentUnit), 10))
+const roundChars = ref([])
 const totalQuestions = computed(() => roundChars.value.length)
 
 const currentChar = computed(() => roundChars.value[currentIndex.value] || null)
@@ -123,7 +129,20 @@ function handleSelect(i) {
   selectedIndex.value = i
 
   const isCorrect = currentOptions.value[i].isCorrect
-  if (isCorrect) correctCount.value++
+  if (isCorrect) {
+    correctCount.value++
+  } else {
+    // 答错：如果是云端数据且有 _id，异步记录错题
+    const item = currentChar.value
+    if (isCloudData.value && item?._id) {
+      recordWrong(getUsername(), {
+        type: 'stroke',
+        char: item.char,
+        unit: item.unit,
+        question_id: item._id
+      })
+    }
+  }
 
   const delay = isCorrect ? 800 : 1500
 
@@ -144,16 +163,6 @@ function goBack() {
   uni.navigateBack()
 }
 
-onMounted(() => {
-  initOutline()
-})
-
-function onAnimComplete() {
-  showAnim.value = false
-  nextQuestion()
-  initOutline()
-}
-
 function nextQuestion() {
   answered.value = false
   selectedIndex.value = -1
@@ -165,15 +174,53 @@ function nextQuestion() {
     const oldTotal = store.totalStars
     store.addStars(earned)
     roundFinished.value = true
+    // 异步记录练习日志，不阻塞跳转
+    recordPractice(getUsername(), {
+      type: 'stroke',
+      totalCount: totalQuestions.value,
+      correctCount: correctCount.value
+    })
     uni.navigateTo({
       url: `/pages/study/result?module=stroke&correct=${correctCount.value}&total=${totalQuestions.value}&earned=${earned}&oldTotal=${oldTotal}`
     })
   }
 }
 
-onShow(() => {
+function onAnimComplete() {
+  showAnim.value = false
+  nextQuestion()
+  initOutline()
+}
+
+function buildRoundChars(dataSource) {
+  const source = dataSource || strokesData.filter(d => d.unit === store.currentUnit)
+  return sampleWithout(source, 10)
+}
+
+async function initRound() {
+  let cloudList = null
+  try {
+    cloudList = await getQuestions('stroke', store.currentUnit)
+  } catch (e) {
+    cloudList = null
+  }
+  if (Array.isArray(cloudList) && cloudList.length > 0) {
+    isCloudData.value = true
+    roundChars.value = buildRoundChars(cloudList)
+  } else {
+    isCloudData.value = false
+    roundChars.value = buildRoundChars(null)
+  }
+}
+
+onMounted(async () => {
+  await initRound()
+  initOutline()
+})
+
+onShow(async () => {
   if (roundFinished.value) {
-    roundChars.value = sampleWithout(strokesData.filter(d => d.unit === store.currentUnit), 10)
+    await initRound()
     currentIndex.value = 0
     correctCount.value = 0
     answered.value = false
