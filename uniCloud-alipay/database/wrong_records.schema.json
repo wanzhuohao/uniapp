@@ -1,0 +1,23 @@
+{
+  "bsonType": "object",
+  "required": ["username", "question_id", "type", "char"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": { "description": "ID" },
+    "username": { "bsonType": "string", "description": "用户名" },
+    "question_id": { "bsonType": "string", "description": "题目ID" },
+    "type": { "bsonType": "string", "description": "题目类型", "enum": ["pinyin", "stroke"] },
+    "char": { "bsonType": "string", "description": "汉字" },
+    "unit": { "bsonType": "string", "description": "单元" },
+    "wrongCount": { "bsonType": "int", "description": "累计错误次数" },
+    "correctCount": { "bsonType": "int", "description": "重练连续答对次数" },
+    "mastered": { "bsonType": "bool", "description": "是否已掌握" },
+    "lastWrongAt": { "bsonType": "timestamp", "description": "最后错误时间" },
+    "createdAt": { "bsonType": "timestamp", "description": "创建时间" }
+  }
+}
