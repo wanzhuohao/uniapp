@@ -2,13 +2,26 @@
   <view class="pinyin-page">
     <StarBar :current="currentIndex + 1" :total="totalQuestions" :stars="store.totalStars" />
 
-    <view v-if="totalQuestions === 0" class="empty-hint">
-      <text>本单元暂无拼音题目</text>
-      <view class="back-btn" @click="goBack">返回主页</view>
+    <!-- 题型筛选 -->
+    <view v-if="!started" class="filter-area">
+      <text class="filter-title">选择题型</text>
+      <view class="filter-tags">
+        <view :class="['filter-tag', filterType === '' && 'active']" @click="filterType = ''">全部混合</view>
+        <view :class="['filter-tag', filterType === 'char2pinyin' && 'active']" @click="filterType = 'char2pinyin'">看汉字选拼音</view>
+        <view :class="['filter-tag', filterType === 'pinyin2char' && 'active']" @click="filterType = 'pinyin2char'">看拼音选汉字</view>
+      </view>
+      <view class="start-btn" @click="startRound">开始练习</view>
     </view>
 
+    <!-- 空状态 -->
+    <view v-if="started && totalQuestions === 0" class="empty-hint">
+      <text>本单元暂无拼音题目</text>
+      <view class="back-btn" @click="goBack">返回</view>
+    </view>
+
+    <!-- 答题 -->
     <QuestionCard
-      v-if="currentQuestion"
+      v-if="started && currentQuestion"
       :key="roundKey + '-' + currentIndex"
       :question="currentQuestion.question"
       :questionType="currentQuestion.questionType"
@@ -35,6 +48,8 @@ import { useAuth } from '../../composables/common/useAuth.js'
 
 const store = useGameStore()
 const { getUsername } = useAuth()
+const filterType = ref('')
+const started = ref(false)
 const currentIndex = ref(0)
 const correctCount = ref(0)
 const roundKey = ref(0)
@@ -43,10 +58,20 @@ const isCloudData = ref(false)
 
 function buildRound(dataSource) {
   const source = dataSource || pinyinData.filter(d => d.unit === store.currentUnit)
-  const sampled = sampleWithout(source, 10) // 最多 10 题，不足则有多少出多少
+  const sampled = sampleWithout(source, 10)
+
   return sampled.map((item, i) => {
-    const halfPoint = Math.ceil(sampled.length / 2)
-    const isTypeA = i < halfPoint
+    // 根据筛选决定题型
+    let isTypeA
+    if (filterType.value === 'char2pinyin') {
+      isTypeA = true
+    } else if (filterType.value === 'pinyin2char') {
+      isTypeA = false
+    } else {
+      // 混合：前一半 A，后一半 B
+      isTypeA = i < Math.ceil(sampled.length / 2)
+    }
+
     if (isTypeA) {
       const options = shuffle([
         { label: item.pinyin, value: item.pinyin, isCorrect: true },
@@ -65,49 +90,9 @@ function buildRound(dataSource) {
 
 const questions = ref([])
 const totalQuestions = computed(() => questions.value.length)
-
 const currentQuestion = computed(() => questions.value[currentIndex.value] || null)
 
-function goBack() {
-  uni.navigateBack()
-}
-
-function handleAnswer({ correct }) {
-  if (correct) {
-    correctCount.value++
-  } else {
-    // 答错：如果是云端数据且有 _id，异步记录错题
-    const item = currentQuestion.value?._source
-    if (isCloudData.value && item?._id) {
-      recordWrong(getUsername(), {
-        type: 'pinyin',
-        char: item.char,
-        unit: item.unit,
-        question_id: item._id
-      })
-    }
-  }
-
-  if (currentIndex.value < totalQuestions.value - 1) {
-    currentIndex.value++
-  } else {
-    const earned = correctCount.value + (correctCount.value === totalQuestions.value ? 3 : 0)
-    const oldTotal = store.totalStars
-    store.addStars(earned)
-    roundFinished.value = true
-    // 异步记录练习日志，不阻塞跳转
-    recordPractice(getUsername(), {
-      type: 'pinyin',
-      totalCount: totalQuestions.value,
-      correctCount: correctCount.value
-    })
-    uni.navigateTo({
-      url: `/pages/study/result?module=pinyin&correct=${correctCount.value}&total=${totalQuestions.value}&earned=${earned}&oldTotal=${oldTotal}`
-    })
-  }
-}
-
-async function initRound() {
+async function startRound() {
   let cloudList = null
   try {
     cloudList = await getQuestions('pinyin', store.currentUnit)
@@ -121,17 +106,46 @@ async function initRound() {
     isCloudData.value = false
     questions.value = shuffle(buildRound(null))
   }
+  currentIndex.value = 0
+  correctCount.value = 0
+  started.value = true
 }
 
-onMounted(async () => {
-  await initRound()
-})
+function goBack() {
+  uni.navigateBack()
+}
 
-onShow(async () => {
+function handleAnswer({ correct }) {
+  if (correct) {
+    correctCount.value++
+  } else {
+    const item = currentQuestion.value?._source
+    if (isCloudData.value && item?._id) {
+      recordWrong(getUsername(), {
+        type: 'pinyin', char: item.char, unit: item.unit, question_id: item._id
+      })
+    }
+  }
+
+  if (currentIndex.value < totalQuestions.value - 1) {
+    currentIndex.value++
+  } else {
+    const earned = correctCount.value + (correctCount.value === totalQuestions.value ? 3 : 0)
+    const oldTotal = store.totalStars
+    store.addStars(earned)
+    roundFinished.value = true
+    recordPractice(getUsername(), {
+      type: 'pinyin', totalCount: totalQuestions.value, correctCount: correctCount.value
+    })
+    uni.navigateTo({
+      url: `/pages/study/result?module=pinyin&correct=${correctCount.value}&total=${totalQuestions.value}&earned=${earned}&oldTotal=${oldTotal}`
+    })
+  }
+}
+
+onShow(() => {
   if (roundFinished.value) {
-    await initRound()
-    currentIndex.value = 0
-    correctCount.value = 0
+    started.value = false
     roundFinished.value = false
     roundKey.value++
   }
@@ -139,24 +153,59 @@ onShow(async () => {
 </script>
 
 <style scoped>
-.pinyin-page {
-  min-height: 100vh;
-}
-.empty-hint {
+.pinyin-page { min-height: 100vh; }
+
+.filter-area {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 80rpx 48rpx;
+}
+.filter-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 32rpx;
+}
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
   justify-content: center;
-  padding: 120rpx 48rpx;
-  color: var(--color-text-light);
-  font-size: 32rpx;
+  margin-bottom: 48rpx;
+}
+.filter-tag {
+  padding: 16rpx 32rpx;
+  border-radius: 24rpx;
+  font-size: 28rpx;
+  background: #fff;
+  color: #666;
+  border: 3rpx solid #BDBDBD;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+}
+.filter-tag:active { transform: scale(0.95); }
+.filter-tag.active {
+  background: #FFA726;
+  color: #fff;
+  border-color: #FFA726;
+  font-weight: bold;
+}
+.start-btn {
+  padding: 24rpx 100rpx;
+  background: linear-gradient(135deg, #FFA726, #F57C00);
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(255,167,38,0.3);
+}
+.start-btn:active { transform: scale(0.97); }
+
+.empty-hint {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 120rpx 48rpx; color: #888; font-size: 32rpx;
 }
 .back-btn {
-  margin-top: 32rpx;
-  padding: 20rpx 48rpx;
-  background: var(--color-primary);
-  color: #fff;
-  border-radius: var(--radius-btn);
-  font-size: 28rpx;
+  margin-top: 32rpx; padding: 20rpx 48rpx;
+  background: #FFA726; color: #fff; border-radius: 20rpx; font-size: 28rpx;
 }
 </style>
