@@ -15,7 +15,7 @@
       <view class="card card-study" @click="goTo('/pages/study/index')">
         <text class="card-icon">📚</text>
         <text class="card-title">学习小天地</text>
-        <text class="card-desc">拼音、笔顺、算术练习</text>
+        <text class="card-desc">拼音、汉字、口算练习</text>
       </view>
 
       <view class="card card-interview" @click="goTo('/pages/interview/index')">
