@@ -21,8 +21,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { onShow, onMounted } from '@dcloudio/uni-app'
+import { ref, computed, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useGameStore } from '../../store/game.js'
 import { sampleWithout, shuffle } from '../../utils/study/questionHelper.js'
 import StarBar from '../../components/study/StarBar.vue'

@@ -45,8 +45,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue'
-import { onShow, onMounted } from '@dcloudio/uni-app'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import HanziWriter from 'hanzi-writer'
 import { useGameStore } from '../../store/game.js'
 import { sampleWithout, shuffle, generateStrokeDistractors } from '../../utils/study/questionHelper.js'
