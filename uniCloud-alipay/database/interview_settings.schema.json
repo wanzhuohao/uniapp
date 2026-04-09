@@ -1,0 +1,17 @@
+{
+  "bsonType": "object",
+  "required": ["username"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": { "description": "ID" },
+    "username": { "bsonType": "string", "description": "用户名" },
+    "api_key": { "bsonType": "string", "description": "DeepSeek API Key" },
+    "exam_question_count": { "bsonType": "int", "description": "模拟考场默认题数", "defaultValue": 4 },
+    "exam_time_per_question": { "bsonType": "int", "description": "每题限时(秒)", "defaultValue": 300 }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "bsonType": "object",
+  "required": ["username", "total_questions", "record_ids"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": { "description": "ID" },
+    "username": { "bsonType": "string", "description": "用户名" },
+    "total_questions": { "bsonType": "int", "description": "题目总数" },
+    "avg_score": { "bsonType": "double", "description": "平均综合评分" },
+    "total_duration": { "bsonType": "int", "description": "总用时(秒)" },
+    "record_ids": { "bsonType": "array", "description": "关联练习记录ID" },
+    "summary": { "bsonType": "string", "description": "AI总体评价" },
+    "create_time": { "bsonType": "timestamp", "description": "创建时间" }
+  }
+}

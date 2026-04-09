@@ -1,0 +1,19 @@
+{
+  "bsonType": "object",
+  "required": ["username", "type", "content"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": { "description": "ID" },
+    "username": { "bsonType": "string", "description": "用户名" },
+    "type": { "bsonType": "string", "description": "题型", "enum": ["comprehensive", "organization", "interpersonal", "emergency", "self_awareness"] },
+    "content": { "bsonType": "string", "description": "题目文本" },
+    "source": { "bsonType": "string", "description": "来源", "defaultValue": "ai-generated" },
+    "used_count": { "bsonType": "int", "description": "使用次数", "defaultValue": 0 },
+    "create_time": { "bsonType": "timestamp", "description": "创建时间" }
+  }
+}
