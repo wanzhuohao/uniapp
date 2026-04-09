@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "hanzi-writer": "^3.7.3",
+    "pinia": "^3.0.4"
+  }
+}
