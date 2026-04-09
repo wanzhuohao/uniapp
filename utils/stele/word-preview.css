@@ -1,0 +1,146 @@
+/**
+ * 碑文预览区：横版文本原样显示，仅控制位置与字号
+ * 布局：横批在上；左起 日期列 | 小字列 | 大字列 | 生卒列（flex row-reverse）
+ * 变量：--beibei-preview-height, --beibei-title-size, --beibei-big-size, --beibei-small-size
+ */
+.beibei-word-preview .word-area {
+  margin-bottom: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: auto;
+  min-height: var(--beibei-preview-height, 560px);
+  display: flex;
+  flex-direction: column;
+  background: #1a1a18;
+  box-shadow: 0 2px 12px rgba(184, 134, 11, 0.1);
+}
+
+.beibei-word-preview .word-top {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.beibei-word-preview .word-title {
+  font-size: var(--beibei-title-size, 36px);
+  font-family: "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
+  font-weight: normal;
+  color: #D4A528;
+  direction: rtl;
+  white-space: pre;
+}
+
+.beibei-word-preview .word-bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: row; /* 左→右：日期、小字、大字、生卒 */
+  min-height: 0;
+}
+
+/* 日期列：固定宽度，内容水平居中、垂直偏底部 */
+.beibei-word-preview .word-col-date {
+  flex: 0 0 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 12px 4px 12px 12px;
+  box-sizing: border-box;
+}
+
+/* 小字列：弹性宽度，内容水平居中、垂直居中 */
+.beibei-word-preview .word-col-small {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: auto;
+}
+
+/* 小字文本左对齐（列居中但文本块内部左对齐） */
+.beibei-word-preview .word-col-small .word-small {
+  text-align: left;
+}
+
+/* 大字列：占比最大，内容居中，顶部留一个大字高度（与横批错开） */
+.beibei-word-preview .word-col-big {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--beibei-big-size, 32px);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* 生卒列：弹性宽度，内容水平居中、垂直偏顶部 */
+.beibei-word-preview .word-col-birth {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px 24px 20px 10px;
+  padding-top: calc(1 * (var(--beibei-big-size, 32px) * 1.2));
+  box-sizing: border-box;
+}
+
+/* 大字：列方向排列，整体由 word-col-big 居中 */
+.beibei-word-preview .word-big {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: var(--beibei-big-size, 32px);
+  font-family: "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
+  color: #D4A528;
+}
+
+/* 每行 flex 左对齐，宽度由内容撑开，整体由父级居中 */
+.beibei-word-preview .word-big-line {
+  display: flex;
+  line-height: 1.8;
+}
+
+/* 每个字符槽：固定 1em 宽 */
+.beibei-word-preview .word-big-char {
+  width: 1em;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* 半角空格：0.5em 宽（用于 " 故" 等单字居中偏移） */
+.beibei-word-preview .word-big-half {
+  width: 0.5em;
+  flex-shrink: 0;
+}
+
+.beibei-word-preview .word-small,
+.beibei-word-preview .word-date,
+.beibei-word-preview .word-birth {
+  font-size: var(--beibei-small-size, 14px);
+  font-family: "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
+  color: #D4A528;
+  white-space: pre;
+  line-height: 1.5;
+}
+
+/* ===== 打印风格（白底黑字） ===== */
+.beibei-word-preview .word-area.theme-light {
+  background: #ffffff;
+  border-color: #ccc;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.beibei-word-preview .word-area.theme-light .word-title,
+.beibei-word-preview .word-area.theme-light .word-big,
+.beibei-word-preview .word-area.theme-light .word-small,
+.beibei-word-preview .word-area.theme-light .word-date,
+.beibei-word-preview .word-area.theme-light .word-birth {
+  color: #1a1a18;
+}
