@@ -4,6 +4,7 @@
     "hanzi-writer": "^3.7.3",
     "html2canvas": "^1.4.1",
     "pinia": "^3.0.4",
+    "three": "^0.183.2",
     "vuedraggable": "^4.1.0"
   }
 }
