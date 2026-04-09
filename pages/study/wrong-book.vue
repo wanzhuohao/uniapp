@@ -14,7 +14,7 @@
       </view>
       <view class="stat-card">
         <text class="stat-num">{{ stats.strokeCount }}</text>
-        <text class="stat-label">笔顺错题</text>
+        <text class="stat-label">汉字错题</text>
       </view>
       <view class="stat-card">
         <text class="stat-num">{{ stats.unmasteredCount }}</text>
@@ -38,7 +38,7 @@
         <view class="top5-item" v-for="(item, i) in stats.top5" :key="item._id">
           <text class="top5-rank">{{ i + 1 }}</text>
           <text class="top5-char">{{ item.char }}</text>
-          <text class="top5-type">{{ item.type === 'pinyin' ? '拼音' : '笔顺' }}</text>
+          <text class="top5-type">{{ item.type === 'pinyin' ? '拼音' : '汉字' }}</text>
           <text class="top5-count">错 {{ item.wrongCount }} 次</text>
         </view>
       </view>
@@ -55,9 +55,9 @@
         @click="filter = 'pinyin'"
       >拼音</text>
       <text
-        :class="['filter-btn', filter === 'stroke' && 'active']"
-        @click="filter = 'stroke'"
-      >笔顺</text>
+        :class="['filter-btn', filter === 'hanzi' && 'active']"
+        @click="filter = 'hanzi'"
+      >汉字</text>
     </view>
 
     <!-- 错题列表 -->
@@ -69,7 +69,7 @@
       >
         <view class="wrong-char">{{ item.char }}</view>
         <view class="wrong-info">
-          <text class="wrong-type">{{ item.type === 'pinyin' ? '拼音' : '笔顺' }}</text>
+          <text class="wrong-type">{{ item.type === 'pinyin' ? '拼音' : '汉字' }}</text>
           <text class="wrong-unit">{{ item.unit }}</text>
         </view>
         <view class="wrong-meta">

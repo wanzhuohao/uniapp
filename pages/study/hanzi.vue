@@ -41,9 +41,9 @@
       <text class="hint-text">按正确笔顺依次点击笔画</text>
 
       <view class="selected-area">
-        <view v-for="(s, i) in selectedStrokes" :key="i" class="selected-item">
+        <view v-for="(s, i) in selectedStrokes" :key="i" class="selected-item" :style="{ borderColor: strokeColor(s) }">
           <text class="selected-num">{{ i + 1 }}</text>
-          <text class="selected-name">{{ s }}</text>
+          <text class="selected-name" :style="{ color: strokeColor(s) }">{{ s }}</text>
         </view>
         <view v-if="selectedStrokes.length === 0" class="selected-placeholder">
           <text>点击下方笔画按钮</text>
@@ -55,6 +55,7 @@
       <view class="stroke-pool">
         <view v-for="(s, i) in shuffledStrokes" :key="'p-'+i"
           :class="['stroke-btn', usedIndexes.includes(i) && 'used', wrongBtn === i && 'wrong']"
+          :style="!usedIndexes.includes(i) ? { borderColor: strokeColor(s), color: strokeColor(s) } : {}"
           @click="pickStroke(i)">{{ s }}</view>
       </view>
       <view class="action-row">
@@ -103,6 +104,21 @@ import strokesData from '../../static/data/strokes.json'
 
 const store = useGameStore()
 const { getUsername } = useAuth()
+
+// 笔画分类颜色（基本笔画用不同颜色区分）
+const STROKE_COLORS = {
+  '横': '#E65100', '提': '#E65100',
+  '竖': '#1565C0', '竖钩': '#1565C0', '竖提': '#1565C0', '竖弯钩': '#1565C0',
+  '撇': '#2E7D32', '撇折': '#2E7D32', '撇点': '#2E7D32',
+  '捺': '#6A1B9A', '点': '#6A1B9A',
+  '横折': '#C62828', '横折钩': '#C62828', '横折弯钩': '#C62828', '横折提': '#C62828',
+  '竖折': '#00695C', '竖折折钩': '#00695C',
+  '横撇': '#EF6C00', '横斜钩': '#EF6C00',
+  '弯钩': '#37474F',
+}
+function strokeColor(name) {
+  return STROKE_COLORS[name] || '#333'
+}
 
 const filterType = ref('')
 const started = ref(false)
@@ -475,7 +491,7 @@ onShow(() => {
 }
 .selected-item { display: flex; align-items: center; gap: 6rpx; background: #E3F2FD; padding: 8rpx 20rpx; border-radius: 12rpx; }
 .selected-num { width: 32rpx; height: 32rpx; border-radius: 50%; background: #42A5F5; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 20rpx; }
-.selected-name { font-size: 28rpx; color: #333; font-weight: 500; }
+.selected-name { font-size: 26rpx; font-weight: 500; }
 .selected-placeholder { color: #ccc; font-size: 26rpx; }
 
 .feedback { text-align: center; font-size: 28rpx; font-weight: bold; padding: 12rpx; margin-bottom: 16rpx; border-radius: 12rpx; width: 100%; }
@@ -485,8 +501,9 @@ onShow(() => {
 .stroke-pool { display: flex; flex-wrap: wrap; gap: 16rpx; justify-content: center; margin-bottom: 32rpx; }
 .stroke-btn {
   padding: 20rpx 36rpx; background: #fff; border: 3rpx solid #BDBDBD;
-  border-radius: 16rpx; font-size: 32rpx; font-weight: 500; color: #333;
+  border-radius: 16rpx; font-size: 32rpx; font-weight: 600; color: #333;
   box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06); transition: all 0.2s;
+  min-width: 100rpx; text-align: center;
 }
 .stroke-btn:active { transform: scale(0.95); }
 .stroke-btn.used { background: #E0E0E0; color: #aaa; border-color: #E0E0E0; box-shadow: none; }
