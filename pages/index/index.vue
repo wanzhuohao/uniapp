@@ -1,52 +1,120 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-		</view>
-	</view>
+  <view class="container">
+    <view class="header">
+      <text class="title">我的工具箱</text>
+      <text class="username" @click="editUsername">{{ username || '未设置' }}</text>
+    </view>
+
+    <view class="cards">
+      <view class="card card-stele" @click="goTo('/pages/stele/index')">
+        <text class="card-icon">📝</text>
+        <text class="card-title">碑文排版</text>
+        <text class="card-desc">碑文下单与排版预览</text>
+      </view>
+
+      <view class="card card-study" @click="goTo('/pages/study/index')">
+        <text class="card-icon">📚</text>
+        <text class="card-title">学习小天地</text>
+        <text class="card-desc">拼音、笔顺、算术练习</text>
+      </view>
+
+      <view class="card card-interview" @click="goTo('/pages/interview/index')">
+        <text class="card-icon">🎤</text>
+        <text class="card-title">面试助手</text>
+        <text class="card-desc">公务员结构化面试练习</text>
+      </view>
+    </view>
+  </view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				title: 'Hello'
-			}
-		},
-		onLoad() {
+<script setup>
+import { ref } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
+import { useAuth } from '../../composables/common/useAuth.js'
 
-		},
-		methods: {
+const { getUsername, setUsername } = useAuth()
+const username = ref(getUsername())
 
-		}
-	}
+onShow(() => {
+  username.value = getUsername()
+})
+
+function goTo(url) {
+  uni.navigateTo({ url })
+}
+
+function editUsername() {
+  uni.showModal({
+    title: '修改用户名',
+    content: '',
+    editable: true,
+    placeholderText: username.value || '输入用户名',
+    success(res) {
+      if (res.confirm && res.content && res.content.trim()) {
+        setUsername(res.content.trim())
+        username.value = res.content.trim()
+      }
+    }
+  })
+}
 </script>
 
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
+<style scoped>
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx 30rpx;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 10rpx 40rpx;
+}
+.title {
+  font-size: 42rpx;
+  font-weight: bold;
+  color: #fff;
+}
+.username {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8rpx 24rpx;
+  border-radius: 30rpx;
+}
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  margin-top: 20rpx;
+}
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.card:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+.card-icon {
+  font-size: 56rpx;
+}
+.card-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+.card-desc {
+  font-size: 26rpx;
+  color: #888;
+}
+.card-stele { border-left: 8rpx solid #96700A; }
+.card-study { border-left: 8rpx solid #66BB6A; }
+.card-interview { border-left: 8rpx solid #007AFF; }
 </style>
