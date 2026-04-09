@@ -1,0 +1,6 @@
+{
+  "name": "seed-questions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "题库数据种子上传"
+}
