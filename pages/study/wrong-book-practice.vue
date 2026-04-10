@@ -197,8 +197,19 @@ function prepareOptions() {
   if (!q) return
 
   if (q.type === 'pinyin' && q.pinyin) {
-    // 拼音题选项
-    const opts = [q.pinyin, ...(q.distractors || [])]
+    // 拼音题选项：优先用云端 distractors，为空则从同单元其他题拼音兜底
+    let distractors = Array.isArray(q.distractors) ? q.distractors.slice() : []
+    if (distractors.length < 3) {
+      const pool = Object.values(questionData.value)
+        .filter(item => item && item.pinyin && item.pinyin !== q.pinyin && !distractors.includes(item.pinyin))
+        .map(item => item.pinyin)
+      const unique = Array.from(new Set(pool))
+      while (distractors.length < 3 && unique.length > 0) {
+        const idx = Math.floor(Math.random() * unique.length)
+        distractors.push(unique.splice(idx, 1)[0])
+      }
+    }
+    const opts = [q.pinyin, ...distractors.slice(0, 3)]
     currentOptions.value = shuffle(opts)
   } else if (q.type === 'stroke' && q.strokes) {
     // 笔顺题选项

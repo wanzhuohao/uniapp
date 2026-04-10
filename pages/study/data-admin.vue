@@ -307,6 +307,11 @@ async function handleDelete() {
     for (const { id } of form.value._ids) {
       await db.collection('questions').doc(id).remove()
     }
+    // 清理本地缓存，避免删除后重练/练习仍读到旧题
+    try {
+      uni.removeStorageSync('questions_pinyin_' + form.value.unit)
+      uni.removeStorageSync('questions_stroke_' + form.value.unit)
+    } catch (e) {}
     uni.hideLoading()
     uni.showToast({ title: '已删除', icon: 'success' })
     editing.value = false
