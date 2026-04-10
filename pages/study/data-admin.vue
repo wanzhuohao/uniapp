@@ -17,6 +17,15 @@
       <view class="add-btn" @click="startAdd">+ 新增</view>
     </view>
 
+    <!-- 单元筛选 -->
+    <view class="unit-filter">
+      <view :class="['unit-btn', unitFilter === '' && 'active']" @click="unitFilter = ''">全部单元</view>
+      <view v-for="u in 8" :key="u"
+        :class="['unit-btn', unitFilter === '2-' + u && 'active']"
+        @click="unitFilter = '2-' + u"
+      >第{{ u }}</view>
+    </view>
+
     <!-- 统计 -->
     <view class="stats">
       共 {{ list.length }} 条 · 筛选后 {{ filteredList.length }} 条
@@ -130,6 +139,7 @@ const db = uniCloud.database()
 const loading = ref(false)
 const list = ref([])
 const typeFilter = ref('')
+const unitFilter = ref('')
 const search = ref('')
 
 const editing = ref(false)
@@ -143,10 +153,13 @@ const filteredList = computed(() => {
   if (typeFilter.value) {
     result = result.filter(i => i.type === typeFilter.value)
   }
+  if (unitFilter.value) {
+    result = result.filter(i => i.unit === unitFilter.value)
+  }
   const q = search.value.trim()
   if (q) {
     result = result.filter(i =>
-      i.char?.includes(q) || i.pinyin?.includes(q) || i.unit?.includes(q)
+      i.char?.includes(q) || i.pinyin?.includes(q)
     )
   }
   return result
