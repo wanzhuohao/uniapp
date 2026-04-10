@@ -9,6 +9,11 @@
     </view>
 
     <view class="modules">
+      <view class="module-card mock-card" @click="goTo('/pages/study/mock-exam')">
+        <text class="module-icon">📚</text>
+        <text class="module-name">学习</text>
+        <text class="module-desc">看答案自判，拓展学习</text>
+      </view>
       <view class="module-card pinyin-card" @click="goTo('/pages/study/pinyin')">
         <text class="module-icon">📖</text>
         <text class="module-name">拼音</text>
@@ -18,11 +23,6 @@
         <text class="module-icon">✏️</text>
         <text class="module-name">汉字</text>
         <text class="module-desc">笔顺、部首、结构、笔画</text>
-      </view>
-      <view class="module-card mock-card" @click="goTo('/pages/study/mock-exam')">
-        <text class="module-icon">📚</text>
-        <text class="module-name">学习模考</text>
-        <text class="module-desc">看答案自判，拓展学习</text>
       </view>
       <view class="module-card mental-card" @click="goTo('/pages/study/mental-math')">
         <text class="module-icon">⏱️</text>

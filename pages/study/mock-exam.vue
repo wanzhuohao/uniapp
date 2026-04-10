@@ -2,7 +2,7 @@
   <view class="mock-page">
     <view class="top-bar">
       <view class="back-btn" @click="goBack">←</view>
-      <text class="title">学习模考</text>
+      <text class="title">学习</text>
       <view class="progress">{{ currentIndex + 1 }}/{{ totalQuestions }}</view>
     </view>
 
