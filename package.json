@@ -1,7 +1,11 @@
 {
   "dependencies": {
+    "cnchar": "^3.2.6",
+    "cnchar-order": "^3.2.6",
+    "cnchar-radical": "^3.2.6",
     "element-plus": "^2.13.6",
     "hanzi-writer": "^3.7.3",
+    "hanzi-writer-data": "^2.0.1",
     "html2canvas": "^1.4.1",
     "pinia": "^3.0.4",
     "three": "^0.183.2",
