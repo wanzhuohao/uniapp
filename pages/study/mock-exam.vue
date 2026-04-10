@@ -54,19 +54,19 @@
 
       <!-- 答案区 -->
       <view v-if="showAnswer" class="answer-box">
-        <view class="answer-row">
+        <view v-if="focus === '' || focus === 'pinyin'" class="answer-row" :class="{ highlight: focus === 'pinyin' }">
           <text class="answer-label">拼音</text>
           <text class="answer-value pinyin">{{ currentQ.pinyin }}</text>
         </view>
-        <view class="answer-row">
+        <view v-if="focus === '' || focus === 'radical'" class="answer-row" :class="{ highlight: focus === 'radical' }">
           <text class="answer-label">部首</text>
           <text class="answer-value">{{ currentQ.radical }}</text>
         </view>
-        <view class="answer-row">
+        <view v-if="focus === '' || focus === 'structure'" class="answer-row" :class="{ highlight: focus === 'structure' }">
           <text class="answer-label">结构</text>
           <text class="answer-value">{{ currentQ.structure }}</text>
         </view>
-        <view class="answer-row">
+        <view v-if="focus === '' || focus === 'strokeCount'" class="answer-row" :class="{ highlight: focus === 'strokeCount' }">
           <text class="answer-label">笔画</text>
           <text class="answer-value">{{ currentQ.strokeCount }} 画</text>
         </view>
@@ -419,10 +419,16 @@ onShow(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16rpx 0;
+  padding: 16rpx 20rpx;
   border-bottom: 1rpx solid #eee;
+  border-radius: 8rpx;
 }
 .answer-row:last-of-type { border-bottom: none; }
+.answer-row.highlight {
+  background: #E0F2F1;
+  border: 2rpx solid #00897B;
+  margin-bottom: 8rpx;
+}
 .answer-label {
   font-size: 28rpx;
   color: #888;
