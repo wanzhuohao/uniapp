@@ -49,6 +49,16 @@
       <!-- 答案区 -->
       <view v-if="showAnswer" class="answer-area">
         <text class="answer-hint">观察正确笔顺：</text>
+        <view class="color-legend">
+          <view class="legend-item">
+            <view class="legend-dot" style="background:#333"></view>
+            <text>普通笔画</text>
+          </view>
+          <view class="legend-item">
+            <view class="legend-dot" style="background:#168F16"></view>
+            <text>部首笔画</text>
+          </view>
+        </view>
         <view class="answer-btn" @click="replayAnim">▶ 重播动画</view>
       </view>
 
@@ -519,6 +529,23 @@ onShow(() => {
 .answer-hint {
   font-size: 28rpx;
   color: #666;
+}
+.color-legend {
+  display: flex;
+  gap: 32rpx;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #888;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.legend-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 4rpx;
 }
 .answer-btn {
   padding: 16rpx 48rpx;
