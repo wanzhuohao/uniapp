@@ -1,10 +1,6 @@
 <template>
   <view class="container">
-    <!-- 头部 -->
-    <view class="header">
-      <text class="back" @click="goBack">←</text>
-      <text class="title">错题本</text>
-    </view>
+    <TopBar title="错题本" />
 
     <!-- 统计概览 -->
     <view class="stats-row">
@@ -103,6 +99,7 @@ import { useAuth } from '../../composables/common/useAuth.js'
 import { getAllWrongList, getWrongStats } from '../../utils/study/wrongBook.js'
 import { getRecentLogs } from '../../utils/study/practiceLog.js'
 import TrendChart from '../../components/common/TrendChart.vue'
+import TopBar from '../../components/common/TopBar.vue'
 
 const { getUsername } = useAuth()
 
@@ -159,9 +156,6 @@ onShow(() => {
   loadData()
 })
 
-function goBack() {
-  uni.navigateBack()
-}
 
 function goPractice() {
   uni.navigateTo({ url: '/pages/study/wrong-book-practice' })
@@ -173,25 +167,6 @@ function goPractice() {
   min-height: 100vh;
   background: #f5f7fa;
   padding-bottom: 120rpx;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  padding: 20rpx 30rpx;
-  background: #fff;
-}
-
-.back {
-  font-size: 36rpx;
-  margin-right: 20rpx;
-  color: #333;
-}
-
-.title {
-  font-size: 34rpx;
-  font-weight: bold;
-  color: #333;
 }
 
 .stats-row {

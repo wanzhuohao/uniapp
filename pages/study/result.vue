@@ -56,9 +56,10 @@ const levelChangeText = computed(() => {
 })
 
 const encourageText = computed(() => {
-  if (correct === 10) return '太棒了！全部答对！'
-  if (correct >= 8) return '真厉害！继续保持！'
-  if (correct >= 6) return '不错哦，继续加油！'
+  const rate = total > 0 ? correct / total : 0
+  if (correct === total && total > 0) return '太棒了！全部答对！'
+  if (rate >= 0.8) return '真厉害！继续保持！'
+  if (rate >= 0.6) return '不错哦，继续加油！'
   return '没关系，多练几次就会了！'
 })
 

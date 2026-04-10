@@ -141,6 +141,7 @@ export const useGameStore = defineStore('game', {
           }
         } catch (e) {
           console.error('syncCloud failed:', e)
+          uni.showToast({ title: '云端同步失败，数据仅本地保存', icon: 'none', duration: 2000 })
         }
       }, 1000)
     },

@@ -1,10 +1,10 @@
 <template>
   <view class="admin-page">
-    <view class="top-bar">
-      <view class="back-btn" @click="goBack">←</view>
-      <text class="title">数据维护</text>
-      <view class="reload-btn" @click="loadData">刷新</view>
-    </view>
+    <TopBar title="数据维护">
+      <template #right>
+        <text class="reload-btn" @click="loadData">刷新</text>
+      </template>
+    </TopBar>
 
     <!-- 工具栏 -->
     <view class="toolbar">
@@ -116,6 +116,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
+import TopBar from '../../components/common/TopBar.vue'
 
 const db = uniCloud.database()
 
@@ -322,10 +323,6 @@ async function handleDelete() {
   }
 }
 
-function goBack() {
-  uni.navigateBack()
-}
-
 onShow(() => {
   if (list.value.length === 0) loadData()
 })
@@ -339,25 +336,6 @@ onShow(() => {
   background: #F5F7FA;
 }
 
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24rpx 32rpx;
-  background: #fff;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
-}
-.back-btn {
-  font-size: 36rpx;
-  width: 56rpx;
-  height: 56rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #f0f0f0;
-}
-.title { font-size: 32rpx; font-weight: bold; }
 .reload-btn {
   padding: 12rpx 24rpx;
   background: #607D8B;

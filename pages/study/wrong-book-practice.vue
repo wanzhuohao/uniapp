@@ -1,11 +1,10 @@
 <template>
   <view class="container">
-    <!-- 头部进度 -->
-    <view class="header">
-      <text class="back" @click="goBack">←</text>
-      <text class="title">错题重练</text>
-      <text class="progress">{{ currentIndex + 1 }} / {{ questions.length }}</text>
-    </view>
+    <TopBar title="错题重练">
+      <template #right>
+        <text>{{ currentIndex + 1 }} / {{ questions.length }}</text>
+      </template>
+    </TopBar>
 
     <!-- 加载中 -->
     <view v-if="loading" class="loading">
@@ -95,6 +94,7 @@ import { useAuth } from '../../composables/common/useAuth.js'
 import { getUnmasteredList, recordCorrect, recordWrongAgain } from '../../utils/study/wrongBook.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
 import { shuffle } from '../../utils/study/questionHelper.js'
+import TopBar from '../../components/common/TopBar.vue'
 
 const { getUsername } = useAuth()
 
@@ -278,31 +278,6 @@ onMounted(() => {
 .container {
   min-height: 100vh;
   background: #f5f7fa;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  padding: 20rpx 30rpx;
-  background: #fff;
-}
-
-.back {
-  font-size: 36rpx;
-  margin-right: 20rpx;
-  color: #333;
-}
-
-.title {
-  font-size: 34rpx;
-  font-weight: bold;
-  color: #333;
-  flex: 1;
-}
-
-.progress {
-  font-size: 26rpx;
-  color: #999;
 }
 
 .loading, .empty-state {

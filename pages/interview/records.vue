@@ -133,7 +133,9 @@ function scoreClass(score) {
 function formatTime(ts) {
   if (!ts) return ''
   const d = new Date(ts)
-  return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+  const now = new Date()
+  const yearPart = d.getFullYear() === now.getFullYear() ? '' : `${d.getFullYear()}/`
+  return `${yearPart}${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
 function viewDetail(id) {

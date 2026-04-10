@@ -313,8 +313,8 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  if (hintTimer) clearTimeout(hintTimer);
-  if (threeAnimateId) cancelAnimationFrame(threeAnimateId);
+  if (hintTimer) { clearTimeout(hintTimer); hintTimer = null; }
+  if (threeAnimateId) { cancelAnimationFrame(threeAnimateId); threeAnimateId = null; }
   if (threeScene) {
     threeScene.traverse((obj: any) => {
       if (obj.geometry) obj.geometry.dispose();
@@ -323,10 +323,11 @@ onBeforeUnmount(() => {
         materials.forEach((m: any) => { if (m.map) m.map.dispose(); m.dispose(); });
       }
     });
+    threeScene = null;
   }
-  if (controls) controls.dispose();
-  if (threeRenderer) threeRenderer.dispose();
-  if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+  if (controls) { controls.dispose(); controls = null; }
+  if (threeRenderer) { threeRenderer.dispose(); threeRenderer = null; }
+  if (resizeHandler) { window.removeEventListener('resize', resizeHandler); resizeHandler = null; }
 });
 </script>
 

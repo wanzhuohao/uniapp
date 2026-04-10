@@ -1,11 +1,10 @@
 <template>
   <view class="mock-page">
-    <view class="top-bar">
-      <view class="back-btn" @click="goBack">←</view>
-      <text class="title">学习</text>
-      <view v-if="started && totalQuestions > 0" class="progress">{{ currentIndex + 1 }}/{{ totalQuestions }}</view>
-      <view v-else class="progress-placeholder"></view>
-    </view>
+    <TopBar title="学习" :auto-back="false" @back="goBack">
+      <template #right>
+        <text v-if="started && totalQuestions > 0">{{ currentIndex + 1 }}/{{ totalQuestions }}</text>
+      </template>
+    </TopBar>
 
     <!-- 筛选页 -->
     <view v-if="!started" class="filter-area">
@@ -102,6 +101,7 @@ import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
 import pinyinData from '../../static/data/pinyin.json'
+import TopBar from '../../components/common/TopBar.vue'
 
 const store = useGameStore()
 const { getUsername } = useAuth()
@@ -251,28 +251,6 @@ onShow(() => {
   background: #F5F7FA;
 }
 
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24rpx 32rpx;
-  background: #fff;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
-}
-.back-btn {
-  font-size: 36rpx;
-  width: 56rpx;
-  height: 56rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #f0f0f0;
-}
-.back-btn:active { transform: scale(0.9); }
-.title { font-size: 32rpx; font-weight: bold; }
-.progress { font-size: 26rpx; color: #888; font-weight: bold; }
-.progress-placeholder { width: 80rpx; }
 
 /* 筛选区 */
 .filter-area {
