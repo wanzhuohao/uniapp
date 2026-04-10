@@ -36,7 +36,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { useAuth } from '../../composables/common/useAuth'
 
+const { getUsername } = useAuth()
 const session = ref({})
 const records = ref([])
 const sessionId = ref('')
@@ -58,6 +60,12 @@ async function loadSession() {
     const sData = sRes.result?.data || sRes.data || []
     if (sData.length > 0) {
       const s = sData[0]
+      const currentUser = getUsername()
+      if (s.username && currentUser && s.username !== currentUser) {
+        uni.showToast({ title: '无权访问', icon: 'none' })
+        setTimeout(() => uni.navigateBack(), 800)
+        return
+      }
       session.value = {
         avgScore: s.avg_score,
         totalQuestions: s.total_questions,

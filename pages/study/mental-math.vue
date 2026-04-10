@@ -64,7 +64,7 @@
       <text class="result-title">完成！</text>
       <text class="result-time">用时：{{ formatTime(finalTime) }}</text>
       <text class="result-score">{{ correctCount }}/100 正确</text>
-      <text class="result-accuracy">正确率：{{ Math.round(correctCount) }}%</text>
+      <text class="result-accuracy">正确率：{{ questions.length ? Math.round(correctCount / questions.length * 100) : 0 }}%</text>
 
       <view class="result-actions">
         <view class="action-btn primary" @click="restart">再来一次</view>

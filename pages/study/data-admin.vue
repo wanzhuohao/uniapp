@@ -227,36 +227,61 @@ async function handleSave() {
     return
   }
 
-  const baseData = {
-    char: f.char,
-    unit: f.unit,
-    pinyin: f.pinyin || '',
-    radical: f.radical || '',
-    structure: f.structure || '',
-    strokeCount: f.strokeCount ? Number(f.strokeCount) : null,
-    strokes: strokesStr.value.split(',').map(s => s.trim()).filter(Boolean),
-    distractors: distractorsStr.value.split(',').map(s => s.trim()).filter(Boolean),
-    char_distractors: charDistractorsStr.value.split(',').map(s => s.trim()).filter(Boolean),
+  // 按 type 构建对应字段，避免字段污染
+  const buildByType = (type) => {
+    const common = {
+      char: f.char,
+      unit: f.unit,
+      type,
+      pinyin: f.pinyin || '',
+      radical: f.radical || '',
+      structure: f.structure || '',
+      strokeCount: f.strokeCount ? Number(f.strokeCount) : null,
+    }
+    if (type === 'pinyin') {
+      return {
+        ...common,
+        distractors: distractorsStr.value.split(',').map(s => s.trim()).filter(Boolean),
+        char_distractors: charDistractorsStr.value.split(',').map(s => s.trim()).filter(Boolean),
+      }
+    }
+    if (type === 'stroke') {
+      return {
+        ...common,
+        strokes: strokesStr.value.split(',').map(s => s.trim()).filter(Boolean),
+      }
+    }
+    return common
   }
 
   try {
     uni.showLoading({ title: '保存中...' })
 
     if (editMode.value === 'add') {
-      // 新增：需要分别创建 pinyin 和 stroke 两条记录（保持云端兼容）
-      await db.collection('questions').add({ ...baseData, type: 'pinyin' })
-      if (baseData.strokes.length) {
-        await db.collection('questions').add({ ...baseData, type: 'stroke' })
+      await db.collection('questions').add(buildByType('pinyin'))
+      const strokes = strokesStr.value.split(',').map(s => s.trim()).filter(Boolean)
+      if (strokes.length) {
+        await db.collection('questions').add(buildByType('stroke'))
       }
       uni.showToast({ title: '新增成功', icon: 'success' })
     } else {
-      // 编辑：更新所有关联的记录
       for (const { id, type } of f._ids) {
-        const dataToUpdate = { ...baseData, type }
-        await db.collection('questions').doc(id).update(dataToUpdate)
+        await db.collection('questions').doc(id).update(buildByType(type))
+      }
+      // 原无 stroke 记录但新填了笔顺，补一条
+      const hasStrokeRow = f._ids.some(x => x.type === 'stroke')
+      const strokes = strokesStr.value.split(',').map(s => s.trim()).filter(Boolean)
+      if (!hasStrokeRow && strokes.length > 0) {
+        await db.collection('questions').add(buildByType('stroke'))
       }
       uni.showToast({ title: '保存成功', icon: 'success' })
     }
+
+    // 清除本地缓存让其他页面拉到新数据
+    try {
+      uni.removeStorageSync('questions_pinyin_' + f.unit)
+      uni.removeStorageSync('questions_stroke_' + f.unit)
+    } catch (e) {}
 
     uni.hideLoading()
     editing.value = false

@@ -50,16 +50,16 @@ function editUsername() {
     title: '修改用户名',
     content: '',
     editable: true,
-    placeholderText: username.value || '输入用户名',
+    placeholderText: '当前：' + (username.value || '未设置'),
     async success(res) {
-      if (res.confirm && res.content && res.content.trim()) {
-        const newName = res.content.trim()
-        if (newName === username.value) return
-        setUsername(newName)
-        username.value = newName
-        // 切换用户：重置 store 状态并从新用户云端拉取
-        await store.switchUser()
-      }
+      const newName = (res.content || '').trim()
+      if (!res.confirm || !newName) return
+      if (newName === username.value) return
+      setUsername(newName)
+      username.value = newName
+      // 切换用户：重置 store 状态并从新用户云端拉取
+      await store.switchUser()
+      uni.showToast({ title: '已切换到 ' + newName, icon: 'success' })
     }
   })
 }

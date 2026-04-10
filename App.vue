@@ -5,22 +5,31 @@ import { useGameStore } from './store/game.js'
 
 const { hasUsername, setUsername } = useAuth()
 
+function promptUsername() {
+  uni.showModal({
+    title: '请输入你的名字',
+    content: '',
+    editable: true,
+    placeholderText: '例如：小明',
+    showCancel: false,
+    confirmText: '确定',
+    success(res) {
+      const name = (res.content || '').trim()
+      if (res.confirm && name) {
+        setUsername(name)
+        const store = useGameStore()
+        store.loadFromCloud()
+      } else {
+        // 空输入 → 再弹一次
+        setTimeout(promptUsername, 100)
+      }
+    }
+  })
+}
+
 onLaunch(() => {
   if (!hasUsername()) {
-    uni.showModal({
-      title: '欢迎使用',
-      content: '请输入你的用户名',
-      editable: true,
-      placeholderText: '输入用户名',
-      success(res) {
-        if (res.confirm && res.content && res.content.trim()) {
-          setUsername(res.content.trim())
-          // 从云端拉取用户数据
-          const store = useGameStore()
-          store.loadFromCloud()
-        }
-      }
-    })
+    promptUsername()
   } else {
     // 已有用户名，启动时从云端拉取数据
     const store = useGameStore()
@@ -51,6 +60,11 @@ page {
   --color-warning: #D4A017;
   --color-warning-hover: #E8BF3A;
   --color-text: #2C2420;
+  --color-text-light: #888;
   --color-gold: #D4A528;
+  --color-star: #FFB300;
+  --color-stroke: #42A5F5;
+  --radius-btn: 16rpx;
+  --radius-card: 20rpx;
 }
 </style>

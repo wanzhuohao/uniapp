@@ -40,7 +40,9 @@
 import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { QUESTION_TYPES, SCORE_DIMENSIONS } from '../../utils/interview/constants'
+import { useAuth } from '../../composables/common/useAuth'
 
+const { getUsername } = useAuth()
 const record = ref({})
 const scoreDimensions = SCORE_DIMENSIONS
 let recordId = ''
@@ -56,7 +58,14 @@ onMounted(async () => {
     const res = await db.collection('interview_records').doc(recordId).get()
     const data = res.result?.data || res.data || []
     if (data.length > 0) {
-      record.value = data[0]
+      const item = data[0]
+      const currentUser = getUsername()
+      if (item.username && currentUser && item.username !== currentUser) {
+        uni.showToast({ title: '无权访问', icon: 'none' })
+        setTimeout(() => uni.navigateBack(), 800)
+        return
+      }
+      record.value = item
     }
   } catch (e) {
     console.error('加载记录失败', e)
