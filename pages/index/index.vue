@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { useGameStore } from '../../store/game.js'
@@ -39,6 +39,15 @@ const username = ref(getUsername())
 
 onShow(() => {
   username.value = getUsername()
+})
+
+// 监听 App.vue 首次设置用户名事件
+const onUsernameChanged = (name) => { username.value = name }
+onMounted(() => {
+  uni.$on('username-changed', onUsernameChanged)
+})
+onUnmounted(() => {
+  uni.$off('username-changed', onUsernameChanged)
 })
 
 function goTo(url) {

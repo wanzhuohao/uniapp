@@ -19,6 +19,7 @@ function promptUsername() {
         setUsername(name)
         const store = useGameStore()
         store.loadFromCloud()
+        uni.$emit('username-changed', name)
       } else {
         // 空输入 → 再弹一次
         setTimeout(promptUsername, 100)
