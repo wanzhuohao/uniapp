@@ -8,22 +8,23 @@
     </view>
 
     <!-- 难度选择（未开始时显示） -->
-    <view v-if="!started && !finished" class="start-area">
-      <text class="start-title">口算计时挑战</text>
-      <text class="start-desc">100 道题，从 0 开始计时</text>
-
-      <view class="level-select">
+    <view v-if="!started && !finished" class="filter-area">
+      <text class="filter-title">选择难度</text>
+      <view class="filter-tags">
         <view
           v-for="lv in 3" :key="lv"
-          class="level-opt"
-          :class="{ active: selectedLevel === lv }"
+          :class="['filter-tag', selectedLevel === lv && 'active']"
           @click="selectedLevel = lv"
-        >
-          Lv.{{ lv }} {{ levelLabels[lv] }}
-        </view>
+        >Lv.{{ lv }} {{ levelLabels[lv] }}</view>
       </view>
 
-      <view class="start-btn" @click="startQuiz">开始</view>
+      <view class="desc-area">
+        <text class="desc">· 100 道题，从 0 开始计时</text>
+        <text class="desc">· 8 分钟和 10 分钟会提醒</text>
+        <text class="desc">· 答错的题会进错题本</text>
+      </view>
+
+      <view class="start-btn" @click="startQuiz">开始挑战</view>
     </view>
 
     <!-- 答题区（滚动列表） -->
@@ -308,46 +309,53 @@ onUnmounted(() => {
   font-weight: bold;
 }
 
-/* 开始区域 */
-.start-area {
-  flex: 1;
+/* 筛选区（统一风格） */
+.filter-area {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 64rpx 48rpx;
+  padding: 48rpx 32rpx;
 }
-.start-title {
-  font-size: 48rpx;
+.filter-title {
+  font-size: 32rpx;
   font-weight: bold;
+  margin-bottom: 20rpx;
+}
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  justify-content: center;
   margin-bottom: 16rpx;
 }
-.start-desc {
-  font-size: 28rpx;
-  color: var(--color-text-light);
-  margin-bottom: 48rpx;
-}
-.level-select {
-  display: flex;
-  gap: 20rpx;
-  margin-bottom: 48rpx;
-}
-.level-opt {
-  padding: 20rpx 36rpx;
-  border-radius: 28rpx;
-  font-size: 28rpx;
+.filter-tag {
+  padding: 14rpx 28rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
   background: #fff;
   color: #666;
-  border: 3rpx solid #BDBDBD;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+  border: 3rpx solid #E0E0E0;
 }
-.level-opt:active { transform: scale(0.95); }
-.level-opt.active {
+.filter-tag:active { transform: scale(0.95); }
+.filter-tag.active {
   background: #9C27B0;
   color: #fff;
-  font-weight: bold;
   border-color: #9C27B0;
-  box-shadow: 0 4rpx 16rpx rgba(156,39,176,0.3);
+  font-weight: bold;
+}
+.desc-area {
+  margin: 40rpx 0;
+  text-align: center;
+  background: #fff;
+  padding: 24rpx 32rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.desc {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
 }
 .start-btn {
   padding: 28rpx 120rpx;
@@ -357,8 +365,9 @@ onUnmounted(() => {
   font-size: 36rpx;
   font-weight: bold;
   box-shadow: 0 8rpx 24rpx rgba(156,39,176,0.3);
+  margin-top: 24rpx;
 }
-.start-btn:active { transform: scale(0.97); opacity: 0.9; }
+.start-btn:active { transform: scale(0.97); }
 
 /* 答题列表 */
 .question-list {
