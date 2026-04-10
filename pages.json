@@ -18,6 +18,7 @@
     { "path": "pages/study/result", "style": { "navigationBarTitleText": "本轮成绩", "navigationStyle": "custom" } },
     { "path": "pages/study/learn", "style": { "navigationBarTitleText": "学习", "navigationStyle": "custom" } },
     { "path": "pages/study/wrong-book", "style": { "navigationBarTitleText": "错题本", "navigationStyle": "custom" } },
+    { "path": "pages/study/data-admin", "style": { "navigationBarTitleText": "数据维护", "navigationStyle": "custom" } },
     { "path": "pages/study/wrong-book-practice", "style": { "navigationBarTitleText": "错题重练", "navigationStyle": "custom" } },
 
     { "path": "pages/interview/index", "style": { "navigationBarTitleText": "面试练习", "navigationStyle": "custom" } },

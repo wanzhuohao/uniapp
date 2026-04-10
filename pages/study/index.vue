@@ -34,6 +34,11 @@
         <text class="module-name">错题本</text>
         <text class="module-desc">错题回顾与重练</text>
       </view>
+      <view class="module-card admin-card" @click="goTo('/pages/study/data-admin')">
+        <text class="module-icon">🛠️</text>
+        <text class="module-name">数据维护</text>
+        <text class="module-desc">编辑题库</text>
+      </view>
     </view>
   </view>
 </template>
@@ -95,6 +100,7 @@ function goTo(url) {
 .mock-card { border-left-color: #00897B; }
 .mental-card { border-left-color: #9C27B0; }
 .wrong-book-card { border-left-color: #FF5722; }
+.admin-card { border-left-color: #607D8B; }
 .module-icon { font-size: 56rpx; }
 .module-name { font-size: 36rpx; font-weight: bold; }
 .module-desc { font-size: 26rpx; color: #888; }
