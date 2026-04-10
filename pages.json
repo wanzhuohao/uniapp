@@ -16,6 +16,7 @@
     { "path": "pages/study/math", "style": { "navigationBarTitleText": "算术练习", "navigationStyle": "custom" } },
     { "path": "pages/study/mental-math", "style": { "navigationBarTitleText": "口算计时", "navigationStyle": "custom" } },
     { "path": "pages/study/result", "style": { "navigationBarTitleText": "本轮成绩", "navigationStyle": "custom" } },
+    { "path": "pages/study/mock-exam", "style": { "navigationBarTitleText": "学习模考", "navigationStyle": "custom" } },
     { "path": "pages/study/wrong-book", "style": { "navigationBarTitleText": "错题本", "navigationStyle": "custom" } },
     { "path": "pages/study/wrong-book-practice", "style": { "navigationBarTitleText": "错题重练", "navigationStyle": "custom" } },
 
