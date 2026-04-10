@@ -157,8 +157,8 @@ async function initOutline() {
       strokeColor: '#333',
       outlineColor: '#DDD',
       radicalColor: '#168F16',
-      strokeAnimationSpeed: 3,   // 笔画动画速度（越大越快，默认1）
-      delayBetweenStrokes: 150,  // 笔画间延迟（ms，默认1000）
+      strokeAnimationSpeed: 1.5, // 笔画动画速度（越大越快，默认1）
+      delayBetweenStrokes: 400,  // 笔画间延迟（ms，默认1000）
       showCharacter: true,
       showOutline: true,
       onLoadCharDataSuccess: () => {
