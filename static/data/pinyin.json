@@ -194,7 +194,8 @@
     ],
     "unit": "2-1",
     "radical": "雨",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 11
   },
   {
     "char": "飞",
@@ -283,7 +284,8 @@
     ],
     "unit": "2-2",
     "radical": "足",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 12
   },
   {
     "char": "也",
@@ -300,7 +302,8 @@
     ],
     "unit": "2-3",
     "radical": "乙",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 3
   },
   {
     "char": "他",
@@ -371,7 +374,8 @@
     ],
     "unit": "2-3",
     "radical": "讠",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 8
   },
   {
     "char": "你",
@@ -388,7 +392,8 @@
     ],
     "unit": "2-3",
     "radical": "亻",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 7
   },
   {
     "char": "们",
@@ -441,7 +446,8 @@
     ],
     "unit": "2-4",
     "radical": "纟",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 11
   },
   {
     "char": "色",
@@ -494,7 +500,8 @@
     ],
     "unit": "2-4",
     "radical": "辶",
-    "structure": "半包围"
+    "structure": "半包围",
+    "strokeCount": 7
   },
   {
     "char": "近",
@@ -511,7 +518,8 @@
     ],
     "unit": "2-4",
     "radical": "辶",
-    "structure": "半包围"
+    "structure": "半包围",
+    "strokeCount": 7
   },
   {
     "char": "还",
@@ -546,7 +554,8 @@
     ],
     "unit": "2-4",
     "radical": "木",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 7
   },
   {
     "char": "去",
@@ -563,7 +572,8 @@
     ],
     "unit": "2-4",
     "radical": "厶",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 5
   },
   {
     "char": "多",
@@ -580,7 +590,8 @@
     ],
     "unit": "2-4",
     "radical": "夕",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 6
   },
   {
     "char": "爸",
@@ -597,7 +608,8 @@
     ],
     "unit": "2-5",
     "radical": "父",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 8
   },
   {
     "char": "妈",
@@ -614,7 +626,8 @@
     ],
     "unit": "2-5",
     "radical": "女",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 6
   },
   {
     "char": "全",
@@ -631,7 +644,8 @@
     ],
     "unit": "2-5",
     "radical": "入",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 6
   },
   {
     "char": "回",
@@ -684,7 +698,8 @@
     ],
     "unit": "2-6",
     "radical": "工",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 3
   },
   {
     "char": "机",
@@ -719,7 +734,8 @@
     ],
     "unit": "2-6",
     "radical": "几",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 2
   },
   {
     "char": "用",
@@ -736,7 +752,8 @@
     ],
     "unit": "2-6",
     "radical": "用",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 5
   },
   {
     "char": "问",
@@ -771,7 +788,8 @@
     ],
     "unit": "2-6",
     "radical": "月",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 6
   },
   {
     "char": "半",
@@ -788,7 +806,8 @@
     ],
     "unit": "2-6",
     "radical": "十",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 5
   },
   {
     "char": "从",
@@ -949,7 +968,8 @@
     ],
     "unit": "2-7",
     "radical": "里",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 7
   },
   {
     "char": "果",
@@ -966,7 +986,8 @@
     ],
     "unit": "2-7",
     "radical": "木",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 8
   },
   {
     "char": "玩",
@@ -983,7 +1004,8 @@
     ],
     "unit": "2-7",
     "radical": "王",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 8
   },
   {
     "char": "很",
@@ -1000,7 +1022,8 @@
     ],
     "unit": "2-5",
     "radical": "彳",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 9
   },
   {
     "char": "当",
@@ -1035,7 +1058,8 @@
     ],
     "unit": "2-8",
     "radical": "音",
-    "structure": "上下"
+    "structure": "上下",
+    "strokeCount": 9
   },
   {
     "char": "讲",
@@ -1070,7 +1094,8 @@
     ],
     "unit": "2-8",
     "radical": "讠",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 6
   },
   {
     "char": "思",
@@ -1159,7 +1184,8 @@
     ],
     "unit": "2-8",
     "radical": "亻",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 7
   },
   {
     "char": "故",
@@ -1212,7 +1238,8 @@
     ],
     "unit": "2-7",
     "radical": "十",
-    "structure": "独体"
+    "structure": "独体",
+    "strokeCount": 4
   },
   {
     "char": "节",
@@ -1247,7 +1274,8 @@
     ],
     "unit": "2-7",
     "radical": "口",
-    "structure": "左右"
+    "structure": "左右",
+    "strokeCount": 5
   },
   {
     "char": "快",

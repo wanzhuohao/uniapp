@@ -9,7 +9,7 @@
     </view>
 
     <view class="modules">
-      <view class="module-card mock-card" @click="goTo('/pages/study/mock-exam')">
+      <view class="module-card mock-card" @click="goTo('/pages/study/learn')">
         <text class="module-icon">📚</text>
         <text class="module-name">学习</text>
         <text class="module-desc">看答案自判，拓展学习</text>
