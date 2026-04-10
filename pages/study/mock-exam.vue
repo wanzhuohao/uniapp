@@ -16,15 +16,6 @@
         >第{{ u }}单元</view>
       </view>
 
-      <text class="filter-title" style="margin-top: 32rpx;">关注重点</text>
-      <view class="filter-tags">
-        <view :class="['filter-tag', focus === '' && 'active']" @click="focus = ''">综合</view>
-        <view :class="['filter-tag', focus === 'pinyin' && 'active']" @click="focus = 'pinyin'">拼音</view>
-        <view :class="['filter-tag', focus === 'radical' && 'active']" @click="focus = 'radical'">部首</view>
-        <view :class="['filter-tag', focus === 'structure' && 'active']" @click="focus = 'structure'">结构</view>
-        <view :class="['filter-tag', focus === 'strokeCount' && 'active']" @click="focus = 'strokeCount'">笔画</view>
-      </view>
-
       <view class="desc-area">
         <text class="desc">· 看字自己说出答案</text>
         <text class="desc">· 点"查看答案"核对</text>
@@ -50,23 +41,23 @@
       <view class="speak-btn" @click="speakChar">🔊</view>
 
       <!-- 提示 -->
-      <text v-if="!showAnswer" class="hint-text">想一想：{{ focusHint }}</text>
+      <text v-if="!showAnswer" class="hint-text">想一想：拼音、部首、结构、笔画</text>
 
       <!-- 答案区 -->
       <view v-if="showAnswer" class="answer-box">
-        <view v-if="focus === '' || focus === 'pinyin'" class="answer-row" :class="{ highlight: focus === 'pinyin' }">
+        <view class="answer-row">
           <text class="answer-label">拼音</text>
           <text class="answer-value pinyin">{{ currentQ.pinyin }}</text>
         </view>
-        <view v-if="focus === '' || focus === 'radical'" class="answer-row" :class="{ highlight: focus === 'radical' }">
+        <view class="answer-row">
           <text class="answer-label">部首</text>
           <text class="answer-value">{{ currentQ.radical }}</text>
         </view>
-        <view v-if="focus === '' || focus === 'structure'" class="answer-row" :class="{ highlight: focus === 'structure' }">
+        <view class="answer-row">
           <text class="answer-label">结构</text>
           <text class="answer-value">{{ currentQ.structure }}</text>
         </view>
-        <view v-if="focus === '' || focus === 'strokeCount'" class="answer-row" :class="{ highlight: focus === 'strokeCount' }">
+        <view class="answer-row">
           <text class="answer-label">笔画</text>
           <text class="answer-value">{{ currentQ.strokeCount }} 画</text>
         </view>
@@ -113,7 +104,6 @@ import pinyinData from '../../static/data/pinyin.json'
 const store = useGameStore()
 const { getUsername } = useAuth()
 
-const focus = ref('')
 const started = ref(false)
 const currentIndex = ref(0)
 const correctCount = ref(0)
@@ -128,17 +118,6 @@ let writerInstance = null
 const questions = ref([])
 const totalQuestions = computed(() => questions.value.length)
 const currentQ = computed(() => questions.value[currentIndex.value] || null)
-
-const focusHint = computed(() => {
-  const map = {
-    '': '拼音、部首、结构、笔画',
-    pinyin: '这个字的拼音',
-    radical: '这个字的部首',
-    structure: '这个字的结构',
-    strokeCount: '这个字有几画'
-  }
-  return map[focus.value] || map['']
-})
 
 async function initOutline() {
   outlineReady.value = false
