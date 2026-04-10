@@ -453,26 +453,28 @@ onShow(() => {
   text-align: center; color: #888; font-size: 28rpx; margin-bottom: 24rpx;
 }
 .char-outline-wrap {
-  display: flex; justify-content: center; align-items: center;
-  margin-bottom: 16rpx; position: relative;
+  position: relative;
   width: 200px; height: 200px;
-  background: #fff; border-radius: 12rpx;
+  margin: 0 auto 16rpx;
+  background: #fff;
+  border-radius: 12rpx;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+  overflow: hidden;
 }
 .char-outline-target {
   width: 200px;
   height: 200px;
+  line-height: 0;
+}
+.char-outline-target :deep(svg) {
+  display: block;
+}
+.char-fallback {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-/* HanziWriter 生成的 svg 强制居中且不倾斜 */
-.char-outline-target :deep(svg) {
-  display: block;
-  width: 200px !important;
-  height: 200px !important;
-}
-.char-fallback {
   font-size: 150px;
   font-weight: bold;
   color: #DDD;
