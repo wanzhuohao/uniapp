@@ -6173,8 +6173,8 @@ async function seed() {
     return { code: 1, msg: 'no data' }
   }
   console.log('开始上传 ' + questionsData.length + ' 道题目...')
-  let success = 0
-  let skip = 0
+  let added = 0
+  let updated = 0
   let fail = 0
   for (const q of questionsData) {
     try {
@@ -6184,18 +6184,18 @@ async function seed() {
         .get()
       if (existing.data && existing.data.length > 0) {
         await db.collection('questions').doc(existing.data[0]._id).update(q)
-        skip++
+        updated++
         continue
       }
       await db.collection('questions').add(q)
-      success++
+      added++
     } catch (e) {
       console.error('上传失败: ' + q.char, e)
       fail++
     }
   }
-  console.log('上传完成：新增 ' + success + '，更新 ' + skip + '，失败 ' + fail)
-  return { code: 0, msg: 'done', success, skip, fail }
+  console.log('上传完成：新增 ' + added + '，更新 ' + updated + '，失败 ' + fail)
+  return { code: 0, msg: 'done', added, updated, fail }
 }
 
 exports.main = async (event, context) => {
