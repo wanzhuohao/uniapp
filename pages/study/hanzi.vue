@@ -127,6 +127,7 @@ const filterType = ref('')
 const started = ref(false)
 const currentIndex = ref(0)
 const correctCount = ref(0)
+const recordedWrongIds = new Set()
 const roundFinished = ref(false)
 const isCloudData = ref(false)
 
@@ -298,6 +299,7 @@ async function startRound() {
   questions.value = buildRound(pinyinSource, strokeSource)
   currentIndex.value = 0
   correctCount.value = 0
+  recordedWrongIds.clear()
   started.value = true
   resetState()
   if (currentQ.value?.qType === 'stroke') {
@@ -324,7 +326,8 @@ function pickOption(i) {
   } else {
     choiceState.value = 'wrong'
     const q = currentQ.value
-    if (q._id) {
+    if (q._id && !recordedWrongIds.has(q._id)) {
+      recordedWrongIds.add(q._id)
       recordWrong(getUsername(), { type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id })
     }
     setTimeout(() => advanceQuestion(), 1500)
