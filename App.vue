@@ -1,6 +1,7 @@
 <script setup>
 import { onLaunch } from '@dcloudio/uni-app'
 import { useAuth } from './composables/common/useAuth.js'
+import { useGameStore } from './store/game.js'
 
 const { hasUsername, setUsername } = useAuth()
 
@@ -14,9 +15,16 @@ onLaunch(() => {
       success(res) {
         if (res.confirm && res.content && res.content.trim()) {
           setUsername(res.content.trim())
+          // 从云端拉取用户数据
+          const store = useGameStore()
+          store.loadFromCloud()
         }
       }
     })
+  } else {
+    // 已有用户名，启动时从云端拉取数据
+    const store = useGameStore()
+    store.loadFromCloud()
   }
 })
 </script>
