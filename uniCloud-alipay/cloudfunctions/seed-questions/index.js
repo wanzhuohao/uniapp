@@ -7,13 +7,13 @@ const questionsData = [
     "pinyin": "rù",
     "distractors": [
       "lù",
-      "rǔ",
-      "rū"
+      "rū",
+      "rú"
     ],
     "char_distractors": [
       "人",
-      "八",
-      "大"
+      "如",
+      "八"
     ],
     "unit": "2-1",
     "radical": "入",
@@ -25,14 +25,14 @@ const questionsData = [
     "char": "花",
     "pinyin": "huā",
     "distractors": [
-      "huà",
       "huá",
-      "hā"
+      "huǎ",
+      "huà"
     ],
     "char_distractors": [
       "化",
-      "画",
-      "话"
+      "华",
+      "草"
     ],
     "unit": "2-1",
     "radical": "艹",
@@ -44,14 +44,14 @@ const questionsData = [
     "char": "鱼",
     "pinyin": "yú",
     "distractors": [
+      "yū",
       "yǔ",
-      "lú",
-      "yū"
+      "yù"
     ],
     "char_distractors": [
-      "马",
-      "鸟",
-      "虫"
+      "角",
+      "余",
+      "鸟"
     ],
     "unit": "2-4",
     "radical": "鱼",
@@ -63,14 +63,14 @@ const questionsData = [
     "char": "书",
     "pinyin": "shū",
     "distractors": [
-      "shú",
       "sū",
+      "shú",
       "shǔ"
     ],
     "char_distractors": [
-      "本",
       "画",
-      "写"
+      "输",
+      "本"
     ],
     "unit": "2-3",
     "radical": "乙",
@@ -82,13 +82,13 @@ const questionsData = [
     "char": "文",
     "pinyin": "wén",
     "distractors": [
-      "wèn",
+      "wéng",
       "wēn",
-      "fén"
+      "wěn"
     ],
     "char_distractors": [
-      "六",
-      "大",
+      "又",
+      "闻",
       "字"
     ],
     "unit": "2-1",
@@ -101,14 +101,14 @@ const questionsData = [
     "char": "把",
     "pinyin": "bǎ",
     "distractors": [
-      "bā",
       "pǎ",
-      "bà"
+      "bā",
+      "bá"
     ],
     "char_distractors": [
       "巴",
-      "吧",
-      "爸"
+      "爸",
+      "打"
     ],
     "unit": "2-5",
     "radical": "扌",
@@ -120,13 +120,13 @@ const questionsData = [
     "char": "的",
     "pinyin": "de",
     "distractors": [
+      "te",
       "dē",
-      "dì",
-      "dí"
+      "dé"
     ],
     "char_distractors": [
-      "地",
       "白",
+      "地",
       "目"
     ],
     "unit": "2-2",
@@ -139,14 +139,14 @@ const questionsData = [
     "char": "地",
     "pinyin": "dì",
     "distractors": [
-      "de",
+      "tì",
       "dī",
-      "tì"
+      "dí"
     ],
     "char_distractors": [
+      "也",
       "的",
-      "土",
-      "田"
+      "场"
     ],
     "unit": "2-5",
     "radical": "土",
@@ -158,14 +158,14 @@ const questionsData = [
     "char": "春",
     "pinyin": "chūn",
     "distractors": [
-      "chún",
       "cūn",
-      "chǔn"
+      "chōng",
+      "chún"
     ],
     "char_distractors": [
-      "冬",
-      "秋",
-      "雪"
+      "舍",
+      "出",
+      "秋"
     ],
     "unit": "2-1",
     "radical": "日",
@@ -177,14 +177,14 @@ const questionsData = [
     "char": "冬",
     "pinyin": "dōng",
     "distractors": [
-      "dòng",
+      "dūn",
       "tōng",
-      "dǒng"
+      "dóng"
     ],
     "char_distractors": [
-      "春",
-      "秋",
-      "风"
+      "夂",
+      "东",
+      "春"
     ],
     "unit": "2-1",
     "radical": "夂",
@@ -197,32 +197,34 @@ const questionsData = [
     "pinyin": "xuě",
     "distractors": [
       "xuē",
-      "xuè",
-      "xué"
+      "xué",
+      "xuè"
     ],
     "char_distractors": [
       "雨",
-      "云",
-      "冬"
+      "学",
+      "霜"
     ],
     "unit": "2-1",
+    "radical": "雨",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "飞",
     "pinyin": "fēi",
     "distractors": [
+      "hēi",
       "féi",
-      "fěi",
-      "fèi"
+      "fěi"
     ],
     "char_distractors": [
       "风",
-      "鸟",
+      "非",
       "气"
     ],
     "unit": "2-1",
-    "radical": "—",
+    "radical": "飞",
     "structure": "独体",
     "strokeCount": 3,
     "type": "pinyin"
@@ -231,14 +233,14 @@ const questionsData = [
     "char": "吃",
     "pinyin": "chī",
     "distractors": [
-      "chì",
       "cī",
+      "chí",
       "chǐ"
     ],
     "char_distractors": [
       "叫",
-      "口",
-      "呢"
+      "池",
+      "喝"
     ],
     "unit": "2-4",
     "radical": "口",
@@ -250,13 +252,13 @@ const questionsData = [
     "char": "叫",
     "pinyin": "jiào",
     "distractors": [
+      "qiào",
       "jiāo",
-      "jiǎo",
-      "qiào"
+      "jiáo"
     ],
     "char_distractors": [
       "吃",
-      "口",
+      "教",
       "叶"
     ],
     "unit": "2-3",
@@ -269,14 +271,14 @@ const questionsData = [
     "char": "走",
     "pinyin": "zǒu",
     "distractors": [
+      "zhǒu",
       "zōu",
-      "zòu",
-      "cǒu"
+      "zóu"
     ],
     "char_distractors": [
       "足",
-      "跑",
-      "是"
+      "奏",
+      "跑"
     ],
     "unit": "2-3",
     "radical": "走",
@@ -288,16 +290,18 @@ const questionsData = [
     "char": "跑",
     "pinyin": "pǎo",
     "distractors": [
-      "páo",
       "bǎo",
-      "pào"
+      "pāo",
+      "páo"
     ],
     "char_distractors": [
-      "走",
-      "足",
-      "路"
+      "炮",
+      "刨",
+      "走"
     ],
     "unit": "2-2",
+    "radical": "足",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
@@ -305,28 +309,30 @@ const questionsData = [
     "pinyin": "yě",
     "distractors": [
       "yē",
-      "yè",
-      "yé"
+      "yé",
+      "yè"
     ],
     "char_distractors": [
       "他",
-      "她",
-      "地"
+      "业",
+      "她"
     ],
     "unit": "2-3",
+    "radical": "乙",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "他",
     "pinyin": "tā",
     "distractors": [
-      "tà",
       "dā",
+      "tá",
       "tǎ"
     ],
     "char_distractors": [
       "她",
-      "也",
+      "它",
       "们"
     ],
     "unit": "2-3",
@@ -339,13 +345,13 @@ const questionsData = [
     "char": "她",
     "pinyin": "tā",
     "distractors": [
-      "tà",
       "dā",
+      "tá",
       "tǎ"
     ],
     "char_distractors": [
       "他",
-      "也",
+      "它",
       "妈"
     ],
     "unit": "2-7",
@@ -358,14 +364,14 @@ const questionsData = [
     "char": "说",
     "pinyin": "shuō",
     "distractors": [
-      "shuò",
       "suō",
-      "shuó"
+      "shuó",
+      "shuǒ"
     ],
     "char_distractors": [
       "话",
-      "请",
-      "讲"
+      "硕",
+      "请"
     ],
     "unit": "2-3",
     "radical": "讠",
@@ -382,41 +388,45 @@ const questionsData = [
       "huǎ"
     ],
     "char_distractors": [
-      "说",
-      "讲",
-      "花"
+      "花",
+      "画",
+      "说"
     ],
     "unit": "2-3",
+    "radical": "讠",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "你",
     "pinyin": "nǐ",
     "distractors": [
-      "ní",
+      "lǐ",
       "nī",
-      "lǐ"
+      "ní"
     ],
     "char_distractors": [
       "他",
-      "她",
+      "泥",
       "们"
     ],
     "unit": "2-3",
+    "radical": "亻",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "们",
     "pinyin": "men",
     "distractors": [
-      "mén",
+      "meng",
       "mēn",
-      "mèn"
+      "mén"
     ],
     "char_distractors": [
-      "你",
-      "他",
-      "她"
+      "门",
+      "闷",
+      "你"
     ],
     "unit": "2-3",
     "radical": "亻",
@@ -428,14 +438,14 @@ const questionsData = [
     "char": "红",
     "pinyin": "hóng",
     "distractors": [
+      "hún",
       "hōng",
-      "hǒng",
-      "gōng"
+      "hǒng"
     ],
     "char_distractors": [
-      "绿",
-      "纸",
-      "细"
+      "虹",
+      "洪",
+      "绿"
     ],
     "unit": "2-1",
     "radical": "纟",
@@ -447,30 +457,32 @@ const questionsData = [
     "char": "绿",
     "pinyin": "lǜ",
     "distractors": [
-      "lǚ",
-      "lū",
-      "lù"
+      "nǜ",
+      "lù",
+      "lǖ"
     ],
     "char_distractors": [
-      "红",
-      "色",
-      "草"
+      "录",
+      "律",
+      "红"
     ],
     "unit": "2-4",
+    "radical": "纟",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "色",
     "pinyin": "sè",
     "distractors": [
-      "sē",
       "shè",
-      "cè"
+      "sē",
+      "sé"
     ],
     "char_distractors": [
       "巴",
-      "红",
-      "绿"
+      "瑟",
+      "红"
     ],
     "unit": "2-5",
     "radical": "色",
@@ -482,14 +494,14 @@ const questionsData = [
     "char": "听",
     "pinyin": "tīng",
     "distractors": [
+      "dīng",
       "tíng",
-      "tǐng",
-      "dīng"
+      "tǐng"
     ],
     "char_distractors": [
-      "说",
-      "口",
-      "叫"
+      "厅",
+      "停",
+      "说"
     ],
     "unit": "2-6",
     "radical": "口",
@@ -501,46 +513,50 @@ const questionsData = [
     "char": "远",
     "pinyin": "yuǎn",
     "distractors": [
+      "yuān",
       "yuán",
-      "yuàn",
-      "yuān"
+      "yuàn"
     ],
     "char_distractors": [
-      "近",
       "还",
-      "运"
+      "圆",
+      "近"
     ],
     "unit": "2-4",
+    "radical": "辶",
+    "structure": "半包围",
     "type": "pinyin"
   },
   {
     "char": "近",
     "pinyin": "jìn",
     "distractors": [
-      "jīn",
-      "jǐn",
-      "qìn"
+      "jìng",
+      "qìn",
+      "jīn"
     ],
     "char_distractors": [
       "远",
-      "还",
-      "进"
+      "进",
+      "斤"
     ],
     "unit": "2-4",
+    "radical": "辶",
+    "structure": "半包围",
     "type": "pinyin"
   },
   {
     "char": "还",
     "pinyin": "hái",
     "distractors": [
-      "huán",
       "hāi",
-      "hǎi"
+      "hǎi",
+      "hài"
     ],
     "char_distractors": [
-      "远",
-      "近",
-      "不"
+      "不",
+      "孩",
+      "远"
     ],
     "unit": "2-7",
     "radical": "辶",
@@ -552,64 +568,72 @@ const questionsData = [
     "char": "来",
     "pinyin": "lái",
     "distractors": [
+      "nái",
       "lāi",
-      "lǎi",
-      "lài"
+      "lǎi"
     ],
     "char_distractors": [
-      "去",
-      "大",
-      "米"
+      "米",
+      "赖",
+      "去"
     ],
     "unit": "2-4",
+    "radical": "木",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "去",
     "pinyin": "qù",
     "distractors": [
+      "jù",
       "qū",
-      "qǔ",
-      "jù"
+      "qú"
     ],
     "char_distractors": [
-      "来",
-      "走",
-      "土"
+      "云",
+      "趣",
+      "来"
     ],
     "unit": "2-4",
+    "radical": "厶",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "多",
     "pinyin": "duō",
     "distractors": [
-      "duǒ",
-      "duò",
-      "tuō"
+      "tuō",
+      "duó",
+      "duǒ"
     ],
     "char_distractors": [
-      "少",
-      "大",
-      "小"
+      "夕",
+      "朵",
+      "少"
     ],
     "unit": "2-4",
+    "radical": "夕",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "爸",
     "pinyin": "bà",
     "distractors": [
-      "bā",
       "pà",
-      "bǎ"
+      "bā",
+      "bá"
     ],
     "char_distractors": [
-      "妈",
       "把",
-      "巴"
+      "怕",
+      "妈"
     ],
     "unit": "2-5",
+    "radical": "父",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
@@ -621,27 +645,31 @@ const questionsData = [
       "mà"
     ],
     "char_distractors": [
-      "爸",
-      "她",
-      "好"
+      "马",
+      "麻",
+      "爸"
     ],
     "unit": "2-5",
+    "radical": "女",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "全",
     "pinyin": "quán",
     "distractors": [
+      "juán",
       "quān",
-      "quǎn",
-      "juán"
+      "quǎn"
     ],
     "char_distractors": [
-      "会",
-      "合",
-      "回"
+      "金",
+      "权",
+      "会"
     ],
     "unit": "2-5",
+    "radical": "入",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
@@ -654,11 +682,11 @@ const questionsData = [
     ],
     "char_distractors": [
       "口",
-      "会",
-      "全"
+      "灰",
+      "国"
     ],
     "unit": "2-3",
-    "radical": "口",
+    "radical": "囗",
     "structure": "全包围",
     "strokeCount": 6,
     "type": "pinyin"
@@ -669,12 +697,12 @@ const questionsData = [
     "distractors": [
       "huī",
       "huí",
-      "kuì"
+      "huǐ"
     ],
     "char_distractors": [
-      "回",
-      "全",
-      "合"
+      "合",
+      "汇",
+      "回"
     ],
     "unit": "2-2",
     "radical": "人",
@@ -686,30 +714,32 @@ const questionsData = [
     "char": "工",
     "pinyin": "gōng",
     "distractors": [
-      "gòng",
+      "gūn",
       "kōng",
-      "gǒng"
+      "góng"
     ],
     "char_distractors": [
       "土",
-      "王",
-      "左"
+      "攻",
+      "王"
     ],
     "unit": "2-6",
+    "radical": "工",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "机",
     "pinyin": "jī",
     "distractors": [
-      "jì",
       "qī",
+      "jí",
       "jǐ"
     ],
     "char_distractors": [
       "几",
-      "木",
-      "本"
+      "鸡",
+      "木"
     ],
     "unit": "2-4",
     "radical": "木",
@@ -721,46 +751,50 @@ const questionsData = [
     "char": "几",
     "pinyin": "jǐ",
     "distractors": [
+      "qǐ",
       "jī",
-      "jì",
-      "qǐ"
+      "jí"
     ],
     "char_distractors": [
       "机",
-      "九",
-      "风"
+      "己",
+      "九"
     ],
     "unit": "2-6",
+    "radical": "几",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "用",
     "pinyin": "yòng",
     "distractors": [
+      "yùn",
       "yōng",
-      "yǒng",
-      "rǒng"
+      "yóng"
     ],
     "char_distractors": [
       "月",
-      "田",
-      "目"
+      "拥",
+      "田"
     ],
     "unit": "2-6",
+    "radical": "用",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "问",
     "pinyin": "wèn",
     "distractors": [
+      "wèng",
       "wēn",
-      "wěn",
-      "mèn"
+      "wén"
     ],
     "char_distractors": [
       "门",
-      "间",
-      "闻"
+      "闻",
+      "间"
     ],
     "unit": "2-4",
     "radical": "门",
@@ -773,45 +807,49 @@ const questionsData = [
     "pinyin": "yǒu",
     "distractors": [
       "yōu",
-      "yòu",
-      "yóu"
+      "yóu",
+      "yòu"
     ],
     "char_distractors": [
-      "右",
       "友",
-      "又"
+      "又",
+      "右"
     ],
     "unit": "2-6",
+    "radical": "月",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "半",
     "pinyin": "bàn",
     "distractors": [
-      "bān",
+      "bàng",
       "pàn",
-      "bǎn"
+      "bān"
     ],
     "char_distractors": [
       "牛",
-      "羊",
+      "伴",
       "午"
     ],
     "unit": "2-6",
+    "radical": "十",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "从",
     "pinyin": "cóng",
     "distractors": [
-      "cōng",
-      "cǒng",
-      "zòng"
+      "chóng",
+      "cún",
+      "cōng"
     ],
     "char_distractors": [
       "人",
-      "众",
-      "入"
+      "丛",
+      "众"
     ],
     "unit": "2-3",
     "radical": "人",
@@ -823,17 +861,17 @@ const questionsData = [
     "char": "主",
     "pinyin": "zhǔ",
     "distractors": [
+      "zǔ",
       "zhū",
-      "zhù",
-      "chǔ"
+      "zhú"
     ],
     "char_distractors": [
       "住",
-      "王",
-      "玉"
+      "猪",
+      "王"
     ],
     "unit": "2-2",
-    "radical": "一",
+    "radical": "丶",
     "structure": "独体",
     "strokeCount": 5,
     "type": "pinyin"
@@ -842,14 +880,14 @@ const questionsData = [
     "char": "住",
     "pinyin": "zhù",
     "distractors": [
+      "zù",
       "zhū",
-      "zhǔ",
-      "chù"
+      "zhú"
     ],
     "char_distractors": [
       "主",
-      "往",
-      "注"
+      "注",
+      "往"
     ],
     "unit": "2-2",
     "radical": "亻",
@@ -861,14 +899,14 @@ const questionsData = [
     "char": "江",
     "pinyin": "jiāng",
     "distractors": [
-      "jiàng",
+      "jiān",
       "qiāng",
-      "jiǎng"
+      "jiáng"
     ],
     "char_distractors": [
       "河",
-      "湖",
-      "工"
+      "姜",
+      "湖"
     ],
     "unit": "2-2",
     "radical": "氵",
@@ -882,12 +920,12 @@ const questionsData = [
     "distractors": [
       "hē",
       "hě",
-      "gé"
+      "hè"
     ],
     "char_distractors": [
-      "江",
-      "湖",
-      "何"
+      "何",
+      "贺",
+      "江"
     ],
     "unit": "2-3",
     "radical": "氵",
@@ -899,14 +937,14 @@ const questionsData = [
     "char": "请",
     "pinyin": "qǐng",
     "distractors": [
-      "qīng",
-      "qìng",
-      "jǐng"
+      "qǐn",
+      "jǐng",
+      "qīng"
     ],
     "char_distractors": [
       "情",
       "清",
-      "晴"
+      "青"
     ],
     "unit": "2-1",
     "radical": "讠",
@@ -918,14 +956,14 @@ const questionsData = [
     "char": "情",
     "pinyin": "qíng",
     "distractors": [
-      "qīng",
+      "qín",
       "jíng",
-      "qǐng"
+      "qīng"
     ],
     "char_distractors": [
-      "青",
-      "清",
-      "晴"
+      "请",
+      "晴",
+      "清"
     ],
     "unit": "2-1",
     "radical": "忄",
@@ -937,17 +975,17 @@ const questionsData = [
     "char": "生",
     "pinyin": "shēng",
     "distractors": [
-      "shèng",
       "sēng",
-      "shěng"
+      "shēn",
+      "shéng"
     ],
     "char_distractors": [
       "牛",
-      "主",
-      "王"
+      "声",
+      "主"
     ],
     "unit": "2-1",
-    "radical": "—",
+    "radical": "生",
     "structure": "独体",
     "strokeCount": 5,
     "type": "pinyin"
@@ -956,78 +994,86 @@ const questionsData = [
     "char": "里",
     "pinyin": "lǐ",
     "distractors": [
-      "lī",
-      "lì",
-      "rǐ"
+      "nǐ",
+      "rǐ",
+      "lī"
     ],
     "char_distractors": [
-      "田",
-      "目",
-      "果"
+      "理",
+      "力",
+      "田"
     ],
     "unit": "2-7",
+    "radical": "里",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "果",
     "pinyin": "guǒ",
     "distractors": [
+      "kuǒ",
       "guō",
-      "guò",
-      "kuǒ"
+      "guó"
     ],
     "char_distractors": [
       "里",
-      "田",
+      "过",
       "木"
     ],
     "unit": "2-7",
+    "radical": "木",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "玩",
     "pinyin": "wán",
     "distractors": [
+      "wáng",
       "wān",
-      "wǎn",
-      "huán"
+      "wǎn"
     ],
     "char_distractors": [
-      "王",
       "完",
-      "元"
+      "晚",
+      "王"
     ],
     "unit": "2-7",
+    "radical": "王",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "很",
     "pinyin": "hěn",
     "distractors": [
-      "hēn",
-      "hèn",
-      "gěn"
+      "hěng",
+      "fěn",
+      "hēn"
     ],
     "char_distractors": [
-      "根",
+      "恨",
       "跟",
-      "恨"
+      "根"
     ],
     "unit": "2-5",
+    "radical": "彳",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "当",
     "pinyin": "dāng",
     "distractors": [
-      "dàng",
+      "dān",
       "tāng",
-      "dǎng"
+      "dáng"
     ],
     "char_distractors": [
       "尚",
-      "常",
-      "堂"
+      "挡",
+      "常"
     ],
     "unit": "2-3",
     "radical": "彐",
@@ -1039,30 +1085,32 @@ const questionsData = [
     "char": "音",
     "pinyin": "yīn",
     "distractors": [
+      "yīng",
       "yín",
-      "yǐn",
-      "yìn"
+      "yǐn"
     ],
     "char_distractors": [
-      "立",
       "意",
+      "因",
       "暗"
     ],
     "unit": "2-8",
+    "radical": "音",
+    "structure": "上下",
     "type": "pinyin"
   },
   {
     "char": "讲",
     "pinyin": "jiǎng",
     "distractors": [
-      "jiāng",
-      "jiàng",
-      "qiǎng"
+      "jiǎn",
+      "qiǎng",
+      "jiāng"
     ],
     "char_distractors": [
-      "说",
-      "话",
-      "请"
+      "井",
+      "奖",
+      "说"
     ],
     "unit": "2-5",
     "radical": "讠",
@@ -1075,32 +1123,34 @@ const questionsData = [
     "pinyin": "xǔ",
     "distractors": [
       "xū",
-      "xù",
-      "chǔ"
+      "xú",
+      "xù"
     ],
     "char_distractors": [
       "午",
-      "牛",
+      "续",
       "计"
     ],
     "unit": "2-8",
+    "radical": "讠",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "思",
     "pinyin": "sī",
     "distractors": [
-      "sì",
       "shī",
+      "sí",
       "sǐ"
     ],
     "char_distractors": [
-      "心",
-      "想",
-      "息"
+      "田",
+      "丝",
+      "想"
     ],
     "unit": "2-5",
-    "radical": "田",
+    "radical": "心",
     "structure": "上下",
     "strokeCount": 9,
     "type": "pinyin"
@@ -1109,14 +1159,14 @@ const questionsData = [
     "char": "床",
     "pinyin": "chuáng",
     "distractors": [
+      "chuán",
       "chuāng",
-      "chuǎng",
-      "zhuáng"
+      "chuǎng"
     ],
     "char_distractors": [
-      "广",
       "庄",
-      "窗"
+      "窗",
+      "广"
     ],
     "unit": "2-5",
     "radical": "广",
@@ -1128,14 +1178,14 @@ const questionsData = [
     "char": "前",
     "pinyin": "qián",
     "distractors": [
-      "qiān",
-      "qiǎn",
-      "jiān"
+      "qiáng",
+      "jián",
+      "qiān"
     ],
     "char_distractors": [
-      "后",
       "月",
-      "门"
+      "钱",
+      "后"
     ],
     "unit": "2-5",
     "radical": "刂",
@@ -1147,17 +1197,17 @@ const questionsData = [
     "char": "光",
     "pinyin": "guāng",
     "distractors": [
-      "guàng",
+      "guān",
       "kuāng",
-      "guǎng"
+      "guáng"
     ],
     "char_distractors": [
-      "火",
-      "大",
-      "先"
+      "先",
+      "广",
+      "火"
     ],
     "unit": "2-2",
-    "radical": "小",
+    "radical": "儿",
     "structure": "上下",
     "strokeCount": 6,
     "type": "pinyin"
@@ -1166,30 +1216,32 @@ const questionsData = [
     "char": "低",
     "pinyin": "dī",
     "distractors": [
+      "tī",
       "dí",
-      "dǐ",
-      "tī"
+      "dǐ"
     ],
     "char_distractors": [
-      "你",
-      "他",
-      "住"
+      "底",
+      "的",
+      "你"
     ],
     "unit": "2-8",
+    "radical": "亻",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "故",
     "pinyin": "gù",
     "distractors": [
+      "kù",
       "gū",
-      "gǔ",
-      "kù"
+      "gú"
     ],
     "char_distractors": [
-      "做",
       "古",
-      "放"
+      "顾",
+      "做"
     ],
     "unit": "2-5",
     "radical": "攵",
@@ -1201,17 +1253,17 @@ const questionsData = [
     "char": "乡",
     "pinyin": "xiāng",
     "distractors": [
+      "xiān",
       "xiáng",
-      "xiǎng",
-      "xiàng"
+      "xiǎng"
     ],
     "char_distractors": [
       "香",
-      "向",
+      "想",
       "多"
     ],
     "unit": "2-5",
-    "radical": "—",
+    "radical": "乙",
     "structure": "独体",
     "strokeCount": 3,
     "type": "pinyin"
@@ -1221,29 +1273,31 @@ const questionsData = [
     "pinyin": "wǔ",
     "distractors": [
       "wū",
-      "wù",
-      "hǔ"
+      "wú",
+      "wù"
     ],
     "char_distractors": [
       "牛",
-      "半",
-      "许"
+      "五",
+      "半"
     ],
     "unit": "2-7",
+    "radical": "十",
+    "structure": "独体",
     "type": "pinyin"
   },
   {
     "char": "节",
     "pinyin": "jié",
     "distractors": [
+      "qié",
       "jiē",
-      "jiě",
-      "qié"
+      "jiě"
     ],
     "char_distractors": [
       "草",
-      "花",
-      "叶"
+      "结",
+      "花"
     ],
     "unit": "2-4",
     "radical": "艹",
@@ -1256,29 +1310,31 @@ const questionsData = [
     "pinyin": "yè",
     "distractors": [
       "yē",
-      "yě",
-      "yué"
+      "yé",
+      "yě"
     ],
     "char_distractors": [
-      "草",
-      "花",
-      "节"
+      "叫",
+      "也",
+      "草"
     ],
     "unit": "2-7",
+    "radical": "口",
+    "structure": "左右",
     "type": "pinyin"
   },
   {
     "char": "快",
     "pinyin": "kuài",
     "distractors": [
-      "kuāi",
       "guài",
-      "kuǎi"
+      "kuāi",
+      "kuái"
     ],
     "char_distractors": [
-      "乐",
       "块",
-      "决"
+      "筷",
+      "乐"
     ],
     "unit": "2-3",
     "radical": "忄",
@@ -1290,14 +1346,14 @@ const questionsData = [
     "char": "乐",
     "pinyin": "lè",
     "distractors": [
+      "nè",
       "lē",
-      "yuè",
-      "lě"
+      "lé"
     ],
     "char_distractors": [
-      "快",
       "了",
-      "子"
+      "勒",
+      "快"
     ],
     "unit": "2-3",
     "radical": "丿",
@@ -1314,12 +1370,12 @@ const questionsData = [
     "distractors": [
       "cuī",
       "chuí",
-      "chūi"
+      "chuǐ"
     ],
     "char_distractors": [
-      "叫",
-      "呢",
-      "口"
+      "次",
+      "炒",
+      "叫"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1331,14 +1387,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
-      "xíng",
-      "shèng",
-      "xǐng"
+      "xìn",
+      "xīng",
+      "xíng"
     ],
     "char_distractors": [
       "性",
       "星",
-      "牲"
+      "好"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1350,13 +1406,13 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 4,
     "distractors": [
-      "shēn",
-      "shěn",
-      "shèn"
+      "sén",
+      "shéng",
+      "shēn"
     ],
     "char_distractors": [
       "十",
-      "计",
+      "神",
       "仁"
     ],
     "unit": "2-1",
@@ -1370,13 +1426,13 @@ const questionsData = [
     "strokeCount": 3,
     "distractors": [
       "mē",
-      "mó",
-      "má"
+      "mé",
+      "mě"
     ],
     "char_distractors": [
       "公",
-      "多",
-      "少"
+      "末",
+      "多"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1384,18 +1440,18 @@ const questionsData = [
   {
     "char": "古",
     "pinyin": "gǔ",
-    "radical": "十",
+    "radical": "口",
     "structure": "上下",
     "strokeCount": 5,
     "distractors": [
+      "kǔ",
       "gū",
-      "gù",
-      "kǔ"
+      "gú"
     ],
     "char_distractors": [
       "故",
       "苦",
-      "胡"
+      "十"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1407,14 +1463,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 9,
     "distractors": [
+      "fú",
       "hū",
-      "hǔ",
-      "hù"
+      "hǔ"
     ],
     "char_distractors": [
-      "古",
       "湖",
-      "葫"
+      "糊",
+      "月"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1426,14 +1482,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 4,
     "distractors": [
-      "shuàng",
-      "chuāng",
+      "shuān",
+      "shuáng",
       "shuǎng"
     ],
     "char_distractors": [
       "对",
-      "又",
-      "欢"
+      "爽",
+      "又"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1441,18 +1497,18 @@ const questionsData = [
   {
     "char": "言",
     "pinyin": "yán",
-    "radical": "—",
+    "radical": "言",
     "structure": "独体",
     "strokeCount": 7,
     "distractors": [
-      "yǎn",
-      "yàn",
-      "yān"
+      "yáng",
+      "yān",
+      "yǎn"
     ],
     "char_distractors": [
-      "语",
       "说",
-      "话"
+      "眼",
+      "语"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1464,9 +1520,9 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 8,
     "distractors": [
-      "qíng",
+      "qīn",
       "jīng",
-      "qǐng"
+      "qíng"
     ],
     "char_distractors": [
       "清",
@@ -1483,14 +1539,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 11,
     "distractors": [
-      "qíng",
+      "qīn",
       "jīng",
-      "qǐng"
+      "qíng"
     ],
     "char_distractors": [
       "青",
-      "晴",
-      "情"
+      "请",
+      "晴"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1502,14 +1558,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 12,
     "distractors": [
-      "qīng",
+      "qín",
       "jíng",
-      "qǐng"
+      "qīng"
     ],
     "char_distractors": [
-      "青",
-      "清",
-      "情"
+      "睛",
+      "情",
+      "清"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1517,18 +1573,18 @@ const questionsData = [
   {
     "char": "字",
     "pinyin": "zì",
-    "radical": "宀",
+    "radical": "子",
     "structure": "上下",
     "strokeCount": 6,
     "distractors": [
+      "zhì",
       "zī",
-      "cì",
-      "zǐ"
+      "zí"
     ],
     "char_distractors": [
       "子",
-      "学",
-      "宇"
+      "自",
+      "学"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1540,14 +1596,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 6,
     "distractors": [
-      "dōng",
+      "dùn",
       "tòng",
-      "dǒng"
+      "dōng"
     ],
     "char_distractors": [
       "功",
-      "力",
-      "助"
+      "冬",
+      "力"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1559,14 +1615,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
+      "wàng",
       "wān",
-      "wǎn",
-      "mán"
+      "wán"
     ],
     "char_distractors": [
       "方",
-      "千",
-      "百"
+      "晚",
+      "千"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1584,8 +1640,8 @@ const questionsData = [
     ],
     "char_distractors": [
       "天",
-      "元",
-      "五"
+      "午",
+      "元"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1597,14 +1653,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
+      "mín",
       "mīng",
-      "mǐng",
-      "míng"
+      "mǐng"
     ],
     "char_distractors": [
       "朋",
-      "阳",
-      "晴"
+      "名",
+      "阳"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1612,17 +1668,17 @@ const questionsData = [
   {
     "char": "卡",
     "pinyin": "kǎ",
-    "radical": "卜",
+    "radical": "丨",
     "structure": "上下",
     "strokeCount": 5,
     "distractors": [
+      "gǎ",
       "kā",
-      "kà",
-      "gǎ"
+      "ká"
     ],
     "char_distractors": [
       "下",
-      "不",
+      "咖",
       "半"
     ],
     "unit": "2-1",
@@ -1635,14 +1691,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "piān",
       "biàn",
-      "piǎn"
+      "piān",
+      "pián"
     ],
     "char_distractors": [
       "版",
-      "牌",
-      "爿"
+      "偏",
+      "斤"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1650,18 +1706,18 @@ const questionsData = [
   {
     "char": "合",
     "pinyin": "hé",
-    "radical": "人",
-    "structure": "上下",
+    "radical": "口",
+    "structure": "上中下",
     "strokeCount": 6,
     "distractors": [
-      "gé",
       "hē",
-      "hě"
+      "hě",
+      "hè"
     ],
     "char_distractors": [
       "会",
-      "全",
-      "回"
+      "河",
+      "全"
     ],
     "unit": "2-1",
     "type": "pinyin"
@@ -1673,14 +1729,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 6,
     "distractors": [
-      "gōng",
-      "gǒng",
-      "kòng"
+      "gùn",
+      "kòng",
+      "gōng"
     ],
     "char_distractors": [
       "工",
-      "公",
-      "供"
+      "拱",
+      "公"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1688,18 +1744,18 @@ const questionsData = [
   {
     "char": "产",
     "pinyin": "chǎn",
-    "radical": "立",
+    "radical": "亠",
     "structure": "独体",
     "strokeCount": 6,
     "distractors": [
-      "chān",
-      "chàn",
-      "shǎn"
+      "cǎn",
+      "chǎng",
+      "chān"
     ],
     "char_distractors": [
-      "生",
       "厂",
-      "广"
+      "铲",
+      "生"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1711,14 +1767,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "tāi",
       "dài",
-      "tǎi"
+      "tāi",
+      "tái"
     ],
     "char_distractors": [
       "大",
-      "天",
-      "犬"
+      "台",
+      "天"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1730,14 +1786,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 6,
     "distractors": [
+      "yán",
       "yāng",
-      "yǎng",
-      "yàng"
+      "yǎng"
     ],
     "char_distractors": [
       "阴",
-      "阵",
-      "防"
+      "羊",
+      "阵"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1745,18 +1801,18 @@ const questionsData = [
   {
     "char": "井",
     "pinyin": "jǐng",
-    "radical": "一",
+    "radical": "二",
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "jīng",
-      "jìng",
-      "qǐng"
+      "jǐn",
+      "qǐng",
+      "jīng"
     ],
     "char_distractors": [
       "开",
-      "升",
-      "天"
+      "景",
+      "升"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1768,14 +1824,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "fáng",
-      "fǎng",
-      "pāng"
+      "fān",
+      "hāng",
+      "fáng"
     ],
     "char_distractors": [
       "万",
-      "放",
-      "房"
+      "房",
+      "放"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1787,14 +1843,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 6,
     "distractors": [
+      "fòu",
       "hōu",
-      "hǒu",
-      "gòu"
+      "hóu"
     ],
     "char_distractors": [
       "向",
-      "同",
-      "合"
+      "候",
+      "前"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1803,17 +1859,17 @@ const questionsData = [
     "char": "高",
     "pinyin": "gāo",
     "radical": "高",
-    "structure": "独体",
+    "structure": "上下",
     "strokeCount": 10,
     "distractors": [
-      "gào",
-      "hāo",
+      "kāo",
+      "gáo",
       "gǎo"
     ],
     "char_distractors": [
       "亮",
-      "京",
-      "商"
+      "告",
+      "京"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1825,14 +1881,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 5,
     "distractors": [
-      "bēi",
-      "bèi",
-      "pěi"
+      "biě",
+      "pěi",
+      "bēi"
     ],
     "char_distractors": [
       "比",
-      "此",
-      "化"
+      "背",
+      "此"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1841,17 +1897,17 @@ const questionsData = [
     "char": "京",
     "pinyin": "jīng",
     "radical": "亠",
-    "structure": "上下",
+    "structure": "上中下",
     "strokeCount": 8,
     "distractors": [
-      "jìng",
+      "jīn",
       "qīng",
-      "jǐng"
+      "jíng"
     ],
     "char_distractors": [
       "高",
-      "亮",
-      "景"
+      "经",
+      "亮"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1863,14 +1919,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
-      "guāng",
-      "guàng",
-      "kuǎng"
+      "guǎn",
+      "kuǎng",
+      "guāng"
     ],
     "char_distractors": [
       "厂",
-      "庄",
-      "广"
+      "逛",
+      "庄"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1883,13 +1939,13 @@ const questionsData = [
     "strokeCount": 5,
     "distractors": [
       "xiē",
-      "xiè",
-      "xié"
+      "xié",
+      "xiè"
     ],
     "char_distractors": [
-      "字",
       "与",
-      "马"
+      "泻",
+      "字"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1901,14 +1957,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 4,
     "distractors": [
+      "rèng",
       "rēn",
-      "rěn",
-      "lèn"
+      "rén"
     ],
     "char_distractors": [
       "让",
-      "讲",
-      "说"
+      "人",
+      "讲"
     ],
     "unit": "2-2",
     "type": "pinyin"
@@ -1920,14 +1976,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 5,
     "distractors": [
-      "rāng",
-      "rǎng",
-      "làng"
+      "ràn",
+      "làng",
+      "rāng"
     ],
     "char_distractors": [
       "认",
-      "讲",
-      "请"
+      "壤",
+      "讲"
     ],
     "unit": "2-3",
     "type": "pinyin"
@@ -1939,14 +1995,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 6,
     "distractors": [
+      "zhì",
       "zī",
-      "cì",
-      "zǐ"
+      "zí"
     ],
     "char_distractors": [
       "白",
-      "目",
-      "百"
+      "字",
+      "目"
     ],
     "unit": "2-3",
     "type": "pinyin"
@@ -1954,18 +2010,18 @@ const questionsData = [
   {
     "char": "已",
     "pinyin": "yǐ",
-    "radical": "已",
+    "radical": "己",
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
       "yī",
-      "yì",
-      "jǐ"
+      "yí",
+      "yì"
     ],
     "char_distractors": [
       "己",
-      "巳",
-      "也"
+      "以",
+      "巳"
     ],
     "unit": "2-3",
     "type": "pinyin"
@@ -1978,12 +2034,12 @@ const questionsData = [
     "strokeCount": 6,
     "distractors": [
       "hāo",
-      "hào",
-      "hǎo"
+      "háo",
+      "hào"
     ],
     "char_distractors": [
       "如",
-      "妈",
+      "号",
       "她"
     ],
     "unit": "2-3",
@@ -1997,12 +2053,12 @@ const questionsData = [
     "strokeCount": 8,
     "distractors": [
       "huā",
-      "huǎ",
-      "guà"
+      "huá",
+      "huǎ"
     ],
     "char_distractors": [
       "书",
-      "花",
+      "化",
       "话"
     ],
     "unit": "2-3",
@@ -2021,7 +2077,7 @@ const questionsData = [
     ],
     "char_distractors": [
       "手",
-      "牛",
+      "猫",
       "尾"
     ],
     "unit": "2-3",
@@ -2034,14 +2090,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 5,
     "distractors": [
+      "dái",
       "tāi",
-      "tǎi",
-      "dái"
+      "tǎi"
     ],
     "char_distractors": [
       "合",
-      "右",
-      "石"
+      "太",
+      "右"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2053,14 +2109,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 11,
     "distractors": [
-      "chāng",
-      "chǎng",
-      "cháng"
+      "càng",
+      "chàn",
+      "chāng"
     ],
     "char_distractors": [
-      "口",
-      "吹",
-      "叫"
+      "昌",
+      "常",
+      "吹"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2072,14 +2128,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 6,
     "distractors": [
-      "sān",
-      "sàn",
-      "shǎn"
+      "shǎn",
+      "sǎng",
+      "sān"
     ],
     "char_distractors": [
       "全",
-      "合",
-      "企"
+      "散",
+      "合"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2087,18 +2143,18 @@ const questionsData = [
   {
     "char": "朵",
     "pinyin": "duǒ",
-    "radical": "几",
+    "radical": "木",
     "structure": "上下",
     "strokeCount": 6,
     "distractors": [
+      "tuǒ",
       "duō",
-      "duò",
-      "tuǒ"
+      "duó"
     ],
     "char_distractors": [
       "花",
-      "果",
-      "木"
+      "蹲",
+      "果"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2106,17 +2162,17 @@ const questionsData = [
   {
     "char": "美",
     "pinyin": "měi",
-    "radical": "羊",
+    "radical": "八",
     "structure": "上下",
     "strokeCount": 9,
     "distractors": [
-      "méi",
+      "miě",
       "mēi",
-      "mèi"
+      "méi"
     ],
     "char_distractors": [
       "羊",
-      "半",
+      "每",
       "丽"
     ],
     "unit": "2-4",
@@ -2129,14 +2185,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 7,
     "distractors": [
+      "zè",
       "zhē",
-      "zhě",
-      "zè"
+      "zhé"
     ],
     "char_distractors": [
       "过",
-      "还",
-      "进"
+      "遮",
+      "还"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2144,18 +2200,18 @@ const questionsData = [
   {
     "char": "看",
     "pinyin": "kàn",
-    "radical": "手",
-    "structure": "半包围",
+    "radical": "目",
+    "structure": "上下",
     "strokeCount": 9,
     "distractors": [
-      "kān",
-      "kǎn",
-      "gàn"
+      "kàng",
+      "gàn",
+      "kān"
     ],
     "char_distractors": [
       "着",
-      "见",
-      "目"
+      "刊",
+      "见"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2167,13 +2223,13 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 9,
     "distractors": [
-      "miǎn",
-      "biàn",
-      "miān"
+      "miān",
+      "mián",
+      "miǎn"
     ],
     "char_distractors": [
       "目",
-      "自",
+      "棉",
       "田"
     ],
     "unit": "2-4",
@@ -2186,13 +2242,13 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 5,
     "distractors": [
-      "jiǎ",
-      "gā",
-      "jiá"
+      "qiā",
+      "jiá",
+      "jiǎ"
     ],
     "char_distractors": [
       "力",
-      "办",
+      "家",
       "功"
     ],
     "unit": "2-4",
@@ -2205,14 +2261,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 7,
     "distractors": [
-      "dōu",
       "tòu",
-      "dǒu"
+      "dōu",
+      "dóu"
     ],
     "char_distractors": [
       "头",
-      "斗",
-      "互"
+      "读",
+      "斗"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2224,9 +2280,9 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
+      "tǒu",
       "dōu",
-      "dòu",
-      "tǒu"
+      "dóu"
     ],
     "char_distractors": [
       "豆",
@@ -2244,13 +2300,13 @@ const questionsData = [
     "strokeCount": 6,
     "distractors": [
       "mī",
-      "mì",
-      "nǐ"
+      "mí",
+      "mì"
     ],
     "char_distractors": [
       "木",
-      "禾",
-      "来"
+      "迷",
+      "禾"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2262,14 +2318,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 7,
     "distractors": [
-      "jiǎn",
-      "jiàn",
-      "qiān"
+      "jiāng",
+      "qiān",
+      "jián"
     ],
     "char_distractors": [
       "门",
-      "问",
-      "闻"
+      "件",
+      "问"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2277,17 +2333,17 @@ const questionsData = [
   {
     "char": "分",
     "pinyin": "fēn",
-    "radical": "八",
+    "radical": "刀",
     "structure": "上下",
     "strokeCount": 4,
     "distractors": [
-      "fèn",
-      "fěn",
-      "fān"
+      "fēng",
+      "hēn",
+      "fén"
     ],
     "char_distractors": [
       "八",
-      "公",
+      "份",
       "半"
     ],
     "unit": "2-4",
@@ -2300,14 +2356,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 6,
     "distractors": [
-      "rōu",
       "lòu",
-      "ròng"
+      "rōu",
+      "róu"
     ],
     "char_distractors": [
-      "月",
       "内",
-      "门"
+      "柔",
+      "月"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2319,14 +2375,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
+      "zǐ",
       "zhī",
-      "zhì",
-      "cǐ"
+      "zhí"
     ],
     "char_distractors": [
       "正",
-      "步",
-      "此"
+      "只",
+      "步"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2338,14 +2394,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "jìn",
-      "jǐn",
-      "qīn"
+      "jīng",
+      "qīn",
+      "jín"
     ],
     "char_distractors": [
       "斗",
-      "片",
-      "近"
+      "巾",
+      "片"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2357,14 +2413,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
-      "cūn",
-      "cǔn",
-      "sùn"
+      "chùn",
+      "còng",
+      "cūn"
     ],
     "char_distractors": [
       "才",
-      "对",
-      "村"
+      "村",
+      "对"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2373,17 +2429,17 @@ const questionsData = [
     "char": "千",
     "pinyin": "qiān",
     "radical": "十",
-    "structure": "独体",
+    "structure": "上下",
     "strokeCount": 3,
     "distractors": [
-      "qiǎn",
-      "qiàn",
-      "gān"
+      "qiāng",
+      "jiān",
+      "qián"
     ],
     "char_distractors": [
       "十",
-      "万",
-      "干"
+      "迁",
+      "万"
     ],
     "unit": "2-4",
     "type": "pinyin"
@@ -2391,17 +2447,17 @@ const questionsData = [
   {
     "char": "元",
     "pinyin": "yuán",
-    "radical": "一",
+    "radical": "二",
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
+      "yuān",
       "yuǎn",
-      "yuàn",
-      "yuān"
+      "yuàn"
     ],
     "char_distractors": [
       "无",
-      "天",
+      "圆",
       "云"
     ],
     "unit": "2-4",
@@ -2414,14 +2470,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 10,
     "distractors": [
+      "yàn",
       "yāng",
-      "yǎng",
-      "xiàng"
+      "yáng"
     ],
     "char_distractors": [
-      "林",
       "杨",
-      "标"
+      "养",
+      "林"
     ],
     "unit": "2-5",
     "type": "pinyin"
@@ -2434,13 +2490,13 @@ const questionsData = [
     "strokeCount": 10,
     "distractors": [
       "xiāo",
-      "xiǎo",
-      "shào"
+      "xiáo",
+      "xiǎo"
     ],
     "char_distractors": [
-      "哭",
-      "乐",
-      "竹"
+      "竹",
+      "小",
+      "哭"
     ],
     "unit": "2-5",
     "type": "pinyin"
@@ -2448,17 +2504,17 @@ const questionsData = [
   {
     "char": "再",
     "pinyin": "zài",
-    "radical": "一",
-    "structure": "独体",
+    "radical": "冂",
+    "structure": "上下",
     "strokeCount": 6,
     "distractors": [
+      "zhài",
       "zāi",
-      "zǎi",
-      "cài"
+      "zái"
     ],
     "char_distractors": [
       "在",
-      "有",
+      "才",
       "又"
     ],
     "unit": "2-5",
@@ -2471,14 +2527,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 10,
     "distractors": [
+      "gè",
       "kē",
-      "kě",
-      "gè"
+      "ké"
     ],
     "char_distractors": [
       "读",
-      "说",
-      "话"
+      "棵",
+      "说"
     ],
     "unit": "2-5",
     "type": "pinyin"
@@ -2487,17 +2543,17 @@ const questionsData = [
     "char": "坐",
     "pinyin": "zuò",
     "radical": "土",
-    "structure": "独体",
+    "structure": "上下",
     "strokeCount": 7,
     "distractors": [
+      "zhuò",
       "zuō",
-      "zuǒ",
-      "cuò"
+      "zuó"
     ],
     "char_distractors": [
       "座",
-      "左",
-      "在"
+      "做",
+      "左"
     ],
     "unit": "2-5",
     "type": "pinyin"
@@ -2505,17 +2561,17 @@ const questionsData = [
   {
     "char": "老",
     "pinyin": "lǎo",
-    "radical": "老",
-    "structure": "半包围",
+    "radical": "耂",
+    "structure": "上下",
     "strokeCount": 6,
     "distractors": [
-      "lāo",
-      "lào",
-      "nǎo"
+      "nǎo",
+      "rǎo",
+      "lāo"
     ],
     "char_distractors": [
       "考",
-      "教",
+      "姥",
       "师"
     ],
     "unit": "2-5",
@@ -2528,14 +2584,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 6,
     "distractors": [
-      "shì",
       "sī",
+      "shí",
       "shǐ"
     ],
     "char_distractors": [
-      "老",
       "帅",
-      "市"
+      "诗",
+      "老"
     ],
     "unit": "2-5",
     "type": "pinyin"
@@ -2547,14 +2603,14 @@ const questionsData = [
     "structure": "全包围",
     "strokeCount": 8,
     "distractors": [
+      "kuó",
       "guō",
-      "guǒ",
-      "kuó"
+      "guǒ"
     ],
     "char_distractors": [
       "回",
-      "园",
-      "因"
+      "过",
+      "园"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2566,14 +2622,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 10,
     "distractors": [
-      "dū",
-      "dǒu",
-      "tōu"
+      "tōu",
+      "dóu",
+      "dǒu"
     ],
     "char_distractors": [
       "部",
-      "郑",
-      "邮"
+      "读",
+      "郑"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2582,17 +2638,17 @@ const questionsData = [
     "char": "百",
     "pinyin": "bǎi",
     "radical": "白",
-    "structure": "独体",
+    "structure": "上下",
     "strokeCount": 6,
     "distractors": [
+      "pǎi",
       "bāi",
-      "bài",
-      "pái"
+      "bái"
     ],
     "char_distractors": [
       "白",
-      "自",
-      "目"
+      "柏",
+      "自"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2604,14 +2660,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 7,
     "distractors": [
+      "sí",
       "shī",
-      "shǐ",
-      "chí"
+      "shǐ"
     ],
     "char_distractors": [
       "日",
-      "明",
-      "晴"
+      "十",
+      "明"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2623,13 +2679,13 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 9,
     "distractors": [
+      "tiǎn",
       "diān",
-      "diàn",
-      "tiǎn"
+      "dián"
     ],
     "char_distractors": [
       "占",
-      "店",
+      "电",
       "黑"
     ],
     "unit": "2-6",
@@ -2643,13 +2699,13 @@ const questionsData = [
     "strokeCount": 8,
     "distractors": [
       "líng",
-      "lǐn",
-      "lìn"
+      "nín",
+      "līn"
     ],
     "char_distractors": [
-      "森",
       "木",
-      "树"
+      "邻",
+      "森"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2661,14 +2717,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 6,
     "distractors": [
+      "xìn",
       "xīng",
-      "xǐng",
-      "shìng"
+      "xíng"
     ],
     "char_distractors": [
       "光",
-      "半",
-      "关"
+      "星",
+      "半"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2680,14 +2736,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
+      "wǎn",
       "wāng",
-      "wàng",
-      "fǎng"
+      "wáng"
     ],
     "char_distractors": [
       "住",
-      "注",
-      "彼"
+      "忘",
+      "注"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2699,13 +2755,13 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 5,
     "distractors": [
-      "guà",
       "kuā",
+      "guá",
       "guǎ"
     ],
     "char_distractors": [
       "爪",
-      "西",
+      "挂",
       "果"
     ],
     "unit": "2-6",
@@ -2718,14 +2774,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 8,
     "distractors": [
-      "tú",
-      "tǔ",
-      "dù"
+      "dù",
+      "tū",
+      "tú"
     ],
     "char_distractors": [
       "免",
-      "象",
-      "儿"
+      "吐",
+      "象"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2737,14 +2793,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 7,
     "distractors": [
-      "jīn",
-      "jǐn",
-      "qìn"
+      "jìng",
+      "qìn",
+      "jīn"
     ],
     "char_distractors": [
       "近",
-      "还",
-      "远"
+      "金",
+      "还"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2756,13 +2812,13 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 6,
     "distractors": [
-      "dèng",
-      "déng",
-      "tēng"
+      "dēn",
+      "tēng",
+      "déng"
     ],
     "char_distractors": [
       "灭",
-      "烧",
+      "等",
       "火"
     ],
     "unit": "2-6",
@@ -2775,13 +2831,13 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "chè",
       "cē",
+      "ché",
       "chě"
     ],
     "char_distractors": [
       "东",
-      "转",
+      "扯",
       "辆"
     ],
     "unit": "2-6",
@@ -2794,14 +2850,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 10,
     "distractors": [
-      "zhān",
-      "zhǎn",
-      "chàn"
+      "zàn",
+      "zhàng",
+      "zhān"
     ],
     "char_distractors": [
       "立",
-      "竞",
-      "端"
+      "战",
+      "竞"
     ],
     "unit": "2-6",
     "type": "pinyin"
@@ -2813,14 +2869,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 8,
     "distractors": [
-      "kǒng",
-      "kòng",
-      "gōng"
+      "kūn",
+      "gōng",
+      "kóng"
     ],
     "char_distractors": [
       "穴",
-      "宝",
-      "宇"
+      "孔",
+      "宝"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2832,14 +2888,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 10,
     "distractors": [
+      "pǐ",
       "bī",
-      "bì",
-      "pǐ"
+      "bí"
     ],
     "char_distractors": [
-      "毛",
-      "写",
-      "画"
+      "竹",
+      "比",
+      "写"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2851,14 +2907,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
-      "zhì",
-      "zhǐ",
-      "chī"
+      "zī",
+      "zhí",
+      "zhǐ"
     ],
     "char_distractors": [
-      "智",
       "矢",
-      "石"
+      "只",
+      "智"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2870,14 +2926,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 12,
     "distractors": [
+      "tào",
       "dāo",
-      "dǎo",
-      "tào"
+      "dáo"
     ],
     "char_distractors": [
-      "路",
-      "通",
-      "过"
+      "首",
+      "到",
+      "路"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2889,13 +2945,13 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
-      "fāng",
-      "fǎng",
-      "páng"
+      "fàn",
+      "hàng",
+      "fāng"
     ],
     "char_distractors": [
       "方",
-      "做",
+      "房",
       "收"
     ],
     "unit": "2-7",
@@ -2908,14 +2964,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 5,
     "distractors": [
-      "pīng",
-      "pǐng",
-      "bíng"
+      "pín",
+      "bíng",
+      "pīng"
     ],
     "char_distractors": [
       "干",
-      "半",
-      "年"
+      "评",
+      "半"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2927,14 +2983,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 6,
     "distractors": [
-      "àn",
-      "ǎn",
-      "yān"
+      "āng",
+      "án",
+      "ǎn"
     ],
     "char_distractors": [
-      "全",
       "家",
-      "宝"
+      "暗",
+      "全"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2946,14 +3002,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
-      "gàn",
+      "gāng",
       "kān",
-      "gǎn"
+      "gán"
     ],
     "char_distractors": [
       "千",
-      "十",
-      "大"
+      "赶",
+      "十"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2965,14 +3021,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 7,
     "distractors": [
-      "shěn",
-      "chēn",
-      "shèn"
+      "sēn",
+      "shēng",
+      "shén"
     ],
     "char_distractors": [
-      "体",
       "自",
-      "长"
+      "深",
+      "体"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -2984,14 +3040,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 9,
     "distractors": [
-      "xìng",
-      "shēng",
+      "xīn",
+      "xíng",
       "xǐng"
     ],
     "char_distractors": [
       "晴",
-      "明",
-      "阳"
+      "姓",
+      "明"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -3003,14 +3059,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
+      "qiǔ",
       "jiū",
-      "jiù",
-      "qiǔ"
+      "jiú"
     ],
     "char_distractors": [
       "九",
-      "及",
-      "又"
+      "旧",
+      "及"
     ],
     "unit": "2-7",
     "type": "pinyin"
@@ -3023,12 +3079,12 @@ const questionsData = [
     "strokeCount": 6,
     "distractors": [
       "xiā",
-      "xiǎ",
-      "hè"
+      "xiá",
+      "xiǎ"
     ],
     "char_distractors": [
       "叫",
-      "吹",
+      "下",
       "呢"
     ],
     "unit": "2-8",
@@ -3041,14 +3097,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
-      "wèi",
       "wēi",
-      "wěi"
+      "wěi",
+      "wèi"
     ],
     "char_distractors": [
-      "力",
       "办",
-      "方"
+      "围",
+      "力"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3060,14 +3116,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
+      "bà",
       "pā",
-      "pǎ",
-      "bà"
+      "pá"
     ],
     "char_distractors": [
-      "怪",
       "伯",
-      "拍"
+      "拍",
+      "怪"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3079,14 +3135,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 10,
     "distractors": [
-      "jiǎ",
-      "gā",
-      "jiá"
+      "qiā",
+      "jiá",
+      "jiǎ"
     ],
     "char_distractors": [
-      "宝",
       "安",
-      "室"
+      "假",
+      "宝"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3095,16 +3151,16 @@ const questionsData = [
     "char": "象",
     "pinyin": "xiàng",
     "radical": "豕",
-    "structure": "独体",
+    "structure": "上下",
     "strokeCount": 11,
     "distractors": [
+      "xiàn",
       "xiāng",
-      "xiǎng",
-      "shàng"
+      "xiáng"
     ],
     "char_distractors": [
       "像",
-      "家",
+      "向",
       "豪"
     ],
     "unit": "2-8",
@@ -3117,13 +3173,13 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 7,
     "distractors": [
+      "mié",
       "mēi",
-      "mèi",
-      "mò"
+      "měi"
     ],
     "char_distractors": [
       "每",
-      "海",
+      "梅",
       "河"
     ],
     "unit": "2-8",
@@ -3136,9 +3192,9 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 8,
     "distractors": [
+      "tào",
       "dāo",
-      "dǎo",
-      "tào"
+      "dáo"
     ],
     "char_distractors": [
       "道",
@@ -3155,14 +3211,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 6,
     "distractors": [
+      "xiàn",
       "xiāng",
-      "xiǎng",
-      "shàng"
+      "xiáng"
     ],
     "char_distractors": [
       "问",
-      "同",
-      "回"
+      "象",
+      "同"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3174,14 +3230,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 5,
     "distractors": [
-      "biǎn",
-      "biàn",
-      "piān"
+      "piān",
+      "bián",
+      "biǎn"
     ],
     "char_distractors": [
       "过",
-      "这",
-      "远"
+      "变",
+      "还"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3189,18 +3245,18 @@ const questionsData = [
   {
     "char": "行",
     "pinyin": "xíng",
-    "radical": "彳",
+    "radical": "行",
     "structure": "左右",
     "strokeCount": 6,
     "distractors": [
+      "xín",
       "xīng",
-      "xìng",
-      "háng"
+      "xǐng"
     ],
     "char_distractors": [
       "走",
-      "很",
-      "得"
+      "形",
+      "很"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3212,14 +3268,14 @@ const questionsData = [
     "structure": "上下",
     "strokeCount": 9,
     "distractors": [
+      "chǎo",
       "cāo",
-      "zǎo",
-      "chǎo"
+      "cáo"
     ],
     "char_distractors": [
       "花",
-      "苗",
-      "药"
+      "早",
+      "苗"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3231,14 +3287,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 10,
     "distractors": [
-      "gān",
-      "gàn",
-      "kǎn"
+      "gǎng",
+      "kǎn",
+      "gān"
     ],
     "char_distractors": [
-      "走",
       "起",
-      "超"
+      "敢",
+      "走"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3250,14 +3306,14 @@ const questionsData = [
     "structure": "半包围",
     "strokeCount": 6,
     "distractors": [
+      "kuò",
       "guō",
-      "guǒ",
-      "kuò"
+      "guó"
     ],
     "char_distractors": [
       "这",
-      "还",
-      "进"
+      "锅",
+      "还"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3269,14 +3325,14 @@ const questionsData = [
     "structure": "左右",
     "strokeCount": 7,
     "distractors": [
+      "zǎo",
       "zhāo",
-      "zhào",
-      "cǎo"
+      "zháo"
     ],
     "char_distractors": [
       "我",
-      "打",
-      "把"
+      "招",
+      "打"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3288,13 +3344,13 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 3,
     "distractors": [
-      "jǐn",
-      "jìn",
-      "qīn"
+      "jīng",
+      "qīn",
+      "jín"
     ],
     "char_distractors": [
       "市",
-      "师",
+      "斤",
       "帅"
     ],
     "unit": "2-8",
@@ -3308,13 +3364,13 @@ const questionsData = [
     "strokeCount": 9,
     "distractors": [
       "xī",
-      "xì",
-      "shǐ"
+      "xí",
+      "xì"
     ],
     "char_distractors": [
       "选",
-      "先",
-      "冼"
+      "喜",
+      "河"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3326,14 +3382,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 6,
     "distractors": [
-      "yé",
       "yē",
-      "yuè"
+      "yé",
+      "yě"
     ],
     "char_distractors": [
       "贝",
-      "见",
-      "百"
+      "叶",
+      "见"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3345,14 +3401,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
+      "fù",
       "hū",
-      "hǔ",
-      "fù"
+      "hú"
     ],
     "char_distractors": [
       "门",
-      "斤",
-      "片"
+      "护",
+      "斤"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3361,16 +3417,16 @@ const questionsData = [
     "char": "角",
     "pinyin": "jiǎo",
     "radical": "角",
-    "structure": "上下",
+    "structure": "独体",
     "strokeCount": 7,
     "distractors": [
+      "qiǎo",
       "jiāo",
-      "jiào",
-      "gé"
+      "jiáo"
     ],
     "char_distractors": [
       "用",
-      "甩",
+      "脚",
       "月"
     ],
     "unit": "2-8",
@@ -3383,14 +3439,14 @@ const questionsData = [
     "structure": "独体",
     "strokeCount": 4,
     "distractors": [
+      "hù",
       "fū",
-      "fǔ",
-      "bù"
+      "fú"
     ],
     "char_distractors": [
       "爸",
-      "爷",
-      "大"
+      "付",
+      "爷"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -3408,8 +3464,8 @@ const questionsData = [
     ],
     "char_distractors": [
       "又",
-      "文",
-      "之"
+      "议",
+      "文"
     ],
     "unit": "2-8",
     "type": "pinyin"
@@ -6114,30 +6170,23 @@ const questionsData = [
 
 async function seed() {
   if (questionsData.length === 0) {
-    console.log('暂无题目数据')
     return { code: 1, msg: 'no data' }
   }
-
   console.log('开始上传 ' + questionsData.length + ' 道题目...')
-
   let success = 0
   let skip = 0
   let fail = 0
-
   for (const q of questionsData) {
     try {
       const existing = await db.collection('questions')
         .where({ type: q.type, char: q.char })
         .limit(1)
         .get()
-
       if (existing.data && existing.data.length > 0) {
-        // 已存在则更新
         await db.collection('questions').doc(existing.data[0]._id).update(q)
         skip++
         continue
       }
-
       await db.collection('questions').add(q)
       success++
     } catch (e) {
@@ -6145,7 +6194,6 @@ async function seed() {
       fail++
     }
   }
-
   console.log('上传完成：新增 ' + success + '，更新 ' + skip + '，失败 ' + fail)
   return { code: 0, msg: 'done', success, skip, fail }
 }
