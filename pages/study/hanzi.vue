@@ -34,7 +34,9 @@
     <!-- 笔顺题型 -->
     <view v-if="started && currentQ && currentQ.qType === 'stroke' && !showAnim" class="quiz-area">
       <view class="char-outline-wrap">
-        <view :id="outlineId" class="char-outline-target"></view>
+        <!-- 默认用普通字体立即显示，HanziWriter 加载完成后覆盖 -->
+        <view class="char-fallback" v-show="!outlineReady">{{ currentQ.char }}</view>
+        <view :id="outlineId" class="char-outline-target" v-show="outlineReady"></view>
       </view>
       <view class="speak-btn" @click="speakChar">🔊</view>
       <view class="type-badge stroke-badge">笔顺</view>
@@ -147,6 +149,7 @@ const selectedOpt = ref(-1)
 
 // HanziWriter
 const outlineId = ref('hz-' + Date.now())
+const outlineReady = ref(false)
 
 // 所有结构选项
 const ALL_STRUCTURES = ['上下', '左右', '独体', '半包围', '全包围']
@@ -154,6 +157,7 @@ const ALL_STRUCTURES = ['上下', '左右', '独体', '半包围', '全包围']
 const ALL_RADICALS = ref([])
 
 async function initOutline() {
+  outlineReady.value = false
   await nextTick()
   const el = document.getElementById(outlineId.value)
   if (!el || !currentQ.value) return
@@ -163,9 +167,16 @@ async function initOutline() {
       width: 150, height: 150, padding: 8,
       strokeColor: '#DDD', outlineColor: '#DDD',
       showCharacter: true, showOutline: false,
+      onLoadCharDataSuccess: () => {
+        outlineReady.value = true
+      },
+      onLoadCharDataError: () => {
+        // 加载失败保持 fallback 显示
+        outlineReady.value = false
+      }
     })
   } catch (e) {
-    el.innerHTML = `<span style="font-size:80px;font-weight:bold;color:#ccc">${currentQ.value.char}</span>`
+    outlineReady.value = false
   }
 }
 
@@ -462,10 +473,22 @@ onShow(() => {
 .hint-text {
   text-align: center; color: #888; font-size: 28rpx; margin-bottom: 24rpx;
 }
-.char-outline-wrap { display: flex; justify-content: center; margin-bottom: 16rpx; }
+.char-outline-wrap {
+  display: flex; justify-content: center; align-items: center;
+  margin-bottom: 16rpx; position: relative;
+  width: 150px; height: 150px;
+  background: #fff; border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
 .char-outline-target {
-  width: 150px; height: 150px; background: #fff;
-  border-radius: 12rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+  width: 150px; height: 150px;
+}
+.char-fallback {
+  font-size: 120px;
+  font-weight: bold;
+  color: #DDD;
+  line-height: 1;
+  font-family: "KaiTi", "楷体", "STKaiti", serif;
 }
 
 /* 选择题选项 */
@@ -498,12 +521,23 @@ onShow(() => {
 .feedback.correct { color: #2E7D32; background: #E8F5E9; }
 .feedback.wrong { color: #C62828; background: #FFEBEE; }
 
-.stroke-pool { display: flex; flex-wrap: wrap; gap: 16rpx; justify-content: center; margin-bottom: 32rpx; }
+.stroke-pool {
+  display: flex; flex-wrap: wrap; gap: 24rpx;
+  justify-content: center; margin-bottom: 32rpx;
+  padding: 0 16rpx;
+}
 .stroke-btn {
-  padding: 20rpx 36rpx; background: #fff; border: 3rpx solid #BDBDBD;
-  border-radius: 16rpx; font-size: 32rpx; font-weight: 600; color: #333;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06); transition: all 0.2s;
-  min-width: 100rpx; text-align: center;
+  padding: 32rpx 48rpx;
+  background: #fff;
+  border: 4rpx solid #BDBDBD;
+  border-radius: 20rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #333;
+  box-shadow: 0 6rpx 16rpx rgba(0,0,0,0.08);
+  transition: all 0.2s;
+  min-width: 140rpx;
+  text-align: center;
 }
 .stroke-btn:active { transform: scale(0.95); }
 .stroke-btn.used { background: #E0E0E0; color: #aaa; border-color: #E0E0E0; box-shadow: none; }
