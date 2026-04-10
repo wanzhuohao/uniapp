@@ -155,8 +155,15 @@ const fetchList = async () => {
         keyword: keyword.value
       }
     });
-    list.value = res.result.data;
-    total.value = res.result.total || 0;
+    const result = res?.result;
+    if (!result || result.code !== 0) {
+      uni.showToast({ title: result?.msg || '获取列表失败', icon: 'none' });
+      list.value = [];
+      total.value = 0;
+      return;
+    }
+    list.value = result.data || [];
+    total.value = result.total || 0;
   } catch (e) {
     uni.showToast({ title: '获取列表失败', icon: 'none' });
   } finally {

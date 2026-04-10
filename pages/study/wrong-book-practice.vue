@@ -95,7 +95,6 @@ import { useAuth } from '../../composables/common/useAuth.js'
 import { getUnmasteredList, recordCorrect, recordWrongAgain } from '../../utils/study/wrongBook.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
 import { shuffle } from '../../utils/study/questionHelper.js'
-import { generateStrokeDistractors } from '../../utils/study/questionHelper.js'
 
 const { getUsername } = useAuth()
 
@@ -211,12 +210,8 @@ function prepareOptions() {
     }
     const opts = [q.pinyin, ...distractors.slice(0, 3)]
     currentOptions.value = shuffle(opts)
-  } else if (q.type === 'stroke' && q.strokes) {
-    // 笔顺题选项
-    const distractors = generateStrokeDistractors(q.strokes, 3)
-    const opts = [q.strokes, ...distractors]
-    currentOptions.value = shuffle(opts)
   }
+  // hanzi/stroke/math 走自测模式（judgeSelf），无需预生成选项
 }
 
 function checkAnswer(answer) {
@@ -226,18 +221,6 @@ function checkAnswer(answer) {
 
   if (q.type === 'pinyin') {
     isCorrect.value = answer === q.pinyin
-  }
-
-  handleResult()
-}
-
-function checkStrokeAnswer(index, answer) {
-  if (showFeedback.value) return
-  selectedAnswer.value = index
-  const q = currentQuestion.value
-
-  if (q.type === 'stroke') {
-    isCorrect.value = answer.join(',') === q.strokes.join(',')
   }
 
   handleResult()
@@ -378,18 +361,6 @@ onMounted(() => {
   margin-bottom: 20rpx;
 }
 
-.stroke-top {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 20rpx;
-}
-
-.stroke-count {
-  font-size: 28rpx;
-  color: #999;
-}
-
 .prompt {
   display: block;
   text-align: center;
@@ -421,31 +392,6 @@ onMounted(() => {
 }
 
 .option.wrong {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.stroke-options {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-}
-
-.stroke-option {
-  padding: 24rpx;
-  border-radius: 16rpx;
-  background: #f0f2ff;
-  font-size: 26rpx;
-  color: #333;
-  text-align: center;
-}
-
-.stroke-option.correct {
-  background: #d4edda;
-  color: #155724;
-}
-
-.stroke-option.wrong {
   background: #f8d7da;
   color: #721c24;
 }

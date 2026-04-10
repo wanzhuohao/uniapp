@@ -97,8 +97,9 @@ async function loadExamConfig() {
     if (!username) return
     const db = uniCloud.database()
     const res = await db.collection('interview_settings').where({ username }).limit(1).get()
-    if (res.result.data.length > 0) {
-      const s = res.result.data[0]
+    const data = res?.result?.data || []
+    if (data.length > 0) {
+      const s = data[0]
       if (s.exam_question_count) examConfig.value.questionCount = s.exam_question_count
       if (s.exam_time_per_question) examConfig.value.timePerQuestion = s.exam_time_per_question
     }
@@ -113,10 +114,11 @@ async function checkApiKey() {
     if (!username) return
     const db = uniCloud.database()
     const res = await db.collection('interview_settings').where({ username }).limit(1).get()
-    if (!res.result.data.length || !res.result.data[0].api_key) {
+    const data = res?.result?.data || []
+    if (!data.length || !data[0].api_key) {
       uni.showModal({
         title: '欢迎使用',
-        content: '请先在设置页配置 DeepSeek API Key 后开始练习',
+        content: '请先在设置页配置 API Key 后开始练习',
         confirmText: '去设置',
         success: (res) => {
           if (res.confirm) goSettings()
@@ -136,13 +138,21 @@ async function startFree() {
       name: 'generate-question',
       data: { username: getUsername(), type: selectedType.value, count: 1 }
     })
-    if (res.result.code !== 0) {
-      uni.showToast({ title: res.result.msg, icon: 'none' })
-      if (res.result.code === -1) goSettings()
+    const result = res?.result
+    if (!result || result.code !== 0) {
+      uni.showToast({ title: result?.msg || '出题失败', icon: 'none' })
+      if (result?.code === -1) goSettings()
       return
     }
+    const list = result.data || []
+    if (list.length === 0) {
+      uni.showToast({ title: '未获取到题目', icon: 'none' })
+      return
+    }
+    // 用 storage 中转题目内容，避免 URL 过长
+    uni.setStorageSync('freeQuestion', list[0])
     uni.navigateTo({
-      url: `/pages/interview/practice?mode=${PRACTICE_MODES.FREE}&type=${selectedType.value}&questionId=${res.result.data[0]._id}&question=${encodeURIComponent(res.result.data[0].content)}&typeLabel=${encodeURIComponent(res.result.data[0].typeLabel)}`
+      url: `/pages/interview/practice?mode=${PRACTICE_MODES.FREE}&type=${selectedType.value}`
     })
   } catch (e) {
     uni.showToast({ title: '出题失败，请检查网络', icon: 'none' })
@@ -160,14 +170,20 @@ async function startExam() {
       name: 'generate-question',
       data: { username: getUsername(), type: selectedType.value, count: examConfig.value.questionCount }
     })
-    if (res.result.code !== 0) {
-      uni.showToast({ title: res.result.msg, icon: 'none' })
-      if (res.result.code === -1) goSettings()
+    const result = res?.result
+    if (!result || result.code !== 0) {
+      uni.showToast({ title: result?.msg || '出题失败', icon: 'none' })
+      if (result?.code === -1) goSettings()
+      return
+    }
+    const list = result.data || []
+    if (list.length === 0) {
+      uni.showToast({ title: '未获取到题目', icon: 'none' })
       return
     }
     // 考场模式通过事件传递题目数据（避免 URL 过长）
     uni.$emit('examQuestions', {
-      questions: res.result.data,
+      questions: list,
       timePerQuestion: examConfig.value.timePerQuestion
     })
     uni.navigateTo({

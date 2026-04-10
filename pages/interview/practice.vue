@@ -120,10 +120,17 @@ onLoad((options) => {
       loadExamQuestion(0)
     })
   } else {
-    // 自由模式
-    currentQuestion.value = decodeURIComponent(options.question)
-    currentTypeLabel.value = decodeURIComponent(options.typeLabel || '')
-    currentQuestionType.value = options.type || ''
+    // 自由模式：从 storage 读取题目（避免 URL 过长）
+    const q = uni.getStorageSync('freeQuestion')
+    if (q && q.content) {
+      currentQuestion.value = q.content
+      currentTypeLabel.value = q.typeLabel || ''
+      currentQuestionType.value = q.type || options.type || ''
+      uni.removeStorageSync('freeQuestion')
+    } else {
+      uni.showToast({ title: '题目加载失败', icon: 'none' })
+      setTimeout(() => uni.navigateBack(), 800)
+    }
   }
 })
 

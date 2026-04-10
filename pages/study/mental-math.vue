@@ -217,7 +217,7 @@ function submitAll() {
   })
 }
 
-function doSubmit() {
+async function doSubmit() {
   clearInterval(timer)
   timer = null
   finalTime.value = elapsed.value
@@ -226,26 +226,27 @@ function doSubmit() {
   finished.value = true
   started.value = false
 
-  // 写错题本和练习日志
+  // 写错题本和练习日志（等待全部完成，避免丢写）
   const username = getUsername()
   if (username) {
-    // 错题异步写入
-    questions.value.forEach(q => {
-      if (String(q.userAnswer) !== String(q.answer)) {
-        recordWrong(username, {
-          type: 'math',
-          char: q.expression + ' = ' + q.answer,
-          unit: 'lv' + selectedLevel.value,
-          question_id: 'math_' + selectedLevel.value + '_' + q.expression.replace(/\s/g, '')
-        })
-      }
-    })
-    // 记录练习日志
-    recordPractice(username, {
-      type: 'math',
-      totalCount: questions.value.length,
-      correctCount: correctCount.value
-    })
+    const wrongWrites = questions.value
+      .filter(q => String(q.userAnswer) !== String(q.answer))
+      .map(q => recordWrong(username, {
+        type: 'math',
+        char: q.expression + ' = ' + q.answer,
+        unit: 'lv' + selectedLevel.value,
+        question_id: 'math_' + selectedLevel.value + '_' + q.expression.replace(/\s/g, '')
+      }))
+    try {
+      await Promise.all(wrongWrites)
+      await recordPractice(username, {
+        type: 'math',
+        totalCount: questions.value.length,
+        correctCount: correctCount.value
+      })
+    } catch (e) {
+      console.error('写入错题/日志失败', e)
+    }
   }
 }
 
@@ -254,6 +255,9 @@ function restart() {
   started.value = false
   elapsed.value = 0
   timerWarn.value = false
+  alerted8 = false
+  alerted10 = false
+  questions.value = []
 }
 
 function goBack() {

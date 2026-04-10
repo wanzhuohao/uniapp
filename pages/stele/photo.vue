@@ -267,39 +267,48 @@ const chooseImage = () => {
       const targetAlbumId = currentAlbumId.value
       uploading.value = true
       let done = 0
+      let failed = 0
       uploadProgress.value = `0/${files.length}`
-      try {
-        for (const tempFilePath of files) {
-          const fileName = `${Date.now()}-${Math.random().toString(36).slice(-6)}.jpg`
-          const uploadRes = await uniCloud.uploadFile({
-            filePath: tempFilePath,
-            cloudPath: `photos/${fileName}`
-          })
-          const fileUrl = uploadRes.fileID
-          await uniCloud.callFunction({
-            name: 'photo-insert',
-            data: { albumId: targetAlbumId, fileName, fileUrl }
-          })
-          done++
-          uploadProgress.value = `${done}/${files.length}`
-        }
-        uni.showToast({ title: `成功上传 ${done} 张`, icon: 'success' })
-        if (currentAlbumId.value === targetAlbumId) {
-          await fetchPhotos(targetAlbumId)
-          nextTick(() => { photoWallRef.value?.scrollTo({ top: photoWallRef.value.scrollHeight, behavior: 'smooth' }); })
-        }
-        fetchAlbums()
-      } catch (e) {
-        if (done > 0) {
-          uni.showToast({ title: `已上传 ${done} 张，部分失败`, icon: 'none' })
-          if (currentAlbumId.value === targetAlbumId) fetchPhotos(targetAlbumId)
-          fetchAlbums()
-        } else {
-          uni.showToast({ title: '上传失败', icon: 'none' })
-        }
-      } finally {
-        uploading.value = false
+
+      // 单张上传函数（容错到单张）
+      const uploadOne = async (tempFilePath: string) => {
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(-6)}.jpg`
+        const uploadRes = await uniCloud.uploadFile({
+          filePath: tempFilePath,
+          cloudPath: `photos/${fileName}`
+        })
+        const fileUrl = uploadRes.fileID
+        await uniCloud.callFunction({
+          name: 'photo-insert',
+          data: { albumId: targetAlbumId, fileName, fileUrl }
+        })
       }
+
+      // 串行上传避免并发占带宽，但单张失败不阻断后续
+      for (const tempFilePath of files) {
+        try {
+          await uploadOne(tempFilePath)
+          done++
+        } catch (e) {
+          failed++
+        }
+        uploadProgress.value = `${done + failed}/${files.length}`
+      }
+
+      if (failed === 0) {
+        uni.showToast({ title: `成功上传 ${done} 张`, icon: 'success' })
+      } else if (done > 0) {
+        uni.showToast({ title: `成功 ${done} 张，失败 ${failed} 张`, icon: 'none' })
+      } else {
+        uni.showToast({ title: '上传失败', icon: 'none' })
+      }
+
+      if (done > 0 && currentAlbumId.value === targetAlbumId) {
+        await fetchPhotos(targetAlbumId)
+        nextTick(() => { photoWallRef.value?.scrollTo({ top: photoWallRef.value.scrollHeight, behavior: 'smooth' }); })
+      }
+      if (done > 0) fetchAlbums()
+      uploading.value = false
     }
   })
 }

@@ -14,6 +14,14 @@ exports.main = async (event, context) => {
   const { type, count = 1 } = event
   const username = event.username
 
+  if (!username) {
+    return { code: -2, msg: '缺少用户名参数' }
+  }
+  if (!type) {
+    return { code: -2, msg: '缺少题型参数' }
+  }
+  const safeCount = Math.max(1, Math.min(20, Number(count) || 1))
+
   const settingsRes = await db.collection('interview_settings')
     .where({ username })
     .limit(1)
@@ -33,7 +41,7 @@ exports.main = async (event, context) => {
 
   const typeLabel = TYPE_LABELS[selectedType] || '综合分析'
 
-  const prompt = `你是一位资深的公务员结构化面试命题专家。请生成${count}道"${typeLabel}"类型的结构化面试题目。
+  const prompt = `你是一位资深的公务员结构化面试命题专家。请生成${safeCount}道"${typeLabel}"类型的结构化面试题目。
 
 要求：
 1. 贴近真实公务员面试的风格和难度
@@ -97,7 +105,6 @@ function callDeepSeek(apiKey, prompt) {
       res.on('data', chunk => data += chunk)
       res.on('end', () => {
         try {
-          console.log('星火 原始返回:', data.substring(0, 500))
           const json = JSON.parse(data)
           if (json.choices && json.choices[0]) {
             resolve(json.choices[0].message.content)
