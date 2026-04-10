@@ -10,19 +10,19 @@
     <view class="stats-row">
       <view class="stat-card">
         <text class="stat-num">{{ stats.pinyinCount }}</text>
-        <text class="stat-label">拼音错题</text>
+        <text class="stat-label">拼音</text>
       </view>
       <view class="stat-card">
-        <text class="stat-num">{{ stats.strokeCount }}</text>
-        <text class="stat-label">汉字错题</text>
+        <text class="stat-num">{{ stats.hanziCount }}</text>
+        <text class="stat-label">汉字</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{ stats.mathCount }}</text>
+        <text class="stat-label">口算</text>
       </view>
       <view class="stat-card">
         <text class="stat-num">{{ stats.unmasteredCount }}</text>
         <text class="stat-label">待掌握</text>
-      </view>
-      <view class="stat-card">
-        <text class="stat-num">{{ stats.masteredCount }}</text>
-        <text class="stat-label">已掌握</text>
       </view>
     </view>
 
@@ -38,7 +38,7 @@
         <view class="top5-item" v-for="(item, i) in stats.top5" :key="item._id">
           <text class="top5-rank">{{ i + 1 }}</text>
           <text class="top5-char">{{ item.char }}</text>
-          <text class="top5-type">{{ item.type === 'pinyin' ? '拼音' : '汉字' }}</text>
+          <text class="top5-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字', math: '口算' })[item.type] || item.type }}</text>
           <text class="top5-count">错 {{ item.wrongCount }} 次</text>
         </view>
       </view>
@@ -58,6 +58,10 @@
         :class="['filter-btn', filter === 'hanzi' && 'active']"
         @click="filter = 'hanzi'"
       >汉字</text>
+      <text
+        :class="['filter-btn', filter === 'math' && 'active']"
+        @click="filter = 'math'"
+      >口算</text>
     </view>
 
     <!-- 错题列表 -->
@@ -69,7 +73,7 @@
       >
         <view class="wrong-char">{{ item.char }}</view>
         <view class="wrong-info">
-          <text class="wrong-type">{{ item.type === 'pinyin' ? '拼音' : '汉字' }}</text>
+          <text class="wrong-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字', math: '口算' })[item.type] || item.type }}</text>
           <text class="wrong-unit">{{ item.unit }}</text>
         </view>
         <view class="wrong-meta">

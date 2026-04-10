@@ -93,6 +93,11 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import { LEVEL_CONFIG } from '../../utils/study/mathGen.js'
+import { recordWrong } from '../../utils/study/wrongBook.js'
+import { recordPractice } from '../../utils/study/practiceLog.js'
+import { useAuth } from '../../composables/common/useAuth.js'
+
+const { getUsername } = useAuth()
 
 const levelLabels = { 1: '十以内', 2: '二十以内', 3: '百以内' }
 
@@ -219,6 +224,28 @@ function doSubmit() {
   questions.value.forEach(q => { q.checked = true })
   finished.value = true
   started.value = false
+
+  // 写错题本和练习日志
+  const username = getUsername()
+  if (username) {
+    // 错题异步写入
+    questions.value.forEach(q => {
+      if (String(q.userAnswer) !== String(q.answer)) {
+        recordWrong(username, {
+          type: 'math',
+          char: q.expression + ' = ' + q.answer,
+          unit: 'lv' + selectedLevel.value,
+          question_id: 'math_' + selectedLevel.value + '_' + q.expression.replace(/\s/g, '')
+        })
+      }
+    })
+    // 记录练习日志
+    recordPractice(username, {
+      type: 'math',
+      totalCount: questions.value.length,
+      correctCount: correctCount.value
+    })
+  }
 }
 
 function restart() {

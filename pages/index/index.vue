@@ -6,10 +6,10 @@
     </view>
 
     <view class="cards">
-      <view class="card card-stele" @click="goTo('/pages/stele/index')">
+      <view class="card card-stele" @click="goTo('/pages/stele/list')">
         <text class="card-icon">📝</text>
         <text class="card-title">碑文排版</text>
-        <text class="card-desc">碑文下单与排版预览</text>
+        <text class="card-desc">订单管理与排版预览</text>
       </view>
 
       <view class="card card-study" @click="goTo('/pages/study/index')">

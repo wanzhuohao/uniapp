@@ -69,7 +69,9 @@ export async function getWrongStats(username) {
   return {
     total: all.length,
     pinyinCount: all.filter(r => r.type === 'pinyin').length,
-    strokeCount: all.filter(r => r.type === 'stroke' || r.type === 'hanzi').length,
+    hanziCount: all.filter(r => r.type === 'stroke' || r.type === 'hanzi').length,
+    mathCount: all.filter(r => r.type === 'math').length,
+    strokeCount: all.filter(r => r.type === 'stroke' || r.type === 'hanzi').length, // 兼容旧字段
     unmasteredCount: all.filter(r => !r.mastered).length,
     masteredCount: all.filter(r => r.mastered).length,
     top5: all.filter(r => !r.mastered).sort((a, b) => b.wrongCount - a.wrongCount).slice(0, 5)
