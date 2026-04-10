@@ -85,6 +85,17 @@ export const useGameStore = defineStore('game', {
       this._persist()
     },
 
+    // 切换用户：清空内存状态，重新从云端加载
+    async switchUser() {
+      this.totalStars = 0
+      this.mathLevel = 1
+      this.mathHistory = []
+      this.currentUnit = '2-1'
+      this._statsId = null
+      // 从新用户的云端拉取
+      await this.loadFromCloud()
+    },
+
     _persist() {
       // 本地持久化
       saveState({

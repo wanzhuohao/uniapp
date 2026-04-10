@@ -93,8 +93,10 @@ onMounted(async () => {
 
 async function loadExamConfig() {
   try {
+    const username = getUsername()
+    if (!username) return
     const db = uniCloud.database()
-    const res = await db.collection('interview_settings').limit(1).get()
+    const res = await db.collection('interview_settings').where({ username }).limit(1).get()
     if (res.result.data.length > 0) {
       const s = res.result.data[0]
       if (s.exam_question_count) examConfig.value.questionCount = s.exam_question_count
@@ -107,8 +109,10 @@ async function loadExamConfig() {
 
 async function checkApiKey() {
   try {
+    const username = getUsername()
+    if (!username) return
     const db = uniCloud.database()
-    const res = await db.collection('interview_settings').limit(1).get()
+    const res = await db.collection('interview_settings').where({ username }).limit(1).get()
     if (!res.result.data.length || !res.result.data[0].api_key) {
       uni.showModal({
         title: '欢迎使用',

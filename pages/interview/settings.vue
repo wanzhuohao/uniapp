@@ -99,7 +99,9 @@ onMounted(async () => {
 
 async function loadSettings() {
   try {
-    const res = await db.collection('interview_settings').limit(1).get()
+    const username = getUsername()
+    if (!username) return
+    const res = await db.collection('interview_settings').where({ username }).limit(1).get()
     if (res.result.data.length > 0) {
       const s = res.result.data[0]
       settingsId.value = s._id

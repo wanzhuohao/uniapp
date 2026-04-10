@@ -2,3 +2,5 @@ node_modules/
 unpackage/
 .hbuilderx/
 .DS_Store
+# 网站所有权验证文件（手动上传到服务器根目录）
+/b2d1073370bf625ca3f51c1550fb0e6e.txt

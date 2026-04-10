@@ -70,7 +70,9 @@
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { QUESTION_TYPES } from '../../utils/interview/constants'
+import { useAuth } from '../../composables/common/useAuth'
 
+const { getUsername } = useAuth()
 const currentTab = 'records'
 const allRecords = ref([])
 const currentFilter = ref('all')
@@ -102,8 +104,11 @@ onShow(() => {
 
 async function loadRecords() {
   try {
+    const username = getUsername()
+    if (!username) return
     const db = uniCloud.database()
     const res = await db.collection('interview_records')
+      .where({ username })
       .orderBy('create_time', 'desc')
       .limit(100)
       .get()

@@ -121,6 +121,10 @@ const loading = ref(true)
 
 const filteredList = computed(() => {
   if (!filter.value) return wrongList.value
+  // "hanzi" 筛选时兼容旧的 stroke 类型
+  if (filter.value === 'hanzi') {
+    return wrongList.value.filter(item => item.type === 'hanzi' || item.type === 'stroke')
+  }
   return wrongList.value.filter(item => item.type === filter.value)
 })
 
@@ -143,7 +147,7 @@ async function loadData() {
     wrongList.value = listData
     trendData.value = logsData.map(d => ({
       label: d.label,
-      rate: d.rate
+      rate: d.accuracy != null ? d.accuracy : d.rate
     }))
   } catch (e) {
     console.error('加载错题数据失败:', e)

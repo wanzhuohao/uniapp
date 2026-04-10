@@ -50,12 +50,14 @@ onMounted(async () => {
 })
 
 async function loadSession() {
+  if (!sessionId.value) return
   const db = uniCloud.database()
   try {
     // 加载考场记录
     const sRes = await db.collection('exam_sessions').doc(sessionId.value).get()
-    if (sRes.data.length > 0) {
-      const s = sRes.data[0]
+    const sData = sRes.result?.data || sRes.data || []
+    if (sData.length > 0) {
+      const s = sData[0]
       session.value = {
         avgScore: s.avg_score,
         totalQuestions: s.total_questions,
@@ -64,10 +66,11 @@ async function loadSession() {
       }
 
       // 加载各题记录
-      for (const id of s.record_ids) {
+      for (const id of (s.record_ids || [])) {
         const rRes = await db.collection('interview_records').doc(id).get()
-        if (rRes.data.length > 0) {
-          records.value.push(rRes.data[0])
+        const rData = rRes.result?.data || rRes.data || []
+        if (rData.length > 0) {
+          records.value.push(rData[0])
         }
       }
     }

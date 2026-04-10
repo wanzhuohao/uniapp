@@ -13,6 +13,8 @@
     "unit": { "bsonType": "string", "description": "单元，如 1-2" },
     "char": { "bsonType": "string", "description": "汉字" },
     "pinyin": { "bsonType": "string", "description": "正确拼音（拼音题）" },
+    "radical": { "bsonType": "string", "description": "部首" },
+    "structure": { "bsonType": "string", "description": "结构" },
     "distractors": { "bsonType": "array", "description": "拼音干扰项", "items": { "bsonType": "string" } },
     "char_distractors": { "bsonType": "array", "description": "汉字干扰项", "items": { "bsonType": "string" } },
     "strokes": { "bsonType": "array", "description": "笔顺数组", "items": { "bsonType": "string" } },

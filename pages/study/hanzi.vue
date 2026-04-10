@@ -277,8 +277,25 @@ function buildRound(charData, strokeData) {
   return shuffle(pool).slice(0, 10)
 }
 
-function startRound() {
-  questions.value = buildRound(pinyinData, strokesData)
+async function startRound() {
+  // 优先从云端拉取，带 _id 以便记录错题
+  let pinyinSource = pinyinData
+  let strokeSource = strokesData
+  try {
+    const cloudPinyin = await getQuestions('pinyin', store.currentUnit)
+    if (Array.isArray(cloudPinyin) && cloudPinyin.length > 0) {
+      pinyinSource = cloudPinyin
+      isCloudData.value = true
+    }
+    const cloudStroke = await getQuestions('stroke', store.currentUnit)
+    if (Array.isArray(cloudStroke) && cloudStroke.length > 0) {
+      strokeSource = cloudStroke
+      isCloudData.value = true
+    }
+  } catch (e) {
+    console.error('云端题库拉取失败，降级本地', e)
+  }
+  questions.value = buildRound(pinyinSource, strokeSource)
   currentIndex.value = 0
   correctCount.value = 0
   started.value = true

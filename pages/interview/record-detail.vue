@@ -50,11 +50,13 @@ onLoad((options) => {
 })
 
 onMounted(async () => {
+  if (!recordId) return
   const db = uniCloud.database()
   try {
     const res = await db.collection('interview_records').doc(recordId).get()
-    if (res.data.length > 0) {
-      record.value = res.data[0]
+    const data = res.result?.data || res.data || []
+    if (data.length > 0) {
+      record.value = data[0]
     }
   } catch (e) {
     console.error('加载记录失败', e)

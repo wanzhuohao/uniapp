@@ -10,7 +10,7 @@
   "properties": {
     "_id": { "description": "ID" },
     "username": { "bsonType": "string", "description": "用户名" },
-    "type": { "bsonType": "string", "description": "练习类型", "enum": ["pinyin", "stroke"] },
+    "type": { "bsonType": "string", "description": "练习类型", "enum": ["pinyin", "stroke", "hanzi", "math"] },
     "date": { "bsonType": "string", "description": "日期 YYYY-MM-DD" },
     "totalCount": { "bsonType": "int", "description": "本轮总题数" },
     "correctCount": { "bsonType": "int", "description": "本轮正确数" },

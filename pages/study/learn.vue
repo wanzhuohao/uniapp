@@ -3,7 +3,8 @@
     <view class="top-bar">
       <view class="back-btn" @click="goBack">←</view>
       <text class="title">学习</text>
-      <view class="progress">{{ currentIndex + 1 }}/{{ totalQuestions }}</view>
+      <view v-if="started && totalQuestions > 0" class="progress">{{ currentIndex + 1 }}/{{ totalQuestions }}</view>
+      <view v-else class="progress-placeholder"></view>
     </view>
 
     <!-- 筛选页 -->
@@ -22,7 +23,7 @@
         <text class="desc">· 答错自动进错题本</text>
       </view>
 
-      <view class="start-btn" @click="startRound">开始模考</view>
+      <view class="start-btn" @click="startRound">开始学习</view>
     </view>
 
     <!-- 空 -->
@@ -99,6 +100,7 @@ import { speak } from '../../utils/common/speech.js'
 import { recordWrong } from '../../utils/study/wrongBook.js'
 import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
+import { getQuestions } from '../../utils/common/cloudDb.js'
 import pinyinData from '../../static/data/pinyin.json'
 
 const store = useGameStore()
@@ -140,9 +142,21 @@ async function initOutline() {
   } catch (e) { outlineReady.value = false }
 }
 
-function startRound() {
-  const filtered = pinyinData.filter(d => d.unit === store.currentUnit && d.radical && d.structure)
-  questions.value = sampleWithout(filtered, 10)
+async function startRound() {
+  // 优先云端（带 _id 便于记录错题）
+  let source = null
+  try {
+    const cloud = await getQuestions('pinyin', store.currentUnit)
+    if (Array.isArray(cloud) && cloud.length > 0) {
+      source = cloud.filter(d => d.radical && d.structure)
+    }
+  } catch (e) {
+    console.error('云端题库拉取失败，降级本地', e)
+  }
+  if (!source || source.length === 0) {
+    source = pinyinData.filter(d => d.unit === store.currentUnit && d.radical && d.structure)
+  }
+  questions.value = sampleWithout(source, 10)
   currentIndex.value = 0
   correctCount.value = 0
   started.value = true
@@ -258,6 +272,7 @@ onShow(() => {
 .back-btn:active { transform: scale(0.9); }
 .title { font-size: 32rpx; font-weight: bold; }
 .progress { font-size: 26rpx; color: #888; font-weight: bold; }
+.progress-placeholder { width: 80rpx; }
 
 /* 筛选区 */
 .filter-area {

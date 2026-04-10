@@ -45,22 +45,34 @@
         </view>
       </view>
 
-      <!-- 笔顺题 -->
-      <view v-if="currentQuestion && currentQuestion.type === 'stroke'" class="question-block">
-        <view class="stroke-top">
-          <text class="char-display">{{ currentQuestion.char }}</text>
-          <text class="stroke-count">{{ currentQuestion.strokeCount }} 画</text>
+      <!-- 汉字自测题（hanzi / 旧 stroke） -->
+      <view v-if="currentQuestion && (currentQuestion.type === 'hanzi' || currentQuestion.type === 'stroke')" class="question-block">
+        <text class="char-display">{{ currentQuestion.char }}</text>
+        <text class="prompt">想一想：拼音、部首、结构、笔画</text>
+        <view v-if="showAnswer" class="answer-box">
+          <view v-if="currentQuestion.pinyin" class="answer-row"><text>拼音：{{ currentQuestion.pinyin }}</text></view>
+          <view v-if="currentQuestion.radical" class="answer-row"><text>部首：{{ currentQuestion.radical }}</text></view>
+          <view v-if="currentQuestion.structure" class="answer-row"><text>结构：{{ currentQuestion.structure }}</text></view>
+          <view v-if="currentQuestion.strokeCount" class="answer-row"><text>笔画：{{ currentQuestion.strokeCount }} 画</text></view>
         </view>
-        <text class="prompt">选择正确的笔顺</text>
-        <view class="stroke-options">
-          <view
-            v-for="(opt, i) in currentOptions"
-            :key="i"
-            :class="['stroke-option', selectedAnswer === i && (isCorrect ? 'correct' : 'wrong')]"
-            @click="checkStrokeAnswer(i, opt)"
-          >
-            <text>{{ opt.join(' → ') }}</text>
-          </view>
+        <view v-if="!showAnswer" class="show-answer-btn" @click="showAnswer = true">查看答案</view>
+        <view v-if="showAnswer" class="self-judge">
+          <view class="judge-btn wrong" @click="judgeSelf(false)">❌ 我不会</view>
+          <view class="judge-btn correct" @click="judgeSelf(true)">✅ 我会了</view>
+        </view>
+      </view>
+
+      <!-- 口算题 -->
+      <view v-if="currentQuestion && currentQuestion.type === 'math'" class="question-block">
+        <text class="char-display math-expr">{{ mathExpression }}</text>
+        <text class="prompt">想出答案后查看</text>
+        <view v-if="showAnswer" class="answer-box">
+          <view class="answer-row"><text>答案：{{ mathAnswer }}</text></view>
+        </view>
+        <view v-if="!showAnswer" class="show-answer-btn" @click="showAnswer = true">查看答案</view>
+        <view v-if="showAnswer" class="self-judge">
+          <view class="judge-btn wrong" @click="judgeSelf(false)">❌ 我不会</view>
+          <view class="judge-btn correct" @click="judgeSelf(true)">✅ 我会了</view>
         </view>
       </view>
 
@@ -98,14 +110,29 @@ const showFeedback = ref(false)
 const justMastered = ref(false)
 const allMastered = ref(false)
 const correctCount = ref(0)
+const showAnswer = ref(false)
+
+// 口算题：从 char 字段解析算式和答案
+const mathExpression = computed(() => {
+  const c = currentQuestion.value?.char || ''
+  // 存储格式 "3 + 5 = 8"
+  const m = c.match(/^(.+?)\s*=\s*/)
+  return m ? m[1] + ' = ?' : c
+})
+const mathAnswer = computed(() => {
+  const c = currentQuestion.value?.char || ''
+  const m = c.match(/=\s*(.+)$/)
+  return m ? m[1] : ''
+})
 
 const currentQuestion = computed(() => {
   if (currentIndex.value < questions.value.length) {
-    const wrongRecord = questions.value[currentIndex.value]
-    return {
-      ...wrongRecord,
-      ...(questionData.value[wrongRecord.question_id] || {})
-    }
+    const w = questions.value[currentIndex.value]
+    // hanzi 类型按 char 查，其他按 question_id 查
+    const extra = w.type === 'hanzi'
+      ? (questionData.value['hanzi_' + w.char] || {})
+      : (questionData.value[w.question_id] || {})
+    return { ...extra, ...w }  // wrong 记录字段优先，云端补全
   }
   return null
 })
@@ -128,18 +155,31 @@ async function loadQuestions() {
       return
     }
 
-    // 按 unit + type 分组，批量拉取题目数据
+    // 只有 pinyin/stroke 类型需要去云端拉完整题目数据
+    // hanzi 类型统一按 char 查云端 pinyin 表补全答案
+    // math 类型的 char 字段已包含完整表达式
     const groups = {}
     for (const w of wrongList) {
-      const key = `${w.type}_${w.unit}`
-      if (!groups[key]) groups[key] = { type: w.type, unit: w.unit }
+      if (w.type === 'pinyin' || w.type === 'stroke') {
+        const key = `${w.type}_${w.unit}`
+        if (!groups[key]) groups[key] = { type: w.type, unit: w.unit }
+      } else if (w.type === 'hanzi') {
+        // hanzi 自测需要拼音/部首/结构/笔画，走 pinyin 表
+        const key = `pinyin_${w.unit}`
+        if (!groups[key]) groups[key] = { type: 'pinyin', unit: w.unit, targetType: 'hanzi' }
+      }
     }
 
     for (const g of Object.values(groups)) {
       const data = await getQuestions(g.type, g.unit)
       if (data) {
         for (const q of data) {
-          questionData.value[q._id] = q
+          // hanzi 类型用 char 作为 key（因为 question_id 对不上）
+          if (g.targetType === 'hanzi') {
+            questionData.value['hanzi_' + q.char] = q
+          } else {
+            questionData.value[q._id] = q
+          }
         }
       }
     }
@@ -206,17 +246,28 @@ async function handleResult() {
   }
 }
 
+// 自测模式（hanzi/math）的我会了/我不会
+async function judgeSelf(correct) {
+  isCorrect.value = correct
+  await handleResult()
+  setTimeout(() => advanceToNext(), 800)
+}
+
 function nextQuestion() {
+  advanceToNext()
+}
+
+function advanceToNext() {
   if (currentIndex.value >= questions.value.length - 1) {
     allMastered.value = true
     return
   }
-
   currentIndex.value++
   selectedAnswer.value = null
   isCorrect.value = false
   showFeedback.value = false
   justMastered.value = false
+  showAnswer.value = false
   prepareOptions()
 }
 

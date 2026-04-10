@@ -31,8 +31,10 @@
 import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useAuth } from '../../composables/common/useAuth.js'
+import { useGameStore } from '../../store/game.js'
 
 const { getUsername, setUsername } = useAuth()
+const store = useGameStore()
 const username = ref(getUsername())
 
 onShow(() => {
@@ -49,10 +51,14 @@ function editUsername() {
     content: '',
     editable: true,
     placeholderText: username.value || '输入用户名',
-    success(res) {
+    async success(res) {
       if (res.confirm && res.content && res.content.trim()) {
-        setUsername(res.content.trim())
-        username.value = res.content.trim()
+        const newName = res.content.trim()
+        if (newName === username.value) return
+        setUsername(newName)
+        username.value = newName
+        // 切换用户：重置 store 状态并从新用户云端拉取
+        await store.switchUser()
       }
     }
   })
