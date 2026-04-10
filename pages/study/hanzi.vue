@@ -151,9 +151,16 @@ async function initOutline() {
   el.innerHTML = ''
   try {
     writerInstance = HanziWriter.create(outlineId.value, currentQ.value.char, {
-      width: 180, height: 180, padding: 8,
-      strokeColor: '#333', outlineColor: '#DDD',
-      showCharacter: true, showOutline: true,
+      width: 200,
+      height: 200,
+      padding: 20,
+      strokeColor: '#333',
+      outlineColor: '#DDD',
+      radicalColor: '#168F16',
+      strokeAnimationSpeed: 3,   // 笔画动画速度（越大越快，默认1）
+      delayBetweenStrokes: 150,  // 笔画间延迟（ms，默认1000）
+      showCharacter: true,
+      showOutline: true,
       onLoadCharDataSuccess: () => {
         outlineReady.value = true
       },
@@ -448,15 +455,25 @@ onShow(() => {
 .char-outline-wrap {
   display: flex; justify-content: center; align-items: center;
   margin-bottom: 16rpx; position: relative;
-  width: 150px; height: 150px;
+  width: 200px; height: 200px;
   background: #fff; border-radius: 12rpx;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
 }
 .char-outline-target {
-  width: 150px; height: 150px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* HanziWriter 生成的 svg 强制居中且不倾斜 */
+.char-outline-target :deep(svg) {
+  display: block;
+  width: 200px !important;
+  height: 200px !important;
 }
 .char-fallback {
-  font-size: 120px;
+  font-size: 150px;
   font-weight: bold;
   color: #DDD;
   line-height: 1;
