@@ -1,9 +1,11 @@
 <script setup>
 import { onLaunch } from '@dcloudio/uni-app'
 import { useAuth } from './composables/common/useAuth.js'
+import { useRecentUsers } from './composables/common/useRecentUsers.js'
 import { useGameStore } from './store/game.js'
 
 const { hasUsername, setUsername } = useAuth()
+const { addRecentUser } = useRecentUsers()
 
 function promptUsername() {
   uni.showModal({
@@ -17,6 +19,7 @@ function promptUsername() {
       const name = (res.content || '').trim()
       if (res.confirm && name) {
         setUsername(name)
+        addRecentUser(name)
         const store = useGameStore()
         store.loadFromCloud()
         uni.$emit('username-changed', name)
