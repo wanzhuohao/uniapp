@@ -31,97 +31,32 @@
       <view class="back-btn" @click="goBack">返回</view>
     </view>
 
-    <!-- 笔顺题型（自测模式）-->
-    <view v-if="started && currentQ && currentQ.qType === 'stroke'" class="quiz-area">
-      <view class="type-badge stroke-badge">笔顺</view>
-      <text class="hint-text">看着汉字想一想笔顺，然后看答案自测</text>
-
-      <!-- HanziWriter 静态展示 -->
-      <view class="char-outline-wrap">
-        <view class="char-fallback" v-show="!outlineReady">{{ currentQ.char }}</view>
-        <view :id="outlineId" class="char-outline-target" v-show="outlineReady"></view>
-      </view>
-      <view class="speak-btn" @click="speakChar">🔊</view>
-
-      <!-- 查看答案按钮 -->
-      <view v-if="!showAnswer" class="show-answer-btn" @click="revealAnswer">查看笔顺动画</view>
-
-      <!-- 答案区 -->
-      <view v-if="showAnswer" class="answer-area">
-        <text class="answer-hint">观察正确笔顺：</text>
-        <view class="color-legend">
-          <view class="legend-item">
-            <view class="legend-dot" style="background:#333"></view>
-            <text>普通笔画</text>
-          </view>
-          <view class="legend-item">
-            <view class="legend-dot" style="background:#168F16"></view>
-            <text>部首笔画</text>
-          </view>
-        </view>
-        <view class="answer-btn" @click="replayAnim">▶ 重播动画</view>
-      </view>
-
-      <!-- 自判按钮 -->
-      <view v-if="showAnswer" class="self-judge">
-        <view class="judge-btn wrong" @click="judgeSelf(false)">❌ 我不会</view>
-        <view class="judge-btn correct" @click="judgeSelf(true)">✅ 我会了</view>
-      </view>
-    </view>
-
-    <!-- 选择题型（部首/结构/笔画数）-->
-    <view v-if="started && currentQ && ['radical','structure','strokeCount'].includes(currentQ.qType)" class="quiz-area">
-      <view class="char-display">{{ currentQ.char }}</view>
-      <view class="speak-btn" @click="speakChar">🔊</view>
-      <view class="type-badge" :class="currentQ.qType + '-badge'">
-        {{ { radical: '部首', structure: '结构', strokeCount: '笔画数' }[currentQ.qType] }}
-      </view>
-      <text class="hint-text">{{ currentQ.hint }}</text>
-
-      <view class="options-grid">
-        <view v-for="(opt, i) in currentQ.options" :key="i"
-          :class="['option-btn', choiceState === 'correct' && opt.isCorrect && 'correct',
-                    choiceState === 'wrong' && selectedOpt === i && 'wrong',
-                    choiceState === 'wrong' && opt.isCorrect && 'correct']"
-          @click="pickOption(i)">{{ opt.label }}</view>
-      </view>
-    </view>
+    <!-- 汉字题（笔顺自测 / 部首/结构/笔画数 选择题）-->
+    <HanziQuestion
+      v-if="started && currentQ"
+      :question="currentQ"
+      @answer="handleAnswer"
+    />
 
   </view>
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
-import HanziWriter from 'hanzi-writer'
 import { useGameStore } from '../../store/game.js'
 import { sampleWithout, shuffle } from '../../utils/study/questionHelper.js'
-import { speak } from '../../utils/common/speech.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
 import { recordWrong } from '../../utils/study/wrongBook.js'
 import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
 import StarBar from '../../components/study/StarBar.vue'
+import HanziQuestion from '../../components/study/HanziQuestion.vue'
 import pinyinData from '../../static/data/pinyin.json'
 import strokesData from '../../static/data/strokes.json'
 
 const store = useGameStore()
 const { getUsername } = useAuth()
-
-// 笔画分类颜色（基本笔画用不同颜色区分）
-const STROKE_COLORS = {
-  '横': '#E65100', '提': '#E65100',
-  '竖': '#1565C0', '竖钩': '#1565C0', '竖提': '#1565C0', '竖弯钩': '#1565C0',
-  '撇': '#2E7D32', '撇折': '#2E7D32', '撇点': '#2E7D32',
-  '捺': '#6A1B9A', '点': '#6A1B9A',
-  '横折': '#C62828', '横折钩': '#C62828', '横折弯钩': '#C62828', '横折提': '#C62828',
-  '竖折': '#00695C', '竖折折钩': '#00695C',
-  '横撇': '#EF6C00', '横斜钩': '#EF6C00',
-  '弯钩': '#37474F',
-}
-function strokeColor(name) {
-  return STROKE_COLORS[name] || '#333'
-}
 
 const filterType = ref('')
 const started = ref(false)
@@ -136,81 +71,24 @@ const questions = ref([])
 const totalQuestions = computed(() => questions.value.length)
 const currentQ = computed(() => questions.value[currentIndex.value] || null)
 
-// 笔顺题自测状态
-const showAnswer = ref(false)
-let writerInstance = null
-
-// 选择题状态
-const choiceState = ref('')
-const selectedOpt = ref(-1)
-
-// HanziWriter
-const outlineId = ref('hz-' + Date.now())
-const outlineReady = ref(false)
-
 // 所有结构选项
 const ALL_STRUCTURES = ['上下', '左右', '独体', '半包围', '全包围']
 // 所有部首（从题库中提取常见部首）
 const ALL_RADICALS = ref([])
 
-async function initOutline() {
-  outlineReady.value = false
-  writerInstance = null
-  await nextTick()
-  const el = document.getElementById(outlineId.value)
-  if (!el || !currentQ.value) return
-  el.innerHTML = ''
-  try {
-    writerInstance = HanziWriter.create(outlineId.value, currentQ.value.char, {
-      width: 200,
-      height: 200,
-      padding: 20,
-      strokeColor: '#333',
-      outlineColor: '#DDD',
-      radicalColor: '#168F16',
-      strokeAnimationSpeed: 1.5, // 笔画动画速度（越大越快，默认1）
-      delayBetweenStrokes: 400,  // 笔画间延迟（ms，默认1000）
-      showCharacter: true,
-      showOutline: true,
-      onLoadCharDataSuccess: () => {
-        outlineReady.value = true
-      },
-      onLoadCharDataError: () => {
-        outlineReady.value = false
-      }
-    })
-  } catch (e) {
-    outlineReady.value = false
-  }
-}
-
-function revealAnswer() {
-  showAnswer.value = true
-  // 播放一次动画
-  if (writerInstance) {
-    try {
-      writerInstance.animateCharacter()
-    } catch (e) {}
-  }
-}
-
-function replayAnim() {
-  if (writerInstance) {
-    try {
-      writerInstance.animateCharacter()
-    } catch (e) {}
-  }
-}
-
-function judgeSelf(isCorrect) {
+function handleAnswer({ isCorrect }) {
   if (isCorrect) {
     correctCount.value++
   } else {
-    // 答错记录错题
     const q = currentQ.value
-    if (q._id) {
+    if (q?._id && !recordedWrongIds.has(q._id)) {
+      recordedWrongIds.add(q._id)
       recordWrong(getUsername(), {
-        type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id, qType: q.qType
+        type: 'hanzi',
+        char: q.char,
+        unit: q.unit,
+        question_id: q._id,
+        qType: q.qType
       })
     }
   }
@@ -232,7 +110,7 @@ function buildRound(charData, strokeData) {
   // 笔顺题
   if (types.includes('stroke')) {
     for (const s of sampleWithout(strokes, 4)) {
-      pool.push({ qType: 'stroke', char: s.char, strokes: s.strokes, unit: s.unit, _id: s._id, hint: '按正确笔顺依次点击' })
+      pool.push({ qType: 'stroke', char: s.char, unit: s.unit, _id: s._id, hint: '看着汉字想一想笔顺，然后看答案自测' })
     }
   }
 
@@ -301,47 +179,11 @@ async function startRound() {
   correctCount.value = 0
   recordedWrongIds.clear()
   started.value = true
-  resetState()
-  if (currentQ.value?.qType === 'stroke') {
-    nextTick(() => initOutline())
-  }
-}
-
-function resetState() {
-  showAnswer.value = false
-  choiceState.value = ''
-  selectedOpt.value = -1
-}
-
-// === 选择题交互 ===
-function pickOption(i) {
-  if (choiceState.value) return
-  selectedOpt.value = i
-  const isCorrect = currentQ.value.options[i].isCorrect
-
-  if (isCorrect) {
-    choiceState.value = 'correct'
-    correctCount.value++
-    setTimeout(() => advanceQuestion(), 800)
-  } else {
-    choiceState.value = 'wrong'
-    const q = currentQ.value
-    if (q._id && !recordedWrongIds.has(q._id)) {
-      recordedWrongIds.add(q._id)
-      recordWrong(getUsername(), { type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id, qType: q.qType })
-    }
-    setTimeout(() => advanceQuestion(), 1500)
-  }
 }
 
 function advanceQuestion() {
   if (currentIndex.value < totalQuestions.value - 1) {
     currentIndex.value++
-    resetState()
-    const q = questions.value[currentIndex.value]
-    if (q?.qType === 'stroke') {
-      nextTick(() => initOutline())
-    }
   } else {
     // 轮次结束
     const earned = correctCount.value + (correctCount.value === totalQuestions.value ? 3 : 0)
@@ -355,10 +197,6 @@ function advanceQuestion() {
   }
 }
 
-function speakChar() {
-  if (currentQ.value) speak(currentQ.value.char)
-}
-
 function goBack() {
   uni.navigateBack()
 }
@@ -367,7 +205,6 @@ onShow(() => {
   if (roundFinished.value) {
     started.value = false
     roundFinished.value = false
-    resetState()
   }
 })
 </script>
@@ -452,152 +289,4 @@ onShow(() => {
   background: #42A5F5; color: #fff; border-radius: 20rpx; font-size: 28rpx;
 }
 
-/* 题型标签 */
-.type-badge {
-  text-align: center; font-size: 24rpx; font-weight: bold;
-  padding: 6rpx 24rpx; border-radius: 20rpx; margin-bottom: 16rpx;
-  display: inline-block; align-self: center;
-}
-.stroke-badge { background: #E3F2FD; color: #1565C0; }
-.radical-badge { background: #FFF3E0; color: #E65100; }
-.structure-badge { background: #E8F5E9; color: #2E7D32; }
-.strokeCount-badge { background: #F3E5F5; color: #7B1FA2; }
-
-.quiz-area {
-  padding: 32rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.char-display {
-  font-size: 120rpx; font-weight: bold; text-align: center;
-  color: #333; min-height: 140rpx; line-height: 1.3;
-}
-.speak-btn {
-  margin: 12rpx 0; font-size: 44rpx; width: 72rpx; height: 72rpx;
-  display: flex; align-items: center; justify-content: center;
-  background: #E3F2FD; border-radius: 50%;
-}
-.speak-btn:active { transform: scale(0.9); }
-.hint-text {
-  text-align: center; color: #888; font-size: 28rpx; margin-bottom: 24rpx;
-}
-.char-outline-wrap {
-  position: relative;
-  width: 200px; height: 200px;
-  margin: 0 auto 16rpx;
-  background: #fff;
-  border-radius: 12rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
-  overflow: hidden;
-}
-.char-outline-target {
-  width: 200px;
-  height: 200px;
-  line-height: 0;
-}
-.char-outline-target :deep(svg) {
-  display: block;
-}
-.char-fallback {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 150px;
-  font-weight: bold;
-  color: #DDD;
-  line-height: 1;
-  font-family: "KaiTi", "楷体", "STKaiti", serif;
-}
-
-/* 选择题选项 */
-.options-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 24rpx; padding: 0 24rpx; width: 100%;
-}
-.option-btn {
-  background: #fff; border: 3rpx solid #BDBDBD; border-radius: 20rpx;
-  padding: 32rpx 16rpx; text-align: center; font-size: 36rpx;
-  font-weight: 500; color: #333;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06); transition: all 0.2s;
-}
-.option-btn:active { transform: scale(0.96); }
-.option-btn.correct { border-color: #66BB6A; background: #E8F5E9; color: #2E7D32; box-shadow: 0 0 0 4rpx rgba(102,187,106,0.3); }
-.option-btn.wrong { border-color: #EF5350; background: #FFEBEE; color: #C62828; box-shadow: 0 0 0 4rpx rgba(239,83,80,0.3); }
-
-/* 笔顺题自测 */
-.show-answer-btn {
-  margin-top: 32rpx;
-  padding: 24rpx 80rpx;
-  background: linear-gradient(135deg, #42A5F5, #1E88E5);
-  color: #fff;
-  border-radius: 40rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  box-shadow: 0 8rpx 24rpx rgba(66,165,245,0.3);
-}
-.show-answer-btn:active { transform: scale(0.97); }
-.answer-area {
-  margin-top: 24rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16rpx;
-}
-.answer-hint {
-  font-size: 28rpx;
-  color: #666;
-}
-.color-legend {
-  display: flex;
-  gap: 32rpx;
-  justify-content: center;
-  font-size: 24rpx;
-  color: #888;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-}
-.legend-dot {
-  width: 20rpx;
-  height: 20rpx;
-  border-radius: 4rpx;
-}
-.answer-btn {
-  padding: 16rpx 48rpx;
-  background: #E3F2FD;
-  color: #1565C0;
-  border-radius: 24rpx;
-  font-size: 28rpx;
-}
-.answer-btn:active { transform: scale(0.97); }
-.self-judge {
-  display: flex;
-  gap: 32rpx;
-  margin-top: 32rpx;
-  justify-content: center;
-}
-.judge-btn {
-  padding: 28rpx 56rpx;
-  border-radius: 24rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  border: 3rpx solid;
-  box-shadow: 0 6rpx 16rpx rgba(0,0,0,0.08);
-}
-.judge-btn:active { transform: scale(0.95); }
-.judge-btn.correct {
-  background: #E8F5E9;
-  color: #2E7D32;
-  border-color: #66BB6A;
-}
-.judge-btn.wrong {
-  background: #FFEBEE;
-  color: #C62828;
-  border-color: #EF5350;
-}
 </style>
