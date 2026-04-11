@@ -4,8 +4,8 @@
       <el-button text @click="onBack" class="back-btn">← 返回列表</el-button>
       <h2 class="detail-page-title">{{ idRef ? '编辑碑文' : '新增碑文' }}<span v-if="justSaved" class="saved-badge">已保存</span></h2>
     </header>
-    <el-row :gutter="24" class="detail-row">
-      <el-col :span="12" class="edit-col">
+    <el-splitter class="detail-splitter">
+      <el-splitter-panel :size="'50%'" min="25%">
         <div class="edit-section">
           <h3 class="section-title">编辑区</h3>
           <el-form :model="form" label-width="90px" size="default">
@@ -107,8 +107,8 @@
             </el-form-item>
           </el-form>
         </div>
-      </el-col>
-      <el-col :span="12" class="preview-col">
+      </el-splitter-panel>
+      <el-splitter-panel min="25%">
         <div class="preview-section">
           <div class="preview-toolbar">
             <h3 class="section-title">预览区</h3>
@@ -147,8 +147,8 @@
           </div>
 
         </div>
-      </el-col>
-    </el-row>
+      </el-splitter-panel>
+    </el-splitter>
 
     <!-- 手机号输入弹窗 -->
     <el-dialog
@@ -509,12 +509,22 @@ watch(() => form.dateQingming, (val) => {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 8px; font-weight: bold; color: var(--color-primary);
 }
-.detail-row { flex: 1; overflow: hidden; flex-wrap: wrap; }
-.edit-col, .preview-col { min-width: 320px; overflow-y: auto; height: 100%; }
-@media (max-width: 768px) {
-  .detail-row { display: flex !important; flex-direction: column !important; }
-  .edit-col, .preview-col { width: 100% !important; max-width: 100% !important; flex: none !important; }
+.detail-splitter { flex: 1; overflow: hidden; height: calc(100vh - 80px); }
+/* 两个 panel 内部可滚动 + 左右间距 */
+.detail-splitter :deep(.el-splitter-panel > div) {
+  height: 100%;
+  overflow-y: auto;
+  padding: 0 12px;
 }
+/* 让 splitter 拖拽条可见（默认是透明的） */
+.detail-splitter :deep(.el-splitter-bar__dragger) {
+  background: var(--color-border-light);
+  transition: background 0.2s;
+}
+.detail-splitter :deep(.el-splitter-bar__dragger:hover) {
+  background: var(--color-primary);
+}
+.edit-section { height: 100%; }
 .preview-section {
   padding: 20px;
   background: linear-gradient(180deg, var(--color-bg-blue-light) 0%, #fff 100%);
