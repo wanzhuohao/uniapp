@@ -67,7 +67,7 @@
         :key="item._id"
         :class="['wrong-item', item.mastered && 'mastered']"
       >
-        <view class="wrong-char">{{ item.char }}</view>
+        <view :class="['wrong-char', item.type === 'math' && 'wrong-math']">{{ item.char }}</view>
         <view class="wrong-info">
           <text class="wrong-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字', math: '口算' })[item.type] || item.type }}</text>
           <text class="wrong-unit">{{ item.unit }}</text>
@@ -294,6 +294,20 @@ function goPractice() {
   color: #333;
   width: 80rpx;
   text-align: center;
+  flex-shrink: 0;
+}
+
+/* 口算题表达式较长，不限制宽度，改为左对齐横排 */
+.wrong-char.wrong-math {
+  font-size: 32rpx;
+  width: auto;
+  min-width: 160rpx;
+  max-width: 60%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: monospace;
 }
 
 .wrong-info {
