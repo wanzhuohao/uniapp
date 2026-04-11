@@ -186,6 +186,7 @@ import { appellationOptions, parseFlexibleDate, arrToDisplay, toStorageDate } fr
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
 import type { PreviewData } from '../../types/order';
+import { toast } from '../../utils/common/toast.js';
 
 const {
   form, currentYear,
@@ -216,7 +217,7 @@ async function onExportImage() {
   const motherName = form.mother?.name || '';
   const filename = (fatherName || motherName) ? `${fatherName}${motherName}_碑文.png` : '碑文预览.png';
   const ok = await previewRef.value.exportImage(filename);
-  if (!ok) uni.showToast({ title: '导出失败', icon: 'none' });
+  if (!ok) toast.error('导出失败');
   exporting.value = false;
 }
 
@@ -225,11 +226,11 @@ const previewData = computed<PreviewData>(() => buildPreview());
 
 function copyPreviewField(field: keyof PreviewData) {
   const text = previewData.value[field] || '';
-  if (!text) { uni.showToast({ title: '该区域暂无内容', icon: 'none' }); return; }
+  if (!text) { toast.info('该区域暂无内容'); return; }
   uni.setClipboardData({
     data: text,
-    success: () => uni.showToast({ title: '已复制', icon: 'success' }),
-    fail: () => uni.showToast({ title: '复制失败', icon: 'none' })
+    success: () => toast.success('已复制'),
+    fail: () => toast.error('复制失败')
   });
 }
 
@@ -297,10 +298,10 @@ const draftNoticeVisible = ref(false);
 
 function applyDraftNotice() {
   if (loadDraft()) {
-    uni.showToast({ title: '已恢复草稿', icon: 'none', duration: 2000 });
+    toast.info('已恢复草稿', 2000);
   } else {
     clearDraft();
-    uni.showToast({ title: '草稿已损坏，已清除', icon: 'none', duration: 2000 });
+    toast.error('草稿已损坏，已清除', 2000);
   }
   draftNoticeVisible.value = false;
 }
@@ -316,7 +317,7 @@ onMounted(async () => {
     await fetchAndFill(copyFrom);
     form.user = '';
     currentStep.value = 1;
-    uni.showToast({ title: '已复制，请修改后保存', icon: 'none', duration: 2000 });
+    toast.info('已复制，请修改后保存', 2000);
   } else if (editId.value) {
     const saved = await fetchAndFill(editId.value);
     if (typeof saved === 'object' && saved.big) savedBig.value = saved.big;
@@ -349,15 +350,15 @@ function onSubmit() {
   doSave(payload).then((newId) => {
     clearDraft();
     if (newId) editId.value = newId;
-    uni.showToast({ title: '提交成功', icon: 'success' });
+    toast.success('提交成功');
   }).catch(() => {
-    uni.showToast({ title: '保存失败', icon: 'none' });
+    toast.error('保存失败');
   }).finally(() => { submitting.value = false; });
 }
 
 function confirmPhoneAndSubmit() {
   const phone = (phoneInput.value || '').trim();
-  if (!phone) { uni.showToast({ title: '请输入客户标识', icon: 'none' }); return; }
+  if (!phone) { toast.error('请输入客户标识'); return; }
   form.user = phone;
   showPhoneDialog.value = false;
   const payload = buildSavePayload(editId.value || undefined);
@@ -366,9 +367,9 @@ function confirmPhoneAndSubmit() {
   doSave(payload).then((newId) => {
     clearDraft();
     if (newId) editId.value = newId;
-    uni.showToast({ title: '提交成功', icon: 'success' });
+    toast.success('提交成功');
   }).catch(() => {
-    uni.showToast({ title: '保存失败', icon: 'none' });
+    toast.error('保存失败');
   }).finally(() => { submitting.value = false; });
 }
 </script>

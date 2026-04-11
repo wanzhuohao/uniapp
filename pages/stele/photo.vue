@@ -99,6 +99,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
+import { toast } from '../../utils/common/toast.js'
 
 interface Album {
   _id: string;
@@ -195,7 +196,7 @@ const openCreateModal = () => {
 
 const doCreateAlbum = async () => {
   if (!albumNameInput.value.trim()) {
-    uni.showToast({ title: '请输入相册名称', icon: 'none' })
+    toast.error('请输入相册名称')
     return
   }
   const res = await uniCloud.callFunction({
@@ -208,7 +209,7 @@ const doCreateAlbum = async () => {
     const newAlbum = albums.value[albums.value.length - 1]
     if (newAlbum) selectAlbum(newAlbum._id)
   } else {
-    uni.showToast({ title: res.result.msg, icon: 'none' })
+    toast.error(res.result.msg)
   }
 }
 
@@ -220,7 +221,7 @@ const editAlbum = (album: Album) => {
 
 const doEditAlbum = async () => {
   if (!albumNameInput.value.trim()) {
-    uni.showToast({ title: '请输入相册名称', icon: 'none' })
+    toast.error('请输入相册名称')
     return
   }
   const res = await uniCloud.callFunction({
@@ -231,7 +232,7 @@ const doEditAlbum = async () => {
     showEdit.value = false
     fetchAlbums()
   } else {
-    uni.showToast({ title: res.result.msg, icon: 'none' })
+    toast.error(res.result.msg)
   }
 }
 
@@ -249,10 +250,10 @@ const deleteAlbum = async (_id: string) => {
       if (res.confirm) {
         try {
           await uniCloud.callFunction({ name: 'album-delete', data: { _id } })
-          uni.showToast({ title: '已移除', icon: 'success' })
+          toast.success('已移除')
           fetchAlbums()
         } catch (e) {
-          uni.showToast({ title: '移除失败', icon: 'none' })
+          toast.error('移除失败')
         }
       }
     }
@@ -296,11 +297,11 @@ const chooseImage = () => {
       }
 
       if (failed === 0) {
-        uni.showToast({ title: `成功上传 ${done} 张`, icon: 'success' })
+        toast.success(`成功上传 ${done} 张`)
       } else if (done > 0) {
-        uni.showToast({ title: `成功 ${done} 张，失败 ${failed} 张`, icon: 'none' })
+        toast.error(`成功 ${done} 张，失败 ${failed} 张`)
       } else {
-        uni.showToast({ title: '上传失败', icon: 'none' })
+        toast.error('上传失败')
       }
 
       if (done > 0 && currentAlbumId.value === targetAlbumId) {
@@ -324,7 +325,7 @@ const deletePhoto = async (_id: string) => {
           fetchPhotos(currentAlbumId.value)
           fetchAlbums()
         } catch (e) {
-          uni.showToast({ title: '移除失败', icon: 'none' })
+          toast.error('移除失败')
         }
       }
     }

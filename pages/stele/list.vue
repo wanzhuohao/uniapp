@@ -136,6 +136,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import type { OrderItem } from '../../types/order';
+import { toast } from '../../utils/common/toast.js';
 
 const keyword = ref('');
 const pageNo = ref(1);
@@ -157,7 +158,7 @@ const fetchList = async () => {
     });
     const result = res?.result;
     if (!result || result.code !== 0) {
-      uni.showToast({ title: result?.msg || '获取列表失败', icon: 'none' });
+      toast.error(result?.msg || '获取列表失败');
       list.value = [];
       total.value = 0;
       return;
@@ -165,7 +166,7 @@ const fetchList = async () => {
     list.value = result.data || [];
     total.value = result.total || 0;
   } catch (e) {
-    uni.showToast({ title: '获取列表失败', icon: 'none' });
+    toast.error('获取列表失败');
   } finally {
     loading.value = false;
   }
@@ -295,11 +296,11 @@ const onDelete = (row: OrderItem) => {
       if (!res.confirm) return;
       try {
         await uniCloud.callFunction({ name: 'order-delete', data: { id: row._id } });
-        uni.showToast({ title: '已移除', icon: 'success' });
+        toast.success('已移除');
         if (list.value.length <= 1 && pageNo.value > 1) pageNo.value--;
         fetchList();
       } catch (e) {
-        uni.showToast({ title: '移除失败', icon: 'none' });
+        toast.error('移除失败');
       }
     }
   });
