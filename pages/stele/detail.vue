@@ -176,7 +176,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, watch, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, reactive, watch, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
 import draggable from 'vuedraggable';
 import { appellationOptions, parseFlexibleDate, arrToDisplay, toStorageDate } from '../../utils/stele/stele-utils';
@@ -295,11 +295,20 @@ onMounted(async () => {
           content: '检测到上次未保存的草稿，是否载入？',
           confirmText: '载入草稿',
           cancelText: '新建',
-          success: (res) => {
-            if (res.confirm && loadDraft()) {
-              refreshPreview();
-              ElMessage.success('已恢复草稿');
+          success: async (res) => {
+            if (res.confirm) {
+              const ok = loadDraft();
+              if (ok) {
+                // 等待 form 等响应式状态从 Object.assign 中沉淀，再触发预览
+                await nextTick();
+                refreshPreview();
+                ElMessage.success('已恢复草稿');
+              } else {
+                // 草稿损坏，清掉
+                clearDraft();
+              }
             } else {
+              // 用户选择新建，清草稿
               clearDraft();
             }
           }
