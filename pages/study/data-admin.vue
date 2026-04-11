@@ -117,6 +117,7 @@
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import TopBar from '../../components/common/TopBar.vue'
+import { toast } from '../../utils/common/toast.js'
 
 const db = uniCloud.database()
 
@@ -183,7 +184,7 @@ async function loadData() {
       return (a.char || '').localeCompare(b.char || '')
     })
   } catch (e) {
-    uni.showToast({ title: '加载失败: ' + e.message, icon: 'none' })
+    toast.error('加载失败: ' + e.message)
   }
   loading.value = false
 }
@@ -224,7 +225,7 @@ function closeEdit() {
 async function handleSave() {
   const f = form.value
   if (!f.char || !f.unit) {
-    uni.showToast({ title: '汉字、单元必填', icon: 'none' })
+    toast.error('汉字、单元必填')
     return
   }
 
@@ -256,7 +257,7 @@ async function handleSave() {
   }
 
   try {
-    uni.showLoading({ title: '保存中...' })
+    toast.loading('保存中...')
 
     if (editMode.value === 'add') {
       await db.collection('questions').add(buildByType('pinyin'))
@@ -264,7 +265,7 @@ async function handleSave() {
       if (strokes.length) {
         await db.collection('questions').add(buildByType('stroke'))
       }
-      uni.showToast({ title: '新增成功', icon: 'success' })
+      toast.success('新增成功')
     } else {
       for (const { id, type } of f._ids) {
         await db.collection('questions').doc(id).update(buildByType(type))
@@ -275,7 +276,7 @@ async function handleSave() {
       if (!hasStrokeRow && strokes.length > 0) {
         await db.collection('questions').add(buildByType('stroke'))
       }
-      uni.showToast({ title: '保存成功', icon: 'success' })
+      toast.success('保存成功')
     }
 
     // 清除本地缓存让其他页面拉到新数据
@@ -284,12 +285,12 @@ async function handleSave() {
       uni.removeStorageSync('questions_stroke_' + f.unit)
     } catch (e) {}
 
-    uni.hideLoading()
+    toast.hideLoading()
     editing.value = false
     await loadData()
   } catch (e) {
-    uni.hideLoading()
-    uni.showToast({ title: '保存失败: ' + e.message, icon: 'none' })
+    toast.hideLoading()
+    toast.error('保存失败: ' + e.message)
   }
 }
 
@@ -304,7 +305,7 @@ async function handleDelete() {
   if (!confirmRes) return
 
   try {
-    uni.showLoading({ title: '删除中...' })
+    toast.loading('删除中...')
     for (const { id } of form.value._ids) {
       await db.collection('questions').doc(id).remove()
     }
@@ -313,13 +314,13 @@ async function handleDelete() {
       uni.removeStorageSync('questions_pinyin_' + form.value.unit)
       uni.removeStorageSync('questions_stroke_' + form.value.unit)
     } catch (e) {}
-    uni.hideLoading()
-    uni.showToast({ title: '已删除', icon: 'success' })
+    toast.hideLoading()
+    toast.success('已删除')
     editing.value = false
     await loadData()
   } catch (e) {
-    uni.hideLoading()
-    uni.showToast({ title: '删除失败: ' + e.message, icon: 'none' })
+    toast.hideLoading()
+    toast.error('删除失败: ' + e.message)
   }
 }
 

@@ -97,6 +97,7 @@ import { useGameStore } from '../../store/game.js'
 import { sampleWithout } from '../../utils/study/questionHelper.js'
 import { speak } from '../../utils/common/speech.js'
 import { recordWrong } from '../../utils/study/wrongBook.js'
+import { toast } from '../../utils/common/toast.js'
 import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
@@ -211,11 +212,7 @@ function advanceQuestion() {
       totalCount: totalQuestions.value,
       correctCount: correctCount.value
     })
-    uni.showToast({
-      title: `完成！答对 ${correctCount.value}/${totalQuestions.value}`,
-      icon: 'none',
-      duration: 2000
-    })
+    toast.info(`完成！答对 ${correctCount.value}/${totalQuestions.value}`, 2000)
     setTimeout(() => {
       started.value = false
       roundFinished.value = false

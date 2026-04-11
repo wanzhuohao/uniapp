@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { loadState, saveState } from '../utils/common/storage.js'
 import { queryCollection, addDocument, updateDocument } from '../utils/common/cloudDb.js'
+import { toast } from '../utils/common/toast.js'
 
 const db = uniCloud.database()
 let syncing = false
@@ -141,7 +142,7 @@ export const useGameStore = defineStore('game', {
           }
         } catch (e) {
           console.error('syncCloud failed:', e)
-          uni.showToast({ title: '云端同步失败，数据仅本地保存', icon: 'none', duration: 2000 })
+          toast.error('云端同步失败，数据仅本地保存', 2000)
         }
       }, 1000)
     },
