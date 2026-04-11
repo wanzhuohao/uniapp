@@ -363,12 +363,6 @@ html body.dark-mode .answer-value {
   color: #e0e0e0 !important;
 }
 
-/* HanziWriter SVG 在暗色下 — character path 用浅色 fill
-   （注意：outline 的 path 也会受影响，一并改为中灰不完美但可接受）*/
-html body.dark-mode .char-outline-target svg path,
-html body.dark-mode .quiz-target svg path,
-html body.dark-mode .result-hanzi svg path,
-html body.dark-mode .hanzi-question svg path {
-  fill: #e0e0e0 !important;
-}
+/* HanziWriter SVG：strokeColor 已在各组件按主题动态设置，
+   CSS 这里不做 fill 强制覆盖（会干扰绿色部首色），信任 HanziWriter 自身 */
 </style>

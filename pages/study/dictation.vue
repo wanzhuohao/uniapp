@@ -53,6 +53,7 @@
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import HanziWriter from 'hanzi-writer'
+import { isDark } from '../../utils/common/theme.js'
 import { useGameStore } from '../../store/game.js'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
@@ -102,13 +103,14 @@ async function startQuiz(char) {
   el.innerHTML = ''
   const myToken = ++quizLoadToken
   try {
+    const dark = isDark()
     quizWriter = HanziWriter.create(QUIZ_ID, char, {
       width: 280,
       height: 280,
       padding: 10,
-      strokeColor: '#2E7D32',
-      outlineColor: '#DDD',
-      radicalColor: '#168F16',
+      strokeColor: dark ? '#80cbc4' : '#2E7D32',
+      outlineColor: dark ? '#555' : '#DDD',
+      radicalColor: dark ? '#80cbc4' : '#168F16',
       showCharacter: false,
       showOutline: true,
       showHintAfterMisses: 2,
@@ -152,13 +154,14 @@ async function showResultHanzi(char) {
   el.innerHTML = ''
   const myToken = ++resultLoadToken
   try {
+    const dark = isDark()
     resultWriter = HanziWriter.create(RESULT_ID, char, {
       width: 200,
       height: 200,
       padding: 10,
-      strokeColor: '#333',
-      outlineColor: '#DDD',
-      radicalColor: '#168F16',
+      strokeColor: dark ? '#e0e0e0' : '#333',
+      outlineColor: dark ? '#555' : '#DDD',
+      radicalColor: dark ? '#80cbc4' : '#168F16',
       showCharacter: true,
       showOutline: true,
     })

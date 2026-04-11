@@ -101,6 +101,7 @@ import { toast } from '../../utils/common/toast.js'
 import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
+import { isDark } from '../../utils/common/theme.js'
 import pinyinData from '../../static/data/pinyin.json'
 import TopBar from '../../components/common/TopBar.vue'
 
@@ -130,10 +131,12 @@ async function initOutline() {
   if (!el || !currentQ.value) return
   el.innerHTML = ''
   try {
+    const dark = isDark()
     writerInstance = HanziWriter.create(outlineId.value, currentQ.value.char, {
       width: 200, height: 200, padding: 20,
-      strokeColor: '#333', outlineColor: '#DDD',
-      radicalColor: '#168F16',
+      strokeColor: dark ? '#e0e0e0' : '#333',
+      outlineColor: dark ? '#555' : '#DDD',
+      radicalColor: dark ? '#80cbc4' : '#168F16',
       strokeAnimationSpeed: 1.5,
       delayBetweenStrokes: 400,
       showCharacter: true, showOutline: true,
