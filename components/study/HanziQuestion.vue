@@ -6,7 +6,7 @@
       <text v-if="question.hint" class="hint-text">{{ question.hint }}</text>
       <view class="char-outline-wrap">
         <view class="char-fallback" v-show="!outlineReady">{{ question.char }}</view>
-        <view ref="outlineRef" class="char-outline-target" v-show="outlineReady"></view>
+        <view :id="outlineId" class="char-outline-target" v-show="outlineReady"></view>
       </view>
       <view class="speak-btn" @click="speakChar">🔊</view>
 
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onBeforeUnmount } from 'vue'
+import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import HanziWriter from 'hanzi-writer'
 import { speak } from '../../utils/common/speech.js'
 
@@ -69,7 +69,7 @@ const emit = defineEmits(['answer'])
 const choiceState = ref('')
 const selectedOpt = ref(-1)
 const showAnswer = ref(false)
-const outlineRef = ref(null)
+const outlineId = 'hq-' + Date.now() + '-' + Math.floor(Math.random() * 1e6)
 const outlineReady = ref(false)
 let writerInstance = null
 let loadToken = 0
@@ -89,12 +89,12 @@ function qTypeLabel(t) {
 async function initOutline() {
   outlineReady.value = false
   await nextTick()
-  const el = outlineRef.value
+  const el = document.getElementById(outlineId)
   if (!el || !props.question?.char) return
   el.innerHTML = ''
   const myToken = ++loadToken
   try {
-    writerInstance = HanziWriter.create(el, props.question.char, {
+    writerInstance = HanziWriter.create(outlineId, props.question.char, {
       width: 200,
       height: 200,
       padding: 20,
@@ -155,6 +155,14 @@ function speakChar() {
   if (props.question?.char) speak(props.question.char)
 }
 
+// 首次挂载时初始化（setup 阶段 ref 尚未绑定，不能用 immediate: true watch）
+onMounted(() => {
+  if (props.question?.qType === 'stroke' && props.question?.char) {
+    initOutline()
+  }
+})
+
+// 后续题目切换（父组件更换 question prop）时重置 + 重初始化
 watch(
   () => props.question?.char,
   (newChar) => {
@@ -163,8 +171,7 @@ watch(
     if (props.question?.qType === 'stroke' && newChar) {
       initOutline()
     }
-  },
-  { immediate: true }
+  }
 )
 
 onBeforeUnmount(() => {
@@ -174,8 +181,9 @@ onBeforeUnmount(() => {
     clearTimeout(pendingTimer)
     pendingTimer = null
   }
-  if (outlineRef.value) {
-    try { outlineRef.value.innerHTML = '' } catch (e) {}
+  const el = document.getElementById(outlineId)
+  if (el) {
+    try { el.innerHTML = '' } catch (e) {}
   }
 })
 </script>
