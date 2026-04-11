@@ -35,6 +35,7 @@ import { useAuth } from '../../composables/common/useAuth.js'
 import { useGameStore } from '../../store/game.js'
 import UserSwitcher from '../../components/common/UserSwitcher.vue'
 import { useRecentUsers } from '../../composables/common/useRecentUsers.js'
+import { toast } from '../../utils/common/toast.js'
 
 const { getUsername, setUsername } = useAuth()
 const store = useGameStore()
@@ -76,11 +77,11 @@ async function doSwitch(name) {
   try {
     await store.switchUser()
   } catch (e) {
-    uni.showToast({ title: '云端加载失败，使用默认数据', icon: 'none', duration: 1500 })
+    toast.error('云端加载失败，使用默认数据', 1500)
   }
 
   uni.$emit('username-changed', name)
-  uni.showToast({ title: '已切换到 ' + name, icon: 'success', duration: 1200 })
+  toast.success('已切换到 ' + name, 1200)
   setTimeout(() => {
     uni.reLaunch({ url: '/pages/index/index' })
   }, 1200)
