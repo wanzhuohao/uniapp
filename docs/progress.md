@@ -2,11 +2,67 @@
 
 > 项目路径: `D:\code\uniapp`
 > 技术栈: UniApp Vue3 + Pinia + uniCloud-alipay
-> 最后更新: 2026-04-11（错题重练 UI 改造 + 屏蔽面试入口）
-> 状态: **已部署上线**，56 个 commit
+> 最后更新: 2026-04-11（方案二全部完成：HanziQuestion重构 / 多用户切换 / toast wrapper / 错题智能复习 / 听写 / 暗色模式）
+> 状态: **代码已就绪待部署**，本日 44 个 commit（累计 100+）
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
 
-## 本轮（2026-04-11）错题重练 UI 改造 + 多用户切换 + 草稿时序
+## 2026-04-11 方案二大批次（44 个 commit）
+
+**方案二：改进与新功能** — 从头脑风暴清单一次性全部落地：
+
+### 1. 重构（技术债）
+- **HanziQuestion 共享组件** — 抽出 hanzi.vue / wrong-book-practice.vue 重复的汉字题 UI（约 100 行），两个页面都改用组件
+- **toast wrapper** — 抽 `utils/common/toast.js`，一次迁移 84+ 处 `uni.showToast` / 15+ 处 `showLoading`，5 个方法 API（success / error / info / loading / hideLoading），84 处调用覆盖完整 grep 验证
+
+### 2. 基础设施
+- **UserSwitcher 多用户切换 UI** — 新建 `components/common/UserSwitcher.vue` 模态浮层 + `composables/common/useRecentUsers.js` localStorage 列表（最多 5 个）。首页点用户名弹出，支持切换 / 删除 / 添加新用户
+- **错题智能复习（Leitner Box 5 级）** — `wrong_records` schema 加 `box` + `nextReviewAt`，`wrongBook.js` 重写算法：box 1/1/3/7/15 天间隔，错题本主页加 tab 切换 "待复习 / 全部"
+
+### 3. 新功能
+- **听写练习** — 新建 `pages/study/dictation.vue`：TTS 念字 + HanziWriter quiz 描红 + 自测判对错，10 题一轮，答错进错题本（type=hanzi，qType=dictation，和 Leitner 流合流）
+- **暗色模式（学习模块）** — `utils/common/theme.js` + App.vue 全局 CSS（`html body.dark-mode ...` 0,3,0 优先级穿透 scoped），浮动切换按钮用 DOM API 注入 body（App.vue template 在 uniapp H5 不渲染），HanziWriter strokeColor 按主题动态传
+
+### 4. 小改 / Bug 修复
+- **面试入口** 完全移除（设计中，之前只是置灰）
+- **错题本口算** 算式横排显示（之前被 80rpx 宽的 wrong-char 挤成一字一行）
+- **碑文 detail 改用 el-splitter** 左右栏可拖动调整宽度
+- **碑文草稿提示** 改为编辑区顶部非阻断横幅（原来是 uni.showModal 阻塞）
+- **stele/detail** 返回按钮去掉"确定返回"确认弹窗
+
+### 5. 文件清理
+- 删除 `static/data/characters.json` / `hanzipi_strokes.json` / `hanzipi_cache.json` 3 个无引用数据文件
+- 删除 `uniCloud-alipay/database/JQL查询.jql` 空模板
+- 保留 `seed-questions` 云函数（用户决定）
+
+### 6. 暗色模式全面自测（20 个页面场景）
+全部 ✓。修复过程中发现的小问题都修到位：
+- StarBar `.star-num` / `.dot` 浅色
+- TopBar + StarBar `goBack` 加 navigateBack fallback → reLaunch study/index（解决 reLaunch 后页面栈只有 1 页返回失效）
+- 口算 timer / 听写字轮廓 outline 提亮
+- 数据维护 unit-filter / item / modal 等实际 class 名
+- 结果页 score / encourage / star-text
+- 错题本 wrong-item 红色冲突（限定到 mental-page）
+- UserSwitcher 模态完整暗色（us-card / us-item.current / us-badge 等）
+- HanziWriter strokeColor 按主题动态选色（4 处 create 调用全部改）
+- toggleDark 后 location.reload 确保 HanziWriter 重建
+- 错题重练 practice-mode-hint 暗色 + 文案按 practiceAll 切换"今日/全部"
+
+### 部署清单
+- ⏳ `wrong_records.schema.json` 已上传 uniCloud（含 box / nextReviewAt / qType dictation）
+- ⏳ HBuilderX 重新发行前端
+
+### 关键新增文件
+- `components/common/UserSwitcher.vue`
+- `components/study/HanziQuestion.vue`
+- `composables/common/useRecentUsers.js`
+- `utils/common/toast.js`
+- `utils/common/theme.js`
+- `pages/study/dictation.vue`
+- 6 份 spec + 3 份 plan 在 docs/specs 和 docs/plans
+
+---
+
+## 2026-04-11 早些时候：错题重练 UI 改造 + 多用户切换 + 草稿时序
 
 **多用户切换 P0 修复**
 - `pages/index/index.vue` editUsername 成功后调 `uni.reLaunch` 回首页，清空页面栈，确保下次进入子页面都加载新用户数据
