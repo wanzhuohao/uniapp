@@ -298,7 +298,8 @@ html body.dark-mode .action-btn:not(.primary) {
   color: #ccc !important;
   border-color: #555 !important;
 }
-html body.dark-mode .wrong-item {
+/* 口算结果区的错题回顾（区分于错题本的 wrong-item）*/
+html body.dark-mode .mental-page .wrong-item {
   background: #3a1f22 !important;
 }
 html body.dark-mode .wrong-section .wrong-title {
@@ -399,5 +400,34 @@ html body.dark-mode .timer.warn {
 /* 错题本未掌握题数 / 已掌握题数 标签 */
 html body.dark-mode .mastered-badge {
   color: #66bb6a !important;
+}
+
+/* 结果页（result.vue）*/
+html body.dark-mode .result-page {
+  background-color: #1a1a1a !important;
+}
+html body.dark-mode .result-card {
+  background: #2a2a2a !important;
+}
+html body.dark-mode .score {
+  color: #FFD54F !important;  /* 亮金色 */
+}
+html body.dark-mode .score-label,
+html body.dark-mode .stars-total-change,
+html body.dark-mode .old-total,
+html body.dark-mode .arrow {
+  color: #aaa !important;
+}
+html body.dark-mode .new-total {
+  color: #FFD54F !important;
+}
+html body.dark-mode .star-text {
+  color: #FFB300 !important;
+}
+html body.dark-mode .encourage {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .level-change {
+  color: #4fc3f7 !important;
 }
 </style>
