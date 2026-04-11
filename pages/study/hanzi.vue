@@ -210,7 +210,7 @@ function judgeSelf(isCorrect) {
     const q = currentQ.value
     if (q._id) {
       recordWrong(getUsername(), {
-        type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id
+        type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id, qType: q.qType
       })
     }
   }
@@ -328,7 +328,7 @@ function pickOption(i) {
     const q = currentQ.value
     if (q._id && !recordedWrongIds.has(q._id)) {
       recordedWrongIds.add(q._id)
-      recordWrong(getUsername(), { type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id })
+      recordWrong(getUsername(), { type: 'hanzi', char: q.char, unit: q.unit, question_id: q._id, qType: q.qType })
     }
     setTimeout(() => advanceQuestion(), 1500)
   }

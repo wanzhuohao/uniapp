@@ -1,24 +1,28 @@
 // utils/study/wrongBook.js
 import { queryCollection, addDocument, updateDocument } from '../common/cloudDb.js'
 
-export async function recordWrong(username, { type, char, unit, question_id }) {
+export async function recordWrong(username, { type, char, unit, question_id, qType }) {
   try {
     const records = await queryCollection('wrong_records', { username, question_id }, { limit: 1 })
 
     if (records.length > 0) {
       const record = records[0]
-      await updateDocument('wrong_records', record._id, {
+      const updateData = {
         wrongCount: (record.wrongCount || 0) + 1,
         correctCount: 0,
         mastered: false,
         lastWrongAt: Date.now()
-      })
+      }
+      if (qType) updateData.qType = qType
+      await updateDocument('wrong_records', record._id, updateData)
     } else {
-      await addDocument('wrong_records', {
+      const insertData = {
         username, question_id, type, char, unit,
         wrongCount: 1, correctCount: 0, mastered: false,
         lastWrongAt: Date.now(), createdAt: Date.now()
-      })
+      }
+      if (qType) insertData.qType = qType
+      await addDocument('wrong_records', insertData)
     }
   } catch (e) {
     console.error('记录错题失败:', e)
