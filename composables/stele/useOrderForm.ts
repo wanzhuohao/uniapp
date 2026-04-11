@@ -397,6 +397,8 @@ export function useOrderForm() {
       const draft = JSON.parse(raw);
       if (!draft?.form) return false;
       Object.assign(form, draft.form);
+      // 确保 names 至少有一排一列，否则用户无法添加第一排
+      form.names = safeNames(draft.form.names);
       fatherBirth.value = draft.fatherBirth || '';
       fatherDeath.value = draft.fatherDeath || '';
       motherBirth.value = draft.motherBirth || '';
