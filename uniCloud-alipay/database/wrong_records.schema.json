@@ -12,7 +12,7 @@
     "username": { "bsonType": "string", "description": "用户名" },
     "question_id": { "bsonType": "string", "description": "题目ID" },
     "type": { "bsonType": "string", "description": "题目类型", "enum": ["pinyin", "stroke", "hanzi", "math"] },
-    "qType": { "bsonType": "string", "description": "汉字题子类型 (radical/structure/strokeCount/stroke)" },
+    "qType": { "bsonType": "string", "description": "汉字题子类型 (radical/structure/strokeCount/stroke/dictation)" },
     "char": { "bsonType": "string", "description": "汉字" },
     "unit": { "bsonType": "string", "description": "单元" },
     "wrongCount": { "bsonType": "int", "description": "累计错误次数" },

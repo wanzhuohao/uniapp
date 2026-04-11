@@ -24,6 +24,11 @@
         <text class="module-name">汉字</text>
         <text class="module-desc">笔顺、部首、结构、笔画</text>
       </view>
+      <view class="module-card dictation-card" @click="goTo('/pages/study/dictation')">
+        <text class="module-icon">✍️</text>
+        <text class="module-name">听写</text>
+        <text class="module-desc">听声音写汉字</text>
+      </view>
       <view class="module-card mental-card" @click="goTo('/pages/study/mental-math')">
         <text class="module-icon">⏱️</text>
         <text class="module-name">口算</text>
@@ -99,6 +104,7 @@ function goTo(url) {
 .hanzi-card { border-left-color: #42A5F5; }
 .mock-card { border-left-color: #00897B; }
 .mental-card { border-left-color: #9C27B0; }
+.dictation-card { border-left-color: #26A69A; }
 .wrong-book-card { border-left-color: #FF5722; }
 .admin-card { border-left-color: #607D8B; }
 .module-icon { font-size: 56rpx; }
