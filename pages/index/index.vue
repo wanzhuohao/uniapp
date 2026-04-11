@@ -18,11 +18,6 @@
         <text class="card-desc">拼音、汉字、口算练习</text>
       </view>
 
-      <view class="card card-interview disabled">
-        <text class="card-icon">🎤</text>
-        <text class="card-title">面试助手</text>
-        <text class="card-desc">重新设计中，暂不可用</text>
-      </view>
     </view>
   </view>
 </template>
