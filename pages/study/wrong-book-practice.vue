@@ -27,6 +27,14 @@
       </view>
       <template v-else>
         <text class="filter-title">选择要重练的类型</text>
+        <view v-if="!practiceAll" class="practice-mode-hint" @click="switchToAll">
+          <text>📚 今日待复习</text>
+          <text class="switch-link">切换到练全部 »</text>
+        </view>
+        <view v-else class="practice-mode-hint" @click="switchToDue">
+          <text>📖 练全部错题</text>
+          <text class="switch-link">切换到今日待复习 »</text>
+        </view>
         <view class="type-cards">
           <view
             v-if="counts.pinyin > 0"
@@ -35,7 +43,7 @@
           >
             <text class="type-icon">🔤</text>
             <text class="type-name">拼音</text>
-            <text class="type-count">{{ counts.pinyin }} 题待掌握</text>
+            <text class="type-count">今日 {{ counts.pinyin }} 题</text>
           </view>
           <view
             v-if="counts.hanzi > 0"
@@ -44,7 +52,7 @@
           >
             <text class="type-icon">🈶</text>
             <text class="type-name">汉字</text>
-            <text class="type-count">{{ counts.hanzi }} 题待掌握</text>
+            <text class="type-count">今日 {{ counts.hanzi }} 题</text>
           </view>
           <view
             v-if="counts.math > 0"
@@ -53,7 +61,7 @@
           >
             <text class="type-icon">🔢</text>
             <text class="type-name">口算</text>
-            <text class="type-count">{{ counts.math }} 题待掌握</text>
+            <text class="type-count">今日 {{ counts.math }} 题</text>
           </view>
         </view>
       </template>
@@ -130,7 +138,7 @@ import QuestionCard from '../../components/study/QuestionCard.vue'
 import HanziQuestion from '../../components/study/HanziQuestion.vue'
 import { useGameStore } from '../../store/game.js'
 import { useAuth } from '../../composables/common/useAuth.js'
-import { getUnmasteredList, recordCorrect, recordWrongAgain } from '../../utils/study/wrongBook.js'
+import { getDueList, getAllWrongList, recordCorrect, recordWrongAgain } from '../../utils/study/wrongBook.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
 import { shuffle, sampleWithout } from '../../utils/study/questionHelper.js'
 
@@ -140,6 +148,7 @@ const { getUsername } = useAuth()
 const ALL_STRUCTURES = ['上下', '左右', '独体', '半包围', '全包围']
 
 const loading = ref(true)
+const practiceAll = ref(false)  // true = 练全部, false = 只练待复习（默认）
 const mode = ref('') // '' | 'pinyin' | 'hanzi' | 'math'
 const finishedMode = ref(false)
 
@@ -191,7 +200,9 @@ async function loadAllWrong() {
     return
   }
   try {
-    const list = await getUnmasteredList(username)
+    const list = practiceAll.value
+      ? await getAllWrongList(username)
+      : await getDueList(username)
     const groups = { pinyin: [], hanzi: [], math: [] }
     for (const w of list) {
       if (w.type === 'pinyin') groups.pinyin.push(w)
@@ -364,10 +375,10 @@ async function handlePinyinAnswer({ correct }) {
   const w = q._wrong
   if (correct) {
     correctCount.value++
-    const r = await recordCorrect(w._id, w.correctCount || 0)
+    const r = await recordCorrect(w._id, w.box, w.correctCount || 0)
     if (r.mastered) masteredThisRound.value++
   } else {
-    await recordWrongAgain(w._id, w.wrongCount || 0)
+    await recordWrongAgain(w._id, w.box, w.wrongCount || 0)
   }
   if (currentIndex.value < pinyinQueue.value.length - 1) {
     currentIndex.value++
@@ -383,10 +394,10 @@ async function handleHanziAnswer({ isCorrect }) {
   const w = q._wrong
   if (isCorrect) {
     correctCount.value++
-    const r = await recordCorrect(w._id, w.correctCount || 0)
+    const r = await recordCorrect(w._id, w.box, w.correctCount || 0)
     if (r.mastered) masteredThisRound.value++
   } else {
-    await recordWrongAgain(w._id, w.wrongCount || 0)
+    await recordWrongAgain(w._id, w.box, w.wrongCount || 0)
   }
   advanceHanzi()
 }
@@ -416,12 +427,12 @@ async function submitMath() {
     if (isRight) {
       correctCount.value++
       writes.push(
-        recordCorrect(w._id, w.correctCount || 0).then(r => {
+        recordCorrect(w._id, w.box, w.correctCount || 0).then(r => {
           if (r.mastered) masteredThisRound.value++
         })
       )
     } else {
-      writes.push(recordWrongAgain(w._id, w.wrongCount || 0))
+      writes.push(recordWrongAgain(w._id, w.box, w.wrongCount || 0))
     }
   }
   try {
@@ -450,6 +461,15 @@ async function exitMode() {
 
 function goBack() {
   uni.navigateBack()
+}
+
+async function switchToAll() {
+  practiceAll.value = true
+  await loadAllWrong()
+}
+async function switchToDue() {
+  practiceAll.value = false
+  await loadAllWrong()
 }
 
 onMounted(() => {
@@ -512,6 +532,24 @@ onMounted(() => {
   margin-bottom: 32rpx;
   color: #333;
 }
+.practice-mode-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: #F0F4FF;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  font-size: 26rpx;
+  color: #666;
+  width: 100%;
+  max-width: 600rpx;
+}
+.switch-link {
+  color: #667eea;
+  font-weight: bold;
+}
+.switch-link:active { opacity: 0.6; }
 .type-cards {
   display: flex;
   flex-direction: column;
