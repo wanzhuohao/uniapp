@@ -23,7 +23,8 @@ function updateBtnVisible() {
     const pages = getCurrentPages()
     const cur = pages[pages.length - 1]
     const path = cur?.route || ''
-    themeBtnEl.style.display = path.startsWith('pages/study/') ? 'flex' : 'none'
+    // 只在学习首页显示，避免子页面学习时的视觉干扰
+    themeBtnEl.style.display = path === 'pages/study/index' ? 'flex' : 'none'
   } catch (e) {
     themeBtnEl.style.display = 'none'
   }
@@ -213,11 +214,11 @@ html body.dark-mode .top5-type {
   color: #888 !important;
 }
 
-/* 未选中的筛选 / tab 标签 */
-html body.dark-mode .unit-tag,
-html body.dark-mode .filter-tag,
-html body.dark-mode .filter-btn,
-html body.dark-mode .tab-btn {
+/* 未选中的筛选 / tab 标签（用 :not(.active) 保留选中态原色） */
+html body.dark-mode .unit-tag:not(.active),
+html body.dark-mode .filter-tag:not(.active),
+html body.dark-mode .filter-btn:not(.active),
+html body.dark-mode .tab-btn:not(.active) {
   background: #3a3a3a !important;
   color: #ccc !important;
   border-color: #555 !important;
@@ -269,6 +270,38 @@ html body.dark-mode .replay-btn {
 html body.dark-mode .trend-chart,
 html body.dark-mode .top5-item {
   background-color: #2a2a2a !important;
+}
+
+/* 底部固定条（错题本 / 数据维护等）*/
+html body.dark-mode .bottom-bar {
+  background: #2a2a2a !important;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 数据维护页面也补暗色 */
+html body.dark-mode .admin-page .data-list,
+html body.dark-mode .admin-page .data-item,
+html body.dark-mode .admin-page .edit-panel,
+html body.dark-mode .admin-page .section,
+html body.dark-mode .admin-page .search-box,
+html body.dark-mode .admin-page .row-card {
+  background-color: #2a2a2a !important;
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .admin-page input,
+html body.dark-mode .admin-page textarea {
+  background: #1a1a1a !important;
+  color: #e0e0e0 !important;
+  border-color: #555 !important;
+}
+
+/* 错题本的 high-frequency top5 list 内部项 */
+html body.dark-mode .top5-rank {
+  color: #ff8a65 !important;
+}
+html body.dark-mode .wrong-count,
+html body.dark-mode .top5-count {
+  color: #ff8a65 !important;
 }
 
 /* 浮动主题切换按钮 */
