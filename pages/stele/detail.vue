@@ -8,6 +8,13 @@
       <el-splitter-panel :size="'50%'" min="25%">
         <div class="edit-section">
           <h3 class="section-title">编辑区</h3>
+          <div v-if="draftNoticeVisible" class="draft-notice">
+            <span class="draft-notice-text">检测到上次未保存的草稿</span>
+            <div class="draft-notice-btns">
+              <el-button size="small" type="primary" @click="applyDraft">载入草稿</el-button>
+              <el-button size="small" @click="dismissDraftNotice">关闭</el-button>
+            </div>
+          </div>
           <el-form :model="form" label-width="90px" size="default">
             <!-- 1. 父母信息 -->
             <el-form-item label="类型">
@@ -272,6 +279,26 @@ function refreshPreview() {
   previewData.value = buildPreview();
 }
 
+// 草稿提示（非阻断，展示在编辑区顶部）
+const draftNoticeVisible = ref(false);
+
+async function applyDraft() {
+  const ok = loadDraft();
+  if (ok) {
+    await nextTick();
+    refreshPreview();
+    ElMessage.success('已恢复草稿');
+  } else {
+    clearDraft();
+    ElMessage.warning('草稿已损坏，已清除');
+  }
+  draftNoticeVisible.value = false;
+}
+
+function dismissDraftNotice() {
+  draftNoticeVisible.value = false;
+}
+
 // 数据回显
 onMounted(async () => {
   const copyFrom = getUrlParam('copyFrom');
@@ -288,31 +315,9 @@ onMounted(async () => {
       if (typeof saved === 'object') previewData.value = saved;
       else refreshPreview();
     } else {
-      const hasDraft = !!localStorage.getItem('stele-draft');
-      if (hasDraft) {
-        uni.showModal({
-          title: '提示',
-          content: '检测到上次未保存的草稿，是否载入？',
-          confirmText: '载入草稿',
-          cancelText: '新建',
-          success: async (res) => {
-            if (res.confirm) {
-              const ok = loadDraft();
-              if (ok) {
-                // 等待 form 等响应式状态从 Object.assign 中沉淀，再触发预览
-                await nextTick();
-                refreshPreview();
-                ElMessage.success('已恢复草稿');
-              } else {
-                // 草稿损坏，清掉
-                clearDraft();
-              }
-            } else {
-              // 用户选择新建，清草稿
-              clearDraft();
-            }
-          }
-        });
+      // 新建模式：不弹 modal 阻断，只在编辑区顶部显示提示
+      if (localStorage.getItem('stele-draft')) {
+        draftNoticeVisible.value = true;
       }
     }
   }
@@ -509,6 +514,22 @@ watch(() => form.dateQingming, (val) => {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 8px; font-weight: bold; color: var(--color-primary);
 }
+.draft-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: var(--color-bg-blue-light);
+  border-left: 4px solid var(--color-warning);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+.draft-notice-text { flex: 1; }
+.draft-notice-btns { display: flex; gap: 8px; flex-shrink: 0; }
+
 .detail-splitter { flex: 1; overflow: hidden; height: calc(100vh - 80px); }
 /* 两个 panel 内部可滚动 + 左右间距 */
 .detail-splitter :deep(.el-splitter-panel > div) {

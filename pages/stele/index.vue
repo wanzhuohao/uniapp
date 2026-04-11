@@ -20,6 +20,15 @@
     </div>
 
     <div class="step-content">
+      <!-- 草稿提示（非阻断横幅）-->
+      <div v-if="draftNoticeVisible" class="draft-notice">
+        <span class="draft-notice-text">检测到上次未保存的草稿</span>
+        <div class="draft-notice-btns">
+          <el-button size="small" type="primary" @click="applyDraftNotice">载入草稿</el-button>
+          <el-button size="small" @click="dismissDraftNotice">关闭</el-button>
+        </div>
+      </div>
+
       <!-- 步骤1：父母信息 + 横批与立碑日期（合并） -->
       <div v-show="currentStep === 1" class="step-panel">
         <el-form label-position="top" size="large">
@@ -283,6 +292,23 @@ watch(() => form.dateQingming, (val) => {
   }
 });
 
+// 草稿提示（非阻断）
+const draftNoticeVisible = ref(false);
+
+function applyDraftNotice() {
+  if (loadDraft()) {
+    uni.showToast({ title: '已恢复草稿', icon: 'none', duration: 2000 });
+  } else {
+    clearDraft();
+    uni.showToast({ title: '草稿已损坏，已清除', icon: 'none', duration: 2000 });
+  }
+  draftNoticeVisible.value = false;
+}
+
+function dismissDraftNotice() {
+  draftNoticeVisible.value = false;
+}
+
 // 数据回显
 onMounted(async () => {
   const copyFrom = getUrlParam('copyFrom');
@@ -296,21 +322,9 @@ onMounted(async () => {
     if (typeof saved === 'object' && saved.big) savedBig.value = saved.big;
     currentStep.value = 3;
   } else {
-    const hasDraft = !!localStorage.getItem('stele-draft');
-    if (hasDraft) {
-      uni.showModal({
-        title: '提示',
-        content: '检测到上次未保存的草稿，是否载入？',
-        confirmText: '载入草稿',
-        cancelText: '新建',
-        success: (res) => {
-          if (res.confirm && loadDraft()) {
-            uni.showToast({ title: '已恢复草稿', icon: 'none', duration: 2000 });
-          } else {
-            clearDraft();
-          }
-        }
-      });
+    // 新建模式：显示顶部横幅，不阻断用户
+    if (localStorage.getItem('stele-draft')) {
+      draftNoticeVisible.value = true;
     }
   }
 });
@@ -452,6 +466,21 @@ function confirmPhoneAndSubmit() {
 .step-panel {
   width: 100%;
 }
+.draft-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  background: var(--color-bg-blue-light);
+  border-left: 4px solid var(--color-warning);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+.draft-notice-text { flex: 1; }
+.draft-notice-btns { display: flex; gap: 8px; flex-shrink: 0; }
 .full-width {
   width: 100%;
 }
