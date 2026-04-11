@@ -402,15 +402,7 @@ const handlePhoneConfirm = async () => {
 
 const onBack = () => {
   saveDraft();
-  uni.showModal({
-    title: '提示',
-    content: '当前编辑内容已自动保存为草稿，确定返回？',
-    confirmText: '返回',
-    cancelText: '继续编辑',
-    success: (res) => {
-      if (res.confirm) uni.redirectTo({ url: '/pages/stele/list' });
-    }
-  });
+  uni.redirectTo({ url: '/pages/stele/list' });
 };
 
 const goTo3D = () => {
