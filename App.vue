@@ -272,10 +272,50 @@ html body.dark-mode .top5-item {
   background-color: #2a2a2a !important;
 }
 
-/* 底部固定条（错题本 / 数据维护等）*/
-html body.dark-mode .bottom-bar {
+/* 底部固定条（错题本 / 数据维护 / 口算交卷 等）*/
+html body.dark-mode .bottom-bar,
+html body.dark-mode .submit-bar,
+html body.dark-mode .mental-page .top-bar {
   background: #2a2a2a !important;
   box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 口算结果区 */
+html body.dark-mode .result-area,
+html body.dark-mode .time-alert-box {
+  background: #2a2a2a !important;
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .result-title,
+html body.dark-mode .result-time,
+html body.dark-mode .result-score,
+html body.dark-mode .result-accuracy,
+html body.dark-mode .time-alert-text {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .action-btn:not(.primary) {
+  background: #3a3a3a !important;
+  color: #ccc !important;
+  border-color: #555 !important;
+}
+html body.dark-mode .wrong-item {
+  background: #3a1f22 !important;
+}
+html body.dark-mode .wrong-section .wrong-title {
+  color: #ff8a65 !important;
+}
+
+/* TrendChart 内部文字（chart-title / 坐标轴） */
+html body.dark-mode .chart-title,
+html body.dark-mode .chart-label,
+html body.dark-mode .chart-axis-label,
+html body.dark-mode .y-label,
+html body.dark-mode .x-label {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .chart-line,
+html body.dark-mode .chart-axis {
+  stroke: #666 !important;
 }
 
 /* 数据维护页面也补暗色 */
@@ -308,5 +348,27 @@ html body.dark-mode .top5-count {
 html body.dark-mode .global-theme-toggle {
   background: #3a3a3a !important;
   color: #FFF9C4 !important;
+}
+
+/* 学习页答案区（learn.vue）*/
+html body.dark-mode .answer-box,
+html body.dark-mode .answer-row {
+  background: #2a2a2a !important;
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .answer-label {
+  color: #888 !important;
+}
+html body.dark-mode .answer-value {
+  color: #e0e0e0 !important;
+}
+
+/* HanziWriter SVG 在暗色下 — character path 用浅色 fill
+   （注意：outline 的 path 也会受影响，一并改为中灰不完美但可接受）*/
+html body.dark-mode .char-outline-target svg path,
+html body.dark-mode .quiz-target svg path,
+html body.dark-mode .result-hanzi svg path,
+html body.dark-mode .hanzi-question svg path {
+  fill: #e0e0e0 !important;
 }
 </style>
