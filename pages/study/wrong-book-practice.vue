@@ -22,8 +22,10 @@
     <view v-if="!loading && !mode" class="filter-area">
       <view v-if="totalUnmastered === 0" class="empty-state">
         <text class="empty-icon">🎉</text>
-        <text class="empty-text">太棒了！没有未掌握的错题！</text>
-        <view class="start-btn" @click="goBack">返回错题本</view>
+        <text v-if="!practiceAll" class="empty-text">今天没有待复习的错题</text>
+        <text v-else class="empty-text">太棒了！没有错题！</text>
+        <view v-if="!practiceAll" class="start-btn" @click="switchToAll">练全部错题</view>
+        <view class="start-btn" style="margin-top: 16rpx; background: #888" @click="goBack">返回错题本</view>
       </view>
       <template v-else>
         <text class="filter-title">选择要重练的类型</text>

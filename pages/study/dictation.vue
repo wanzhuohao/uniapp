@@ -109,7 +109,8 @@ async function startQuiz(char) {
       height: 280,
       padding: 10,
       strokeColor: dark ? '#80cbc4' : '#2E7D32',
-      outlineColor: dark ? '#555' : '#DDD',
+      // dictation 页字是空轮廓（showCharacter: false），outline 是主视觉，暗色下需要更亮
+      outlineColor: dark ? '#888' : '#DDD',
       radicalColor: dark ? '#80cbc4' : '#168F16',
       showCharacter: false,
       showOutline: true,

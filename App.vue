@@ -318,20 +318,42 @@ html body.dark-mode .chart-axis {
   stroke: #666 !important;
 }
 
-/* 数据维护页面也补暗色 */
-html body.dark-mode .admin-page .data-list,
-html body.dark-mode .admin-page .data-item,
-html body.dark-mode .admin-page .edit-panel,
-html body.dark-mode .admin-page .section,
-html body.dark-mode .admin-page .search-box,
-html body.dark-mode .admin-page .row-card {
+/* 数据维护页面（data-admin.vue 实际 class 名）*/
+html body.dark-mode .admin-page .toolbar,
+html body.dark-mode .admin-page .list,
+html body.dark-mode .admin-page .item,
+html body.dark-mode .admin-page .modal,
+html body.dark-mode .admin-page .modal-header,
+html body.dark-mode .admin-page .modal-body,
+html body.dark-mode .admin-page .modal-footer,
+html body.dark-mode .admin-page .field {
   background-color: #2a2a2a !important;
   color: #e0e0e0 !important;
 }
+html body.dark-mode .admin-page .item-char,
+html body.dark-mode .admin-page .modal-title,
+html body.dark-mode .admin-page .reload-btn,
+html body.dark-mode .admin-page .label {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .admin-page .line1,
+html body.dark-mode .admin-page .line2,
+html body.dark-mode .admin-page .line3,
+html body.dark-mode .admin-page .stats,
+html body.dark-mode .admin-page .modal-close {
+  color: #aaa !important;
+}
 html body.dark-mode .admin-page input,
-html body.dark-mode .admin-page textarea {
+html body.dark-mode .admin-page textarea,
+html body.dark-mode .admin-page .search-input,
+html body.dark-mode .admin-page .input {
   background: #1a1a1a !important;
   color: #e0e0e0 !important;
+  border-color: #555 !important;
+}
+html body.dark-mode .admin-page .unit-chip:not(.active) {
+  background: #3a3a3a !important;
+  color: #ccc !important;
   border-color: #555 !important;
 }
 
@@ -365,4 +387,17 @@ html body.dark-mode .answer-value {
 
 /* HanziWriter SVG：strokeColor 已在各组件按主题动态设置，
    CSS 这里不做 fill 强制覆盖（会干扰绿色部首色），信任 HanziWriter 自身 */
+
+/* 口算计时器（顶部时间显示）暗色 */
+html body.dark-mode .timer {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .timer.warn {
+  color: #ff8a65 !important;
+}
+
+/* 错题本未掌握题数 / 已掌握题数 标签 */
+html body.dark-mode .mastered-badge {
+  color: #66bb6a !important;
+}
 </style>
