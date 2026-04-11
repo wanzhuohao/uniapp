@@ -2,7 +2,7 @@
   <view class="container">
     <view class="header">
       <text class="title">我的工具箱</text>
-      <text class="username" @click="editUsername">{{ username || '未设置' }}</text>
+      <text class="username" @click="openSwitcher">{{ username || '未设置' }}</text>
     </view>
 
     <view class="cards">
@@ -19,6 +19,12 @@
       </view>
 
     </view>
+    <UserSwitcher
+      :visible="showSwitcher"
+      @close="showSwitcher = false"
+      @switch-to="doSwitch"
+      @add-new="onAddNew"
+    />
   </view>
 </template>
 
@@ -27,10 +33,15 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { useGameStore } from '../../store/game.js'
+import UserSwitcher from '../../components/common/UserSwitcher.vue'
+import { useRecentUsers } from '../../composables/common/useRecentUsers.js'
 
 const { getUsername, setUsername } = useAuth()
 const store = useGameStore()
+const { addRecentUser } = useRecentUsers()
 const username = ref(getUsername())
+const showSwitcher = ref(false)
+const switching = ref(false)
 
 onShow(() => {
   username.value = getUsername()
@@ -49,26 +60,45 @@ function goTo(url) {
   uni.navigateTo({ url })
 }
 
-function editUsername() {
+function openSwitcher() {
+  if (switching.value) return
+  showSwitcher.value = true
+}
+
+async function doSwitch(name) {
+  if (switching.value) return
+  switching.value = true
+  setUsername(name)
+  addRecentUser(name)
+  username.value = name
+  showSwitcher.value = false
+
+  try {
+    await store.switchUser()
+  } catch (e) {
+    uni.showToast({ title: '云端加载失败，使用默认数据', icon: 'none', duration: 1500 })
+  }
+
+  uni.$emit('username-changed', name)
+  uni.showToast({ title: '已切换到 ' + name, icon: 'success', duration: 1200 })
+  setTimeout(() => {
+    uni.reLaunch({ url: '/pages/index/index' })
+  }, 1200)
+}
+
+function onAddNew() {
+  showSwitcher.value = false
   uni.showModal({
-    title: '修改用户名',
+    title: '添加新用户',
     content: '',
     editable: true,
-    placeholderText: '当前：' + (username.value || '未设置'),
+    placeholderText: '输入新用户名',
+    showCancel: true,
     async success(res) {
       const newName = (res.content || '').trim()
       if (!res.confirm || !newName) return
       if (newName === username.value) return
-      setUsername(newName)
-      username.value = newName
-      // 切换用户：重置 store 状态并从新用户云端拉取
-      await store.switchUser()
-      uni.$emit('username-changed', newName)
-      uni.showToast({ title: '已切换到 ' + newName, icon: 'success', duration: 1200 })
-      // reLaunch 清空页面栈，确保所有子页面下次进入都加载新用户数据
-      setTimeout(() => {
-        uni.reLaunch({ url: '/pages/index/index' })
-      }, 1200)
+      await doSwitch(newName)
     }
   })
 }
