@@ -17,9 +17,19 @@
         <text class="stat-label">口算</text>
       </view>
       <view class="stat-card">
-        <text class="stat-num">{{ stats.unmasteredCount }}</text>
-        <text class="stat-label">待掌握</text>
+        <text class="stat-num due-num">{{ stats.dueCount }}</text>
+        <text class="stat-label">今日待复习</text>
       </view>
+    </view>
+
+    <!-- 视图切换 Tab -->
+    <view class="tab-row">
+      <text :class="['tab-btn', viewMode === 'due' && 'active']" @click="viewMode = 'due'">
+        待复习 {{ stats.dueCount }}
+      </text>
+      <text :class="['tab-btn', viewMode === 'all' && 'active']" @click="viewMode = 'all'">
+        全部 {{ stats.total }}
+      </text>
     </view>
 
     <!-- 正确率趋势 -->
@@ -84,9 +94,9 @@
     </view>
 
     <!-- 重练按钮 -->
-    <view class="bottom-bar" v-if="stats.unmasteredCount > 0">
+    <view class="bottom-bar" v-if="stats.dueCount > 0 || stats.unmasteredCount > 0">
       <button class="practice-btn" @click="goPractice">
-        开始重练（{{ stats.unmasteredCount }} 题未掌握）
+        开始重练（今日 {{ stats.dueCount }} 题待复习）
       </button>
     </view>
   </view>
@@ -109,20 +119,35 @@ const stats = ref({
   strokeCount: 0,
   unmasteredCount: 0,
   masteredCount: 0,
-  top5: []
+  top5: [],
+  dueCount: 0,
+  pinyinDue: 0,
+  hanziDue: 0,
+  mathDue: 0,
 })
 const wrongList = ref([])
 const trendData = ref([])
 const filter = ref('')
+const viewMode = ref('due') // 'due' | 'all'
 const loading = ref(true)
 
 const filteredList = computed(() => {
-  if (!filter.value) return wrongList.value
-  // "hanzi" 筛选时兼容旧的 stroke 类型
+  const now = Date.now()
+  // 先按 viewMode 过滤
+  let list = viewMode.value === 'due'
+    ? wrongList.value.filter(r => {
+        const t = r.nextReviewAt != null ? r.nextReviewAt
+          : (r.mastered && r.box == null ? now + 15 * 86400000 : 0)
+        return t <= now
+      })
+    : wrongList.value
+
+  // 再按 type filter
+  if (!filter.value) return list
   if (filter.value === 'hanzi') {
-    return wrongList.value.filter(item => item.type === 'hanzi' || item.type === 'stroke')
+    return list.filter(item => item.type === 'hanzi' || item.type === 'stroke')
   }
-  return wrongList.value.filter(item => item.type === filter.value)
+  return list.filter(item => item.type === filter.value)
 })
 
 async function loadData() {
@@ -188,6 +213,27 @@ function goPractice() {
   font-size: 40rpx;
   font-weight: bold;
   color: #667eea;
+}
+
+.stat-num.due-num { color: #FF5722; }
+
+.tab-row {
+  display: flex;
+  padding: 0 20rpx 12rpx;
+  gap: 16rpx;
+}
+.tab-btn {
+  padding: 14rpx 32rpx;
+  border-radius: 32rpx;
+  font-size: 28rpx;
+  color: #666;
+  background: #fff;
+  font-weight: 500;
+}
+.tab-btn.active {
+  background: #667eea;
+  color: #fff;
+  font-weight: bold;
 }
 
 .stat-label {
