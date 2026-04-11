@@ -281,6 +281,49 @@ html body.dark-mode .top5-item {
   background-color: #2a2a2a !important;
 }
 
+/* 错题重练页的 hint 切换条 */
+html body.dark-mode .practice-mode-hint {
+  background: #1e3a4f !important;
+  color: #a0c4de !important;
+}
+html body.dark-mode .practice-mode-hint .switch-link {
+  color: #90caf9 !important;
+}
+
+/* UserSwitcher 模态（.us-*）*/
+html body.dark-mode .us-card {
+  background: #2a2a2a !important;
+}
+html body.dark-mode .us-title {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .us-close {
+  background: #3a3a3a !important;
+  color: #ccc !important;
+}
+html body.dark-mode .us-item {
+  background: #3a3a3a !important;
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .us-item.current {
+  background: #3a2f1a !important;  /* 深金色 */
+  border-color: #FFB300 !important;
+}
+html body.dark-mode .us-name {
+  color: #e0e0e0 !important;
+}
+html body.dark-mode .us-badge {
+  background: #4a3a1a !important;
+  color: #ffcc80 !important;
+}
+html body.dark-mode .us-remove {
+  background: #4a1f1f !important;
+  color: #ff8a80 !important;
+}
+html body.dark-mode .us-empty {
+  color: #888 !important;
+}
+
 /* 底部固定条（错题本 / 数据维护 / 口算交卷 等）*/
 html body.dark-mode .bottom-bar,
 html body.dark-mode .submit-bar,

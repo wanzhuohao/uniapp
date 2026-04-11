@@ -45,7 +45,7 @@
           >
             <text class="type-icon">🔤</text>
             <text class="type-name">拼音</text>
-            <text class="type-count">今日 {{ counts.pinyin }} 题</text>
+            <text class="type-count">{{ practiceAll ? '全部' : '今日' }} {{ counts.pinyin }} 题</text>
           </view>
           <view
             v-if="counts.hanzi > 0"
@@ -54,7 +54,7 @@
           >
             <text class="type-icon">🈶</text>
             <text class="type-name">汉字</text>
-            <text class="type-count">今日 {{ counts.hanzi }} 题</text>
+            <text class="type-count">{{ practiceAll ? '全部' : '今日' }} {{ counts.hanzi }} 题</text>
           </view>
           <view
             v-if="counts.math > 0"
@@ -63,7 +63,7 @@
           >
             <text class="type-icon">🔢</text>
             <text class="type-name">口算</text>
-            <text class="type-count">今日 {{ counts.math }} 题</text>
+            <text class="type-count">{{ practiceAll ? '全部' : '今日' }} {{ counts.math }} 题</text>
           </view>
         </view>
       </template>
