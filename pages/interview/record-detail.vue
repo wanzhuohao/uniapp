@@ -41,6 +41,7 @@ import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { QUESTION_TYPES, SCORE_DIMENSIONS } from '../../utils/interview/constants'
 import { useAuth } from '../../composables/common/useAuth'
+import { toast } from '../../utils/common/toast.js'
 
 const { getUsername } = useAuth()
 const record = ref({})
@@ -61,7 +62,7 @@ onMounted(async () => {
       const item = data[0]
       const currentUser = getUsername()
       if (item.username && currentUser && item.username !== currentUser) {
-        uni.showToast({ title: '无权访问', icon: 'none' })
+        toast.error('无权访问')
         setTimeout(() => uni.navigateBack(), 800)
         return
       }

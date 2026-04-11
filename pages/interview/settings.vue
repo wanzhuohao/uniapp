@@ -70,6 +70,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { DEFAULT_EXAM_CONFIG } from '../../utils/interview/constants'
 import { useAuth } from '../../composables/common/useAuth'
+import { toast } from '../../utils/common/toast.js'
 
 const { getUsername } = useAuth()
 const currentTab = 'settings'
@@ -116,7 +117,7 @@ async function loadSettings() {
 
 async function saveApiKey() {
   if (!apiKey.value.trim()) {
-    uni.showToast({ title: '请输入 API Key', icon: 'none' })
+    toast.error('请输入 API Key')
     return
   }
   saving.value = true
@@ -133,9 +134,9 @@ async function saveApiKey() {
       })
       settingsId.value = res.result.id
     }
-    uni.showToast({ title: '保存成功', icon: 'success' })
+    toast.success('保存成功')
   } catch (e) {
-    uni.showToast({ title: '保存失败', icon: 'none' })
+    toast.error('保存失败')
   } finally {
     saving.value = false
   }
@@ -158,9 +159,9 @@ async function saveExamConfig() {
       })
       settingsId.value = res.result.id
     }
-    uni.showToast({ title: '保存成功', icon: 'success' })
+    toast.success('保存成功')
   } catch (e) {
-    uni.showToast({ title: '保存失败', icon: 'none' })
+    toast.error('保存失败')
   } finally {
     saving.value = false
   }
@@ -180,7 +181,7 @@ function clearData() {
     content: '将删除所有练习记录和题库缓存，API Key 保留。确定要清除吗？',
     success: (res) => {
       if (res.confirm) {
-        uni.showToast({ title: '暂不支持，请联系开发者', icon: 'none' })
+        toast.error('暂不支持，请联系开发者')
       }
     }
   })

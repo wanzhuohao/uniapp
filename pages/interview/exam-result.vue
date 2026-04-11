@@ -37,6 +37,7 @@
 import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useAuth } from '../../composables/common/useAuth'
+import { toast } from '../../utils/common/toast.js'
 
 const { getUsername } = useAuth()
 const session = ref({})
@@ -62,7 +63,7 @@ async function loadSession() {
       const s = sData[0]
       const currentUser = getUsername()
       if (s.username && currentUser && s.username !== currentUser) {
-        uni.showToast({ title: '无权访问', icon: 'none' })
+        toast.error('无权访问')
         setTimeout(() => uni.navigateBack(), 800)
         return
       }

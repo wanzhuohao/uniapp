@@ -73,6 +73,7 @@
 import { ref, onMounted } from 'vue'
 import { QUESTION_TYPES, DEFAULT_EXAM_CONFIG, PRACTICE_MODES } from '../../utils/interview/constants'
 import { useAuth } from '../../composables/common/useAuth'
+import { toast } from '../../utils/common/toast.js'
 
 const { getUsername } = useAuth()
 const currentTab = 'index'
@@ -132,7 +133,7 @@ async function checkApiKey() {
 
 async function startFree() {
   loading.value = true
-  uni.showLoading({ title: '正在出题...' })
+  toast.loading('正在出题...')
   try {
     const res = await uniCloud.callFunction({
       name: 'generate-question',
@@ -140,13 +141,13 @@ async function startFree() {
     })
     const result = res?.result
     if (!result || result.code !== 0) {
-      uni.showToast({ title: result?.msg || '出题失败', icon: 'none' })
+      toast.error(result?.msg || '出题失败')
       if (result?.code === -1) goSettings()
       return
     }
     const list = result.data || []
     if (list.length === 0) {
-      uni.showToast({ title: '未获取到题目', icon: 'none' })
+      toast.error('未获取到题目')
       return
     }
     // 用 storage 中转题目内容，避免 URL 过长
@@ -155,16 +156,16 @@ async function startFree() {
       url: `/pages/interview/practice?mode=${PRACTICE_MODES.FREE}&type=${selectedType.value}`
     })
   } catch (e) {
-    uni.showToast({ title: '出题失败，请检查网络', icon: 'none' })
+    toast.error('出题失败，请检查网络')
   } finally {
     loading.value = false
-    uni.hideLoading()
+    toast.hideLoading()
   }
 }
 
 async function startExam() {
   loading.value = true
-  uni.showLoading({ title: '正在出题...' })
+  toast.loading('正在出题...')
   try {
     const res = await uniCloud.callFunction({
       name: 'generate-question',
@@ -172,13 +173,13 @@ async function startExam() {
     })
     const result = res?.result
     if (!result || result.code !== 0) {
-      uni.showToast({ title: result?.msg || '出题失败', icon: 'none' })
+      toast.error(result?.msg || '出题失败')
       if (result?.code === -1) goSettings()
       return
     }
     const list = result.data || []
     if (list.length === 0) {
-      uni.showToast({ title: '未获取到题目', icon: 'none' })
+      toast.error('未获取到题目')
       return
     }
     // 考场模式通过事件传递题目数据（避免 URL 过长）
@@ -190,10 +191,10 @@ async function startExam() {
       url: `/pages/interview/practice?mode=${PRACTICE_MODES.EXAM}`
     })
   } catch (e) {
-    uni.showToast({ title: '出题失败，请检查网络', icon: 'none' })
+    toast.error('出题失败，请检查网络')
   } finally {
     loading.value = false
-    uni.hideLoading()
+    toast.hideLoading()
   }
 }
 

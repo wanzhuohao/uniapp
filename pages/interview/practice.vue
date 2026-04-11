@@ -73,6 +73,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useTimer } from '../../composables/interview/useTimer'
 import { SCORE_DIMENSIONS, PRACTICE_MODES } from '../../utils/interview/constants'
 import { useAuth } from '../../composables/common/useAuth'
+import { toast } from '../../utils/common/toast.js'
 
 const { getUsername } = useAuth()
 const timer = useTimer()
@@ -128,7 +129,7 @@ onLoad((options) => {
       currentQuestionType.value = q.type || options.type || ''
       uni.removeStorageSync('freeQuestion')
     } else {
-      uni.showToast({ title: '题目加载失败', icon: 'none' })
+      toast.error('题目加载失败')
       setTimeout(() => uni.navigateBack(), 800)
     }
   }
@@ -209,10 +210,10 @@ async function submitAnswer() {
       showReview.value = true
       typewriterEffect(res.result.data.review)
     } else {
-      uni.showToast({ title: res.result.msg || '点评失败', icon: 'none' })
+      toast.error(res.result.msg || '点评失败')
     }
   } catch (e) {
-    uni.showToast({ title: '提交失败，请重试', icon: 'none' })
+    toast.error('提交失败，请重试')
   } finally {
     submitting.value = false
   }
@@ -224,14 +225,14 @@ async function reviewAllExamAnswers() {
 
   // 显示专门的"点评中"状态（不复用 showReview）
   showReview.value = false
-  uni.showLoading({ title: '正在 AI 点评中...', mask: true })
+  toast.loading('正在 AI 点评中...', { mask: true })
 
   const username = getUsername()
 
   // 逐题调用点评
   for (let i = 0; i < examRecordIds.value.length; i++) {
     const q = allQuestions.value[i]
-    uni.showLoading({ title: `正在点评第${i + 1}/${examRecordIds.value.length}题...`, mask: true })
+    toast.loading(`正在点评第${i + 1}/${examRecordIds.value.length}题...`, { mask: true })
     try {
       await uniCloud.callFunction({
         name: 'review-answer',
@@ -249,14 +250,14 @@ async function reviewAllExamAnswers() {
   }
 
   // 生成总评
-  uni.showLoading({ title: '生成总评...', mask: true })
+  toast.loading('生成总评...', { mask: true })
   try {
     const summaryRes = await uniCloud.callFunction({
       name: 'exam-summary',
       data: { username, recordIds: examRecordIds.value }
     })
 
-    uni.hideLoading()
+    toast.hideLoading()
 
     if (summaryRes.result.code === 0) {
       uni.redirectTo({
@@ -268,8 +269,8 @@ async function reviewAllExamAnswers() {
     console.error('生成总评失败', e)
   }
 
-  uni.hideLoading()
-  uni.showToast({ title: '点评完成，请查看记录', icon: 'none' })
+  toast.hideLoading()
+  toast.info('点评完成，请查看记录')
   isReviewing.value = false
 }
 
@@ -318,10 +319,10 @@ async function nextFreeQuestion() {
       displayedReview.value = ''
       reviewData.value = {}
     } else {
-      uni.showToast({ title: res.result.msg, icon: 'none' })
+      toast.error(res.result.msg)
     }
   } catch (e) {
-    uni.showToast({ title: '出题失败', icon: 'none' })
+    toast.error('出题失败')
   } finally {
     loading.value = false
   }
