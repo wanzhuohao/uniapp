@@ -25,7 +25,14 @@ const emit = defineEmits(['back'])
 
 function onBack() {
   emit('back')
-  if (props.autoBack) uni.navigateBack()
+  if (props.autoBack) {
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      uni.navigateBack()
+    } else {
+      uni.reLaunch({ url: '/pages/study/index' })
+    }
+  }
 }
 </script>
 

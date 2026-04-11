@@ -13,6 +13,10 @@ export function setDark(v) {
 
 export function toggleDark() {
   setDark(!isDark())
+  // 切换后刷新页面，确保 HanziWriter 等固定色参数的实例重新创建
+  if (typeof window !== 'undefined') {
+    setTimeout(() => window.location.reload(), 100)
+  }
 }
 
 export function applyTheme() {

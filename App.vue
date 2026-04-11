@@ -230,8 +230,17 @@ html body.dark-mode .top-bar {
   background-color: #2a2a2a !important;
 }
 html body.dark-mode .star-num,
-html body.dark-mode .page-title {
+html body.dark-mode .page-title,
+html body.dark-mode .star-total,
+html body.dark-mode .star-total .star-num {
   color: #e0e0e0 !important;
+}
+html body.dark-mode .dot {
+  background: #444 !important;
+}
+html body.dark-mode .dot.active,
+html body.dark-mode .dot.done {
+  background: #FFB300 !important;
 }
 html body.dark-mode .back-btn {
   background: #3a3a3a !important;
@@ -356,6 +365,14 @@ html body.dark-mode .admin-page .unit-chip:not(.active) {
   background: #3a3a3a !important;
   color: #ccc !important;
   border-color: #555 !important;
+}
+html body.dark-mode .admin-page .unit-filter {
+  background: #1a1a1a !important;
+  border-bottom-color: #444 !important;
+}
+html body.dark-mode .admin-page .toolbar .add-btn {
+  background: #1e3a1e !important;
+  color: #81c784 !important;
 }
 
 /* 错题本的 high-frequency top5 list 内部项 */
