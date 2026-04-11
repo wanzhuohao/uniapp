@@ -19,6 +19,16 @@
     "correctCount": { "bsonType": "int", "description": "重练连续答对次数" },
     "mastered": { "bsonType": "bool", "description": "是否已掌握" },
     "lastWrongAt": { "bsonType": "timestamp", "description": "最后错误时间" },
-    "createdAt": { "bsonType": "timestamp", "description": "创建时间" }
+    "createdAt": { "bsonType": "timestamp", "description": "创建时间" },
+    "box": {
+      "bsonType": "int",
+      "description": "Leitner box 等级 1-5，越大间隔越长",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "nextReviewAt": {
+      "bsonType": "long",
+      "description": "下次待复习时间戳（ms），<= now 即到期"
+    }
   }
 }
