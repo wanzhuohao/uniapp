@@ -18,10 +18,10 @@
         <text class="card-desc">拼音、汉字、口算练习</text>
       </view>
 
-      <view class="card card-interview" @click="goTo('/pages/interview/index')">
+      <view class="card card-interview disabled">
         <text class="card-icon">🎤</text>
         <text class="card-title">面试助手</text>
-        <text class="card-desc">公务员结构化面试练习</text>
+        <text class="card-desc">重新设计中，暂不可用</text>
       </view>
     </view>
   </view>
@@ -68,7 +68,12 @@ function editUsername() {
       username.value = newName
       // 切换用户：重置 store 状态并从新用户云端拉取
       await store.switchUser()
-      uni.showToast({ title: '已切换到 ' + newName, icon: 'success' })
+      uni.$emit('username-changed', newName)
+      uni.showToast({ title: '已切换到 ' + newName, icon: 'success', duration: 1200 })
+      // reLaunch 清空页面栈，确保所有子页面下次进入都加载新用户数据
+      setTimeout(() => {
+        uni.reLaunch({ url: '/pages/index/index' })
+      }, 1200)
     }
   })
 }
@@ -132,4 +137,12 @@ function editUsername() {
 .card-stele { border-left: 8rpx solid #96700A; }
 .card-study { border-left: 8rpx solid #66BB6A; }
 .card-interview { border-left: 8rpx solid #007AFF; }
+.card.disabled {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}
+.card.disabled:active {
+  transform: none;
+  opacity: 0.5;
+}
 </style>
