@@ -1,33 +1,22 @@
 <template>
   <view class="hanzi-question">
-    <!-- 笔顺自测题型 -->
+    <!-- 笔顺描红题型 -->
     <template v-if="question && question.qType === 'stroke'">
       <view class="type-badge stroke-badge">笔顺</view>
-      <text v-if="question.hint" class="hint-text">{{ question.hint }}</text>
-      <view class="char-outline-wrap">
-        <view class="char-fallback" v-show="!outlineReady">{{ question.char }}</view>
-        <view :id="outlineId" class="char-outline-target" v-show="outlineReady"></view>
-      </view>
+      <text class="hint-text">按正确笔顺写出这个字</text>
       <view class="speak-btn" @click="speakChar">🔊</view>
-
-      <view v-if="!showAnswer" class="show-answer-btn" @click="revealAnswer">查看笔顺动画</view>
-      <view v-if="showAnswer" class="answer-area">
-        <text class="answer-hint">观察正确笔顺：</text>
-        <view class="color-legend">
-          <view class="legend-item">
-            <view class="legend-dot" style="background:#333"></view>
-            <text>普通笔画</text>
-          </view>
-          <view class="legend-item">
-            <view class="legend-dot" style="background:#168F16"></view>
-            <text>部首笔画</text>
-          </view>
-        </view>
-        <view class="answer-btn" @click="replayAnim">▶ 重播动画</view>
+      <view class="char-outline-wrap quiz-size">
+        <view class="char-fallback quiz-size" v-show="!outlineReady">{{ question.char }}</view>
+        <view :id="outlineId" class="char-outline-target quiz-size" v-show="outlineReady"></view>
       </view>
-      <view v-if="showAnswer" class="self-judge">
-        <view class="judge-btn wrong" @click="judgeSelf(false)">❌ 我不会</view>
-        <view class="judge-btn correct" @click="judgeSelf(true)">✅ 我会了</view>
+
+      <!-- quiz 完成后的结果 -->
+      <view v-if="strokeResult" class="stroke-result">
+        <text :class="['result-verdict', strokeResult.correct ? 'correct' : 'wrong']">
+          {{ strokeResult.correct ? '全对!' : `有 ${strokeResult.mistakes} 笔写错` }}
+        </text>
+        <view class="answer-btn" @click="replayAnim">▶ 播放笔顺动画</view>
+        <view class="next-btn" @click="emitStrokeResult">下一题</view>
       </view>
     </template>
 
@@ -69,7 +58,7 @@ const emit = defineEmits(['answer'])
 
 const choiceState = ref('')
 const selectedOpt = ref(-1)
-const showAnswer = ref(false)
+const strokeResult = ref(null) // { correct: boolean, mistakes: number }
 const outlineId = 'hq-' + Date.now() + '-' + Math.floor(Math.random() * 1e6)
 const outlineReady = ref(false)
 let writerInstance = null
@@ -79,7 +68,7 @@ let pendingTimer = null
 function resetState() {
   choiceState.value = ''
   selectedOpt.value = -1
-  showAnswer.value = false
+  strokeResult.value = null
   outlineReady.value = false
 }
 
@@ -89,6 +78,7 @@ function qTypeLabel(t) {
 
 async function initOutline() {
   outlineReady.value = false
+  strokeResult.value = null
   await nextTick()
   const el = document.getElementById(outlineId)
   if (!el || !props.question?.char) return
@@ -97,18 +87,35 @@ async function initOutline() {
   try {
     const dark = isDark()
     writerInstance = HanziWriter.create(outlineId, props.question.char, {
-      width: 200,
-      height: 200,
-      padding: 20,
-      strokeColor: dark ? '#e0e0e0' : '#333',
-      outlineColor: dark ? '#555' : '#DDD',
+      width: 280,
+      height: 280,
+      padding: 10,
+      strokeColor: dark ? '#80cbc4' : '#2E7D32',
+      outlineColor: dark ? '#888' : '#DDD',
       radicalColor: dark ? '#80cbc4' : '#168F16',
-      strokeAnimationSpeed: 1.5,
-      delayBetweenStrokes: 400,
-      showCharacter: true,
+      strokeAnimationSpeed: 2,
+      delayBetweenStrokes: 200,
+      showCharacter: false,
       showOutline: true,
+      showHintAfterMisses: 2,
       onLoadCharDataSuccess: () => {
-        if (myToken === loadToken) outlineReady.value = true
+        if (myToken !== loadToken) return
+        outlineReady.value = true
+        try {
+          writerInstance?.quiz({
+            onComplete: (summaryData) => {
+              if (myToken !== loadToken) return
+              strokeResult.value = {
+                correct: summaryData.totalMistakes === 0,
+                mistakes: summaryData.totalMistakes
+              }
+              // quiz 完成后显示完整字
+              try {
+                writerInstance?.showCharacter()
+              } catch (e) {}
+            }
+          })
+        } catch (e) {}
       },
       onLoadCharDataError: () => {
         if (myToken === loadToken) {
@@ -122,21 +129,16 @@ async function initOutline() {
   }
 }
 
-function revealAnswer() {
-  showAnswer.value = true
-  if (writerInstance) {
-    try { writerInstance.animateCharacter() } catch (e) {}
-  }
-}
-
 function replayAnim() {
   if (writerInstance) {
     try { writerInstance.animateCharacter() } catch (e) {}
   }
 }
 
-function judgeSelf(isCorrect) {
-  emit('answer', { isCorrect })
+function emitStrokeResult() {
+  if (strokeResult.value) {
+    emit('answer', { isCorrect: strokeResult.value.correct })
+  }
 }
 
 function pickOption(i) {
@@ -251,10 +253,19 @@ onBeforeUnmount(() => {
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
   overflow: hidden;
 }
+.char-outline-wrap.quiz-size {
+  width: 280px;
+  height: 280px;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.08);
+}
 .char-outline-target {
   width: 200px;
   height: 200px;
   line-height: 0;
+}
+.char-outline-target.quiz-size {
+  width: 280px;
+  height: 280px;
 }
 .char-outline-target :deep(svg) { display: block; }
 .char-fallback {
@@ -303,8 +314,28 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 0 4rpx rgba(239,83,80,0.3);
 }
 
-.show-answer-btn {
-  margin-top: 32rpx;
+.stroke-result {
+  margin-top: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+.result-verdict {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+.result-verdict.correct { color: #2E7D32; }
+.result-verdict.wrong { color: #C62828; }
+.answer-btn {
+  padding: 16rpx 48rpx;
+  background: #E3F2FD;
+  color: #1565C0;
+  border-radius: 24rpx;
+  font-size: 28rpx;
+}
+.answer-btn:active { transform: scale(0.95); }
+.next-btn {
   padding: 24rpx 80rpx;
   background: linear-gradient(135deg, #42A5F5, #1E88E5);
   color: #fff;
@@ -313,67 +344,5 @@ onBeforeUnmount(() => {
   font-weight: bold;
   box-shadow: 0 8rpx 24rpx rgba(66,165,245,0.3);
 }
-.show-answer-btn:active { transform: scale(0.97); }
-
-.answer-area {
-  margin-top: 24rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16rpx;
-}
-.answer-hint {
-  font-size: 28rpx;
-  color: #666;
-}
-.color-legend {
-  display: flex;
-  gap: 32rpx;
-  justify-content: center;
-  font-size: 24rpx;
-  color: #888;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-}
-.legend-dot {
-  width: 20rpx;
-  height: 20rpx;
-  border-radius: 4rpx;
-}
-.answer-btn {
-  padding: 16rpx 48rpx;
-  background: #E3F2FD;
-  color: #1565C0;
-  border-radius: 24rpx;
-  font-size: 28rpx;
-}
-
-.self-judge {
-  display: flex;
-  gap: 32rpx;
-  margin-top: 32rpx;
-  justify-content: center;
-}
-.judge-btn {
-  padding: 28rpx 56rpx;
-  border-radius: 24rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  border: 3rpx solid;
-  box-shadow: 0 6rpx 16rpx rgba(0,0,0,0.08);
-}
-.judge-btn:active { transform: scale(0.95); }
-.judge-btn.correct {
-  background: #E8F5E9;
-  color: #2E7D32;
-  border-color: #66BB6A;
-}
-.judge-btn.wrong {
-  background: #FFEBEE;
-  color: #C62828;
-  border-color: #EF5350;
-}
+.next-btn:active { transform: scale(0.97); }
 </style>

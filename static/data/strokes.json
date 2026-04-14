@@ -8,7 +8,7 @@
       "捺"
     ],
     "strokeCount": 4,
-    "unit": "2-1",
+    "unit": "2-0",
     "radical": "文",
     "structure": "独体"
   },
@@ -24,7 +24,7 @@
       "横"
     ],
     "strokeCount": 7,
-    "unit": "2-1",
+    "unit": "2-0",
     "radical": "艹",
     "structure": "上下"
   },
@@ -37,7 +37,7 @@
       "点"
     ],
     "strokeCount": 4,
-    "unit": "2-3",
+    "unit": "2-0",
     "radical": "乙",
     "structure": "独体"
   },
@@ -55,7 +55,7 @@
       "横"
     ],
     "strokeCount": 9,
-    "unit": "2-1",
+    "unit": "2-0",
     "radical": "日",
     "structure": "上下"
   },
@@ -69,7 +69,7 @@
       "点"
     ],
     "strokeCount": 5,
-    "unit": "2-1",
+    "unit": "2-0",
     "radical": "夂",
     "structure": "上下"
   },
@@ -84,7 +84,7 @@
       "横"
     ],
     "strokeCount": 6,
-    "unit": "2-5"
+    "unit": "2-0"
   },
   {
     "char": "飞",
@@ -94,385 +94,43 @@
       "点"
     ],
     "strokeCount": 3,
-    "unit": "2-1",
+    "unit": "2-0",
     "radical": "—",
     "structure": "独体"
   },
   {
-    "char": "吃",
+    "char": "思",
     "strokes": [
       "竖",
       "横折",
       "横",
-      "撇",
-      "横折弯钩",
+      "竖",
+      "横",
+      "点",
+      "斜钩",
+      "点",
       "点"
     ],
-    "strokeCount": 6,
-    "unit": "2-4",
-    "radical": "口",
-    "structure": "左右"
+    "strokeCount": 9,
+    "radical": "田",
+    "structure": "上下",
+    "unit": "2-4"
   },
   {
-    "char": "叫",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横折钩"
-    ],
-    "strokeCount": 5,
-    "unit": "2-3",
-    "radical": "口",
-    "structure": "左右"
-  },
-  {
-    "char": "走",
-    "strokes": [
-      "横",
-      "竖",
-      "横",
-      "竖",
-      "横",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 7,
-    "unit": "2-3",
-    "radical": "走",
-    "structure": "上下"
-  },
-  {
-    "char": "也",
-    "strokes": [
-      "横折钩",
-      "竖",
-      "竖弯钩"
-    ],
-    "strokeCount": 3,
-    "unit": "2-3"
-  },
-  {
-    "char": "他",
-    "strokes": [
-      "撇",
-      "竖",
-      "横折钩",
-      "竖",
-      "竖弯钩"
-    ],
-    "strokeCount": 5,
-    "unit": "2-3",
-    "radical": "亻",
-    "structure": "左右"
-  },
-  {
-    "char": "她",
-    "strokes": [
-      "撇点",
-      "撇",
-      "横",
-      "横折钩",
-      "竖",
-      "竖弯钩"
-    ],
-    "strokeCount": 6,
-    "unit": "2-7",
-    "radical": "女",
-    "structure": "左右"
-  },
-  {
-    "char": "红",
-    "strokes": [
-      "撇折",
-      "撇折",
-      "提",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 6,
-    "unit": "2-1",
-    "radical": "纟",
-    "structure": "左右"
-  },
-  {
-    "char": "听",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "撇",
-      "竖",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 7,
-    "unit": "2-6",
-    "radical": "口",
-    "structure": "左右"
-  },
-  {
-    "char": "你",
-    "strokes": [
-      "撇",
-      "竖",
-      "撇",
-      "横撇",
-      "竖钩",
-      "撇",
-      "点"
-    ],
-    "strokeCount": 7,
-    "unit": "2-3"
-  },
-  {
-    "char": "回",
-    "strokes": [
-      "竖",
-      "横折",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "unit": "2-3",
-    "radical": "口",
-    "structure": "全包围"
-  },
-  {
-    "char": "会",
-    "strokes": [
-      "撇",
-      "捺",
-      "横折",
-      "横",
-      "撇折",
-      "点"
-    ],
-    "strokeCount": 6,
-    "unit": "2-2",
-    "radical": "人",
-    "structure": "上下"
-  },
-  {
-    "char": "工",
-    "strokes": [
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 3,
-    "unit": "2-6"
-  },
-  {
-    "char": "用",
-    "strokes": [
-      "撇",
-      "横折钩",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 5,
-    "unit": "2-6"
-  },
-  {
-    "char": "问",
+    "char": "床",
     "strokes": [
       "点",
-      "竖",
-      "横折钩",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 6,
-    "unit": "2-4",
-    "radical": "门",
-    "structure": "半包围"
-  },
-  {
-    "char": "有",
-    "strokes": [
       "横",
       "撇",
-      "竖",
-      "横折钩",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "unit": "2-6"
-  },
-  {
-    "char": "半",
-    "strokes": [
-      "点",
-      "撇",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 5,
-    "unit": "2-6"
-  },
-  {
-    "char": "从",
-    "strokes": [
-      "撇",
-      "捺",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 4,
-    "unit": "2-3",
-    "radical": "人",
-    "structure": "左右"
-  },
-  {
-    "char": "江",
-    "strokes": [
-      "点",
-      "点",
-      "提",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 6,
-    "unit": "2-2",
-    "radical": "氵",
-    "structure": "左右"
-  },
-  {
-    "char": "河",
-    "strokes": [
-      "点",
-      "点",
-      "提",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖钩"
-    ],
-    "strokeCount": 8,
-    "unit": "2-3",
-    "radical": "氵",
-    "structure": "左右"
-  },
-  {
-    "char": "生",
-    "strokes": [
-      "撇",
-      "横",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 5,
-    "unit": "2-1",
-    "radical": "—",
-    "structure": "独体"
-  },
-  {
-    "char": "里",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "竖",
-      "横",
-      "横"
-    ],
-    "strokeCount": 7,
-    "unit": "2-7"
-  },
-  {
-    "char": "果",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "横",
       "横",
       "竖",
       "撇",
       "捺"
     ],
-    "strokeCount": 8,
-    "unit": "2-7"
-  },
-  {
-    "char": "快",
-    "strokes": [
-      "点",
-      "点",
-      "竖",
-      "横折",
-      "横",
-      "撇",
-      "捺"
-    ],
     "strokeCount": 7,
-    "unit": "2-3",
-    "radical": "忄",
-    "structure": "左右"
-  },
-  {
-    "char": "乐",
-    "strokes": [
-      "撇",
-      "竖折",
-      "竖钩",
-      "撇",
-      "点"
-    ],
-    "strokeCount": 5,
-    "unit": "2-3",
-    "radical": "丿",
-    "structure": "独体"
-  },
-  {
-    "char": "午",
-    "strokes": [
-      "撇",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 4,
-    "unit": "2-7"
-  },
-  {
-    "char": "节",
-    "strokes": [
-      "横",
-      "竖",
-      "竖",
-      "横折",
-      "竖"
-    ],
-    "strokeCount": 5,
-    "unit": "2-4",
-    "radical": "艹",
-    "structure": "上下"
-  },
-  {
-    "char": "叶",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 5,
-    "unit": "2-7"
+    "radical": "广",
+    "structure": "半包围",
+    "unit": "2-4"
   },
   {
     "char": "前",
@@ -488,931 +146,167 @@
       "竖"
     ],
     "strokeCount": 9,
-    "unit": "2-5",
+    "unit": "2-4",
     "radical": "刂",
     "structure": "上下"
   },
   {
-    "char": "吹",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "撇",
-      "横折弯钩",
-      "撇",
-      "点"
-    ],
-    "strokeCount": 7,
-    "radical": "口",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "姓",
-    "strokes": [
-      "撇点",
-      "撇",
-      "横",
-      "撇",
-      "横",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 8,
-    "radical": "女",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "什",
-    "strokes": [
-      "撇",
-      "竖",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 4,
-    "radical": "亻",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "么",
-    "strokes": [
-      "撇",
-      "撇折",
-      "点"
-    ],
-    "strokeCount": 3,
-    "radical": "丿",
-    "structure": "独体",
-    "unit": "2-1"
-  },
-  {
-    "char": "古",
+    "char": "地",
     "strokes": [
       "横",
       "竖",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 5,
-    "radical": "十",
-    "structure": "上下",
-    "unit": "2-1"
-  },
-  {
-    "char": "胡",
-    "strokes": [
-      "横",
-      "竖",
-      "竖",
-      "横折",
-      "横",
-      "竖",
+      "提",
       "横折钩",
-      "横",
-      "横"
+      "竖",
+      "竖弯钩"
     ],
-    "strokeCount": 9,
-    "radical": "月",
+    "strokeCount": 6,
+    "radical": "土",
     "structure": "左右",
-    "unit": "2-1"
+    "unit": "2-4"
   },
   {
-    "char": "双",
+    "char": "故",
     "strokes": [
-      "横撇",
-      "捺",
-      "横撇",
+      "横",
+      "竖",
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "横",
+      "撇",
       "捺"
     ],
-    "strokeCount": 4,
-    "radical": "又",
+    "strokeCount": 9,
+    "radical": "攵",
     "structure": "左右",
-    "unit": "2-1"
+    "unit": "2-4"
   },
   {
-    "char": "言",
+    "char": "乡",
     "strokes": [
-      "点",
-      "横",
-      "横",
-      "横",
-      "竖",
-      "横折",
-      "横"
+      "撇折",
+      "撇折",
+      "撇"
     ],
-    "strokeCount": 7,
+    "strokeCount": 3,
     "radical": "—",
     "structure": "独体",
-    "unit": "2-1"
+    "unit": "2-4"
   },
   {
-    "char": "青",
+    "char": "色",
     "strokes": [
-      "横",
-      "横",
-      "竖",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 8,
-    "radical": "青",
-    "structure": "上下",
-    "unit": "2-1"
-  },
-  {
-    "char": "清",
-    "strokes": [
-      "点",
-      "点",
-      "提",
-      "横",
-      "横",
-      "竖",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 11,
-    "radical": "氵",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "晴",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横",
-      "横",
-      "竖",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 12,
-    "radical": "日",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "情",
-    "strokes": [
-      "点",
-      "点",
-      "竖",
-      "横",
-      "横",
-      "竖",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 11,
-    "radical": "忄",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "请",
-    "strokes": [
-      "点",
-      "横折提",
-      "横",
-      "横",
-      "竖",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 10,
-    "radical": "讠",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "字",
-    "strokes": [
-      "点",
-      "点",
-      "横撇",
-      "横撇",
-      "竖钩",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "宀",
-    "structure": "上下",
-    "unit": "2-1"
-  },
-  {
-    "char": "动",
-    "strokes": [
-      "横",
-      "横",
-      "撇折",
-      "点",
-      "横折钩",
-      "撇"
-    ],
-    "strokeCount": 6,
-    "radical": "力",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "万",
-    "strokes": [
-      "横",
-      "横折钩",
-      "撇"
-    ],
-    "strokeCount": 3,
-    "radical": "一",
-    "structure": "独体",
-    "unit": "2-1"
-  },
-  {
-    "char": "无",
-    "strokes": [
-      "横",
-      "横",
-      "撇",
-      "竖弯钩"
-    ],
-    "strokeCount": 4,
-    "radical": "一",
-    "structure": "独体",
-    "unit": "2-1"
-  },
-  {
-    "char": "明",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "撇",
-      "横折钩",
-      "横",
-      "横"
-    ],
-    "strokeCount": 8,
-    "radical": "日",
-    "structure": "左右",
-    "unit": "2-1"
-  },
-  {
-    "char": "卡",
-    "strokes": [
-      "竖",
-      "横",
-      "横",
-      "竖",
-      "点"
-    ],
-    "strokeCount": 5,
-    "radical": "卜",
-    "structure": "上下",
-    "unit": "2-1"
-  },
-  {
-    "char": "片",
-    "strokes": [
-      "撇",
-      "竖",
-      "横",
-      "横折"
-    ],
-    "strokeCount": 4,
-    "radical": "片",
-    "structure": "独体",
-    "unit": "2-1"
-  },
-  {
-    "char": "合",
-    "strokes": [
-      "撇",
-      "捺",
-      "横",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "人",
-    "structure": "上下",
-    "unit": "2-1"
-  },
-  {
-    "char": "共",
-    "strokes": [
-      "横",
-      "竖",
-      "竖",
-      "横",
-      "撇",
-      "点"
-    ],
-    "strokeCount": 6,
-    "radical": "八",
-    "structure": "上下",
-    "unit": "2-2"
-  },
-  {
-    "char": "产",
-    "strokes": [
-      "点",
-      "横",
-      "撇",
-      "横",
-      "撇",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "立",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "太",
-    "strokes": [
-      "横",
-      "撇",
-      "捺",
-      "点"
-    ],
-    "strokeCount": 4,
-    "radical": "大",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "阳",
-    "strokes": [
-      "横折折折钩",
-      "竖",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "阝",
-    "structure": "左右",
-    "unit": "2-2"
-  },
-  {
-    "char": "光",
-    "strokes": [
-      "竖",
-      "点",
-      "撇",
-      "横",
-      "撇",
-      "竖弯钩"
-    ],
-    "strokeCount": 6,
-    "radical": "小",
-    "structure": "上下",
-    "unit": "2-2"
-  },
-  {
-    "char": "井",
-    "strokes": [
-      "横",
-      "横",
-      "撇",
-      "竖"
-    ],
-    "strokeCount": 4,
-    "radical": "一",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "主",
-    "strokes": [
-      "点",
-      "横",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 5,
-    "radical": "一",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "住",
-    "strokes": [
-      "撇",
-      "竖",
-      "点",
-      "横",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 7,
-    "radical": "亻",
-    "structure": "左右",
-    "unit": "2-2"
-  },
-  {
-    "char": "方",
-    "strokes": [
-      "点",
-      "横",
-      "横折钩",
-      "撇"
-    ],
-    "strokeCount": 4,
-    "radical": "方",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "后",
-    "strokes": [
-      "撇",
-      "撇",
-      "横",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "口",
-    "structure": "半包围",
-    "unit": "2-2"
-  },
-  {
-    "char": "高",
-    "strokes": [
-      "点",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横折",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 10,
-    "radical": "高",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "的",
-    "strokes": [
-      "撇",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "撇",
-      "横折钩",
-      "点"
-    ],
-    "strokeCount": 8,
-    "radical": "白",
-    "structure": "左右",
-    "unit": "2-2"
-  },
-  {
-    "char": "北",
-    "strokes": [
-      "竖",
-      "横",
-      "提",
-      "撇",
-      "竖弯钩"
-    ],
-    "strokeCount": 5,
-    "radical": "匕",
-    "structure": "左右",
-    "unit": "2-2"
-  },
-  {
-    "char": "京",
-    "strokes": [
-      "点",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖钩",
-      "撇",
-      "点"
-    ],
-    "strokeCount": 8,
-    "radical": "亠",
-    "structure": "上下",
-    "unit": "2-2"
-  },
-  {
-    "char": "广",
-    "strokes": [
-      "点",
-      "横",
-      "撇"
-    ],
-    "strokeCount": 3,
-    "radical": "广",
-    "structure": "独体",
-    "unit": "2-2"
-  },
-  {
-    "char": "写",
-    "strokes": [
-      "点",
-      "横折",
-      "横",
-      "竖折折钩",
-      "横"
-    ],
-    "strokeCount": 5,
-    "radical": "冖",
-    "structure": "上下",
-    "unit": "2-2"
-  },
-  {
-    "char": "认",
-    "strokes": [
-      "点",
-      "横折提",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 4,
-    "radical": "讠",
-    "structure": "左右",
-    "unit": "2-2"
-  },
-  {
-    "char": "说",
-    "strokes": [
-      "点",
-      "横折提",
-      "撇",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "撇",
-      "竖弯钩"
-    ],
-    "strokeCount": 9,
-    "radical": "讠",
-    "structure": "左右",
-    "unit": "2-3"
-  },
-  {
-    "char": "让",
-    "strokes": [
-      "点",
-      "横折提",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 5,
-    "radical": "讠",
-    "structure": "左右",
-    "unit": "2-3"
-  },
-  {
-    "char": "自",
-    "strokes": [
-      "撇",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "自",
-    "structure": "独体",
-    "unit": "2-3"
-  },
-  {
-    "char": "已",
-    "strokes": [
-      "横折",
-      "横",
-      "竖弯钩"
-    ],
-    "strokeCount": 3,
-    "radical": "已",
-    "structure": "独体",
-    "unit": "2-3"
-  },
-  {
-    "char": "好",
-    "strokes": [
-      "撇点",
-      "撇",
-      "横",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "女",
-    "structure": "左右",
-    "unit": "2-3"
-  },
-  {
-    "char": "们",
-    "strokes": [
-      "撇",
-      "竖",
-      "点",
-      "竖",
-      "横折钩"
-    ],
-    "strokeCount": 5,
-    "radical": "亻",
-    "structure": "左右",
-    "unit": "2-3"
-  },
-  {
-    "char": "当",
-    "strokes": [
-      "竖",
-      "点",
       "撇",
       "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "彐",
-    "structure": "上下",
-    "unit": "2-3"
-  },
-  {
-    "char": "画",
-    "strokes": [
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横",
-      "竖折",
-      "竖"
-    ],
-    "strokeCount": 8,
-    "radical": "一",
-    "structure": "半包围",
-    "unit": "2-3"
-  },
-  {
-    "char": "毛",
-    "strokes": [
-      "撇",
       "横",
       "竖弯钩",
-      "撇"
+      "撇",
+      "竖弯钩"
     ],
-    "strokeCount": 4,
-    "radical": "毛",
-    "structure": "独体",
-    "unit": "2-3"
+    "strokeCount": 6,
+    "radical": "色",
+    "structure": "上下",
+    "unit": "2-4"
   },
   {
-    "char": "机",
+    "char": "把",
+    "strokes": [
+      "横",
+      "竖钩",
+      "提",
+      "横折",
+      "竖",
+      "横",
+      "竖弯钩"
+    ],
+    "strokeCount": 7,
+    "radical": "扌",
+    "structure": "左右",
+    "unit": "2-4"
+  },
+  {
+    "char": "讲",
+    "strokes": [
+      "点",
+      "横折提",
+      "横",
+      "竖",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 6,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-4"
+  },
+  {
+    "char": "样",
     "strokes": [
       "横",
       "竖",
       "撇",
       "点",
+      "点",
       "撇",
-      "横折弯钩"
+      "横",
+      "横",
+      "横",
+      "竖"
     ],
-    "strokeCount": 6,
+    "strokeCount": 10,
     "radical": "木",
     "structure": "左右",
     "unit": "2-4"
   },
   {
-    "char": "台",
-    "strokes": [
-      "撇折",
-      "点",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 5,
-    "radical": "口",
-    "structure": "上下",
-    "unit": "2-4"
-  },
-  {
-    "char": "唱",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横"
-    ],
-    "strokeCount": 11,
-    "radical": "口",
-    "structure": "左右",
-    "unit": "2-4"
-  },
-  {
-    "char": "伞",
+    "char": "笑",
     "strokes": [
       "撇",
-      "捺",
       "横",
-      "横",
-      "竖钩",
-      "点"
-    ],
-    "strokeCount": 6,
-    "radical": "人",
-    "structure": "上下",
-    "unit": "2-4"
-  },
-  {
-    "char": "朵",
-    "strokes": [
-      "撇",
-      "横折弯",
-      "横",
-      "横",
-      "撇",
-      "竖"
-    ],
-    "strokeCount": 6,
-    "radical": "几",
-    "structure": "上下",
-    "unit": "2-4"
-  },
-  {
-    "char": "美",
-    "strokes": [
       "点",
       "撇",
       "横",
-      "横",
-      "竖",
-      "横",
+      "点",
+      "撇",
       "横",
       "撇",
       "捺"
     ],
-    "strokeCount": 9,
-    "radical": "羊",
+    "strokeCount": 10,
+    "radical": "竹",
     "structure": "上下",
     "unit": "2-4"
   },
   {
-    "char": "这",
-    "strokes": [
-      "点",
-      "横",
-      "撇",
-      "点",
-      "点",
-      "横折折撇",
-      "捺"
-    ],
-    "strokeCount": 7,
-    "radical": "辶",
-    "structure": "半包围",
-    "unit": "2-4"
-  },
-  {
-    "char": "看",
-    "strokes": [
-      "撇",
-      "横",
-      "横",
-      "撇",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横"
-    ],
-    "strokeCount": 9,
-    "radical": "手",
-    "structure": "半包围",
-    "unit": "2-4"
-  },
-  {
-    "char": "鱼",
-    "strokes": [
-      "撇",
-      "横撇",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横",
-      "横"
-    ],
-    "strokeCount": 8,
-    "radical": "鱼",
-    "structure": "上下",
-    "unit": "2-4"
-  },
-  {
-    "char": "面",
+    "char": "再",
     "strokes": [
       "横",
-      "撇",
       "竖",
-      "横折",
-      "横",
-      "横",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 9,
-    "radical": "面",
-    "structure": "独体",
-    "unit": "2-4"
-  },
-  {
-    "char": "加",
-    "strokes": [
       "横折钩",
-      "撇",
       "竖",
-      "横折",
+      "横",
       "横"
     ],
-    "strokeCount": 5,
-    "radical": "力",
-    "structure": "左右",
+    "strokeCount": 6,
+    "radical": "一",
+    "structure": "独体",
     "unit": "2-4"
   },
   {
-    "char": "豆",
+    "char": "节",
     "strokes": [
       "横",
+      "竖",
       "竖",
       "横折",
-      "横",
-      "竖",
-      "横",
-      "点"
-    ],
-    "strokeCount": 7,
-    "radical": "豆",
-    "structure": "独体",
-    "unit": "2-4"
-  },
-  {
-    "char": "斗",
-    "strokes": [
-      "点",
-      "点",
-      "横",
       "竖"
     ],
-    "strokeCount": 4,
-    "radical": "斗",
-    "structure": "独体",
-    "unit": "2-4"
+    "strokeCount": 5,
+    "unit": "2-4",
+    "radical": "艹",
+    "structure": "上下"
   },
   {
     "char": "米",
@@ -1459,6 +353,21 @@
     "unit": "2-4"
   },
   {
+    "char": "吃",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "横折弯钩",
+      "点"
+    ],
+    "strokeCount": 6,
+    "unit": "2-4",
+    "radical": "口",
+    "structure": "左右"
+  },
+  {
     "char": "肉",
     "strokes": [
       "竖",
@@ -1474,6 +383,1307 @@
     "unit": "2-4"
   },
   {
+    "char": "册",
+    "pinyin": "cè",
+    "radical": "丿",
+    "structure": "独体",
+    "strokeCount": 5,
+    "unit": "2-4"
+  },
+  {
+    "char": "支",
+    "pinyin": "zhī",
+    "radical": "支",
+    "structure": "上下",
+    "strokeCount": 4,
+    "unit": "2-4"
+  },
+  {
+    "char": "电",
+    "pinyin": "diàn",
+    "radical": "丨",
+    "structure": "独体",
+    "strokeCount": 5,
+    "unit": "2-4"
+  },
+  {
+    "char": "衣",
+    "pinyin": "yī",
+    "radical": "衣",
+    "structure": "独体",
+    "strokeCount": 6,
+    "unit": "2-4"
+  },
+  {
+    "char": "叫",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折钩"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0",
+    "radical": "口",
+    "structure": "左右"
+  },
+  {
+    "char": "走",
+    "strokes": [
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "unit": "2-0",
+    "radical": "走",
+    "structure": "上下"
+  },
+  {
+    "char": "也",
+    "strokes": [
+      "横折钩",
+      "竖",
+      "竖弯钩"
+    ],
+    "strokeCount": 3,
+    "unit": "2-0"
+  },
+  {
+    "char": "他",
+    "strokes": [
+      "撇",
+      "竖",
+      "横折钩",
+      "竖",
+      "竖弯钩"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0",
+    "radical": "亻",
+    "structure": "左右"
+  },
+  {
+    "char": "她",
+    "strokes": [
+      "撇点",
+      "撇",
+      "横",
+      "横折钩",
+      "竖",
+      "竖弯钩"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0",
+    "radical": "女",
+    "structure": "左右"
+  },
+  {
+    "char": "红",
+    "strokes": [
+      "撇折",
+      "撇折",
+      "提",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0",
+    "radical": "纟",
+    "structure": "左右"
+  },
+  {
+    "char": "听",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "竖",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 7,
+    "unit": "2-0",
+    "radical": "口",
+    "structure": "左右"
+  },
+  {
+    "char": "你",
+    "strokes": [
+      "撇",
+      "竖",
+      "撇",
+      "横撇",
+      "竖钩",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 7,
+    "unit": "2-0"
+  },
+  {
+    "char": "回",
+    "strokes": [
+      "竖",
+      "横折",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0",
+    "radical": "口",
+    "structure": "全包围"
+  },
+  {
+    "char": "会",
+    "strokes": [
+      "撇",
+      "捺",
+      "横折",
+      "横",
+      "撇折",
+      "点"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0",
+    "radical": "人",
+    "structure": "上下"
+  },
+  {
+    "char": "工",
+    "strokes": [
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 3,
+    "unit": "2-0"
+  },
+  {
+    "char": "用",
+    "strokes": [
+      "撇",
+      "横折钩",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0"
+  },
+  {
+    "char": "问",
+    "strokes": [
+      "点",
+      "竖",
+      "横折钩",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0",
+    "radical": "门",
+    "structure": "半包围"
+  },
+  {
+    "char": "有",
+    "strokes": [
+      "横",
+      "撇",
+      "竖",
+      "横折钩",
+      "横",
+      "横"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0"
+  },
+  {
+    "char": "半",
+    "strokes": [
+      "点",
+      "撇",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0"
+  },
+  {
+    "char": "从",
+    "strokes": [
+      "撇",
+      "捺",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 4,
+    "unit": "2-0",
+    "radical": "人",
+    "structure": "左右"
+  },
+  {
+    "char": "江",
+    "strokes": [
+      "点",
+      "点",
+      "提",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 6,
+    "unit": "2-0",
+    "radical": "氵",
+    "structure": "左右"
+  },
+  {
+    "char": "河",
+    "strokes": [
+      "点",
+      "点",
+      "提",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖钩"
+    ],
+    "strokeCount": 8,
+    "unit": "2-0",
+    "radical": "氵",
+    "structure": "左右"
+  },
+  {
+    "char": "生",
+    "strokes": [
+      "撇",
+      "横",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0",
+    "radical": "—",
+    "structure": "独体"
+  },
+  {
+    "char": "里",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "横"
+    ],
+    "strokeCount": 7,
+    "unit": "2-0"
+  },
+  {
+    "char": "果",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横",
+      "竖",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 8,
+    "unit": "2-0"
+  },
+  {
+    "char": "快",
+    "strokes": [
+      "点",
+      "点",
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "unit": "2-0",
+    "radical": "忄",
+    "structure": "左右"
+  },
+  {
+    "char": "乐",
+    "strokes": [
+      "撇",
+      "竖折",
+      "竖钩",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0",
+    "radical": "丿",
+    "structure": "独体"
+  },
+  {
+    "char": "午",
+    "strokes": [
+      "撇",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 4,
+    "unit": "2-0"
+  },
+  {
+    "char": "叶",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 5,
+    "unit": "2-0"
+  },
+  {
+    "char": "吹",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "横折弯钩",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 7,
+    "radical": "口",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "姓",
+    "strokes": [
+      "撇点",
+      "撇",
+      "横",
+      "撇",
+      "横",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "女",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "什",
+    "strokes": [
+      "撇",
+      "竖",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 4,
+    "radical": "亻",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "么",
+    "strokes": [
+      "撇",
+      "撇折",
+      "点"
+    ],
+    "strokeCount": 3,
+    "radical": "丿",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "古",
+    "strokes": [
+      "横",
+      "竖",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "十",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "胡",
+    "strokes": [
+      "横",
+      "竖",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折钩",
+      "横",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "月",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "双",
+    "strokes": [
+      "横撇",
+      "捺",
+      "横撇",
+      "捺"
+    ],
+    "strokeCount": 4,
+    "radical": "又",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "言",
+    "strokes": [
+      "点",
+      "横",
+      "横",
+      "横",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 7,
+    "radical": "—",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "青",
+    "strokes": [
+      "横",
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "青",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "清",
+    "strokes": [
+      "点",
+      "点",
+      "提",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 11,
+    "radical": "氵",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "晴",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 12,
+    "radical": "日",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "情",
+    "strokes": [
+      "点",
+      "点",
+      "竖",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 11,
+    "radical": "忄",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "请",
+    "strokes": [
+      "点",
+      "横折提",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 10,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "字",
+    "strokes": [
+      "点",
+      "点",
+      "横撇",
+      "横撇",
+      "竖钩",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "宀",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "动",
+    "strokes": [
+      "横",
+      "横",
+      "撇折",
+      "点",
+      "横折钩",
+      "撇"
+    ],
+    "strokeCount": 6,
+    "radical": "力",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "万",
+    "strokes": [
+      "横",
+      "横折钩",
+      "撇"
+    ],
+    "strokeCount": 3,
+    "radical": "一",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "无",
+    "strokes": [
+      "横",
+      "横",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 4,
+    "radical": "一",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "明",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "撇",
+      "横折钩",
+      "横",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "日",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "卡",
+    "strokes": [
+      "竖",
+      "横",
+      "横",
+      "竖",
+      "点"
+    ],
+    "strokeCount": 5,
+    "radical": "卜",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "片",
+    "strokes": [
+      "撇",
+      "竖",
+      "横",
+      "横折"
+    ],
+    "strokeCount": 4,
+    "radical": "片",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "合",
+    "strokes": [
+      "撇",
+      "捺",
+      "横",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "人",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "共",
+    "strokes": [
+      "横",
+      "竖",
+      "竖",
+      "横",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 6,
+    "radical": "八",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "产",
+    "strokes": [
+      "点",
+      "横",
+      "撇",
+      "横",
+      "撇",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "立",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "太",
+    "strokes": [
+      "横",
+      "撇",
+      "捺",
+      "点"
+    ],
+    "strokeCount": 4,
+    "radical": "大",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "阳",
+    "strokes": [
+      "横折折折钩",
+      "竖",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "阝",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "光",
+    "strokes": [
+      "竖",
+      "点",
+      "撇",
+      "横",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 6,
+    "radical": "小",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "井",
+    "strokes": [
+      "横",
+      "横",
+      "撇",
+      "竖"
+    ],
+    "strokeCount": 4,
+    "radical": "一",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "主",
+    "strokes": [
+      "点",
+      "横",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "一",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "住",
+    "strokes": [
+      "撇",
+      "竖",
+      "点",
+      "横",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 7,
+    "radical": "亻",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "方",
+    "strokes": [
+      "点",
+      "横",
+      "横折钩",
+      "撇"
+    ],
+    "strokeCount": 4,
+    "radical": "方",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "后",
+    "strokes": [
+      "撇",
+      "撇",
+      "横",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "口",
+    "structure": "半包围",
+    "unit": "2-0"
+  },
+  {
+    "char": "高",
+    "strokes": [
+      "点",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 10,
+    "radical": "高",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "的",
+    "strokes": [
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "撇",
+      "横折钩",
+      "点"
+    ],
+    "strokeCount": 8,
+    "radical": "白",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "北",
+    "strokes": [
+      "竖",
+      "横",
+      "提",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 5,
+    "radical": "匕",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "京",
+    "strokes": [
+      "点",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖钩",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 8,
+    "radical": "亠",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "广",
+    "strokes": [
+      "点",
+      "横",
+      "撇"
+    ],
+    "strokeCount": 3,
+    "radical": "广",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "写",
+    "strokes": [
+      "点",
+      "横折",
+      "横",
+      "竖折折钩",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "冖",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "认",
+    "strokes": [
+      "点",
+      "横折提",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 4,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "说",
+    "strokes": [
+      "点",
+      "横折提",
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 9,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "让",
+    "strokes": [
+      "点",
+      "横折提",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 5,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "自",
+    "strokes": [
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "自",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "已",
+    "strokes": [
+      "横折",
+      "横",
+      "竖弯钩"
+    ],
+    "strokeCount": 3,
+    "radical": "已",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "好",
+    "strokes": [
+      "撇点",
+      "撇",
+      "横",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "女",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "们",
+    "strokes": [
+      "撇",
+      "竖",
+      "点",
+      "竖",
+      "横折钩"
+    ],
+    "strokeCount": 5,
+    "radical": "亻",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "当",
+    "strokes": [
+      "竖",
+      "点",
+      "撇",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "彐",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "画",
+    "strokes": [
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "竖折",
+      "竖"
+    ],
+    "strokeCount": 8,
+    "radical": "一",
+    "structure": "半包围",
+    "unit": "2-0"
+  },
+  {
+    "char": "毛",
+    "strokes": [
+      "撇",
+      "横",
+      "竖弯钩",
+      "撇"
+    ],
+    "strokeCount": 4,
+    "radical": "毛",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "机",
+    "strokes": [
+      "横",
+      "竖",
+      "撇",
+      "点",
+      "撇",
+      "横折弯钩"
+    ],
+    "strokeCount": 6,
+    "radical": "木",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "台",
+    "strokes": [
+      "撇折",
+      "点",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "口",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "唱",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横"
+    ],
+    "strokeCount": 11,
+    "radical": "口",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "伞",
+    "strokes": [
+      "撇",
+      "捺",
+      "横",
+      "横",
+      "竖钩",
+      "点"
+    ],
+    "strokeCount": 6,
+    "radical": "人",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "朵",
+    "strokes": [
+      "撇",
+      "横折弯",
+      "横",
+      "横",
+      "撇",
+      "竖"
+    ],
+    "strokeCount": 6,
+    "radical": "几",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "美",
+    "strokes": [
+      "点",
+      "撇",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 9,
+    "radical": "羊",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "这",
+    "strokes": [
+      "点",
+      "横",
+      "撇",
+      "点",
+      "点",
+      "横折折撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "辶",
+    "structure": "半包围",
+    "unit": "2-0"
+  },
+  {
+    "char": "看",
+    "strokes": [
+      "撇",
+      "横",
+      "横",
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "手",
+    "structure": "半包围",
+    "unit": "2-0"
+  },
+  {
+    "char": "鱼",
+    "strokes": [
+      "撇",
+      "横撇",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "鱼",
+    "structure": "上下",
+    "unit": "2-0"
+  },
+  {
+    "char": "面",
+    "strokes": [
+      "横",
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "面",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "加",
+    "strokes": [
+      "横折钩",
+      "撇",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "力",
+    "structure": "左右",
+    "unit": "2-0"
+  },
+  {
+    "char": "豆",
+    "strokes": [
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "点"
+    ],
+    "strokeCount": 7,
+    "radical": "豆",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
+    "char": "斗",
+    "strokes": [
+      "点",
+      "点",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 4,
+    "radical": "斗",
+    "structure": "独体",
+    "unit": "2-0"
+  },
+  {
     "char": "止",
     "strokes": [
       "竖",
@@ -1484,7 +1694,7 @@
     "strokeCount": 4,
     "radical": "止",
     "structure": "独体",
-    "unit": "2-4"
+    "unit": "2-0"
   },
   {
     "char": "斤",
@@ -1497,7 +1707,7 @@
     "strokeCount": 4,
     "radical": "斤",
     "structure": "独体",
-    "unit": "2-4"
+    "unit": "2-0"
   },
   {
     "char": "寸",
@@ -1509,7 +1719,7 @@
     "strokeCount": 3,
     "radical": "寸",
     "structure": "独体",
-    "unit": "2-4"
+    "unit": "2-0"
   },
   {
     "char": "千",
@@ -1521,7 +1731,7 @@
     "strokeCount": 3,
     "radical": "十",
     "structure": "独体",
-    "unit": "2-4"
+    "unit": "2-0"
   },
   {
     "char": "元",
@@ -1534,185 +1744,7 @@
     "strokeCount": 4,
     "radical": "一",
     "structure": "独体",
-    "unit": "2-4"
-  },
-  {
-    "char": "思",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横",
-      "点",
-      "斜钩",
-      "点",
-      "点"
-    ],
-    "strokeCount": 9,
-    "radical": "田",
-    "structure": "上下",
-    "unit": "2-5"
-  },
-  {
-    "char": "床",
-    "strokes": [
-      "点",
-      "横",
-      "撇",
-      "横",
-      "竖",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 7,
-    "radical": "广",
-    "structure": "半包围",
-    "unit": "2-5"
-  },
-  {
-    "char": "地",
-    "strokes": [
-      "横",
-      "竖",
-      "提",
-      "横折钩",
-      "竖",
-      "竖弯钩"
-    ],
-    "strokeCount": 6,
-    "radical": "土",
-    "structure": "左右",
-    "unit": "2-5"
-  },
-  {
-    "char": "故",
-    "strokes": [
-      "横",
-      "竖",
-      "竖",
-      "横折",
-      "横",
-      "撇",
-      "横",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 9,
-    "radical": "攵",
-    "structure": "左右",
-    "unit": "2-5"
-  },
-  {
-    "char": "乡",
-    "strokes": [
-      "撇折",
-      "撇折",
-      "撇"
-    ],
-    "strokeCount": 3,
-    "radical": "—",
-    "structure": "独体",
-    "unit": "2-5"
-  },
-  {
-    "char": "色",
-    "strokes": [
-      "撇",
-      "横折",
-      "横",
-      "竖弯钩",
-      "撇",
-      "竖弯钩"
-    ],
-    "strokeCount": 6,
-    "radical": "色",
-    "structure": "上下",
-    "unit": "2-5"
-  },
-  {
-    "char": "把",
-    "strokes": [
-      "横",
-      "竖钩",
-      "提",
-      "横折",
-      "竖",
-      "横",
-      "竖弯钩"
-    ],
-    "strokeCount": 7,
-    "radical": "扌",
-    "structure": "左右",
-    "unit": "2-5"
-  },
-  {
-    "char": "讲",
-    "strokes": [
-      "点",
-      "横折提",
-      "横",
-      "竖",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 6,
-    "radical": "讠",
-    "structure": "左右",
-    "unit": "2-5"
-  },
-  {
-    "char": "样",
-    "strokes": [
-      "横",
-      "竖",
-      "撇",
-      "点",
-      "点",
-      "撇",
-      "横",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 10,
-    "radical": "木",
-    "structure": "左右",
-    "unit": "2-5"
-  },
-  {
-    "char": "笑",
-    "strokes": [
-      "撇",
-      "横",
-      "点",
-      "撇",
-      "横",
-      "点",
-      "撇",
-      "横",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 10,
-    "radical": "竹",
-    "structure": "上下",
-    "unit": "2-5"
-  },
-  {
-    "char": "再",
-    "strokes": [
-      "横",
-      "竖",
-      "横折钩",
-      "竖",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "一",
-    "structure": "独体",
-    "unit": "2-5"
+    "unit": "2-0"
   },
   {
     "char": "课",
@@ -1731,7 +1763,7 @@
     "strokeCount": 10,
     "radical": "讠",
     "structure": "左右",
-    "unit": "2-5"
+    "unit": "2-0"
   },
   {
     "char": "坐",
@@ -1747,7 +1779,7 @@
     "strokeCount": 7,
     "radical": "土",
     "structure": "独体",
-    "unit": "2-5"
+    "unit": "2-0"
   },
   {
     "char": "老",
@@ -1762,7 +1794,7 @@
     "strokeCount": 6,
     "radical": "老",
     "structure": "半包围",
-    "unit": "2-5"
+    "unit": "2-0"
   },
   {
     "char": "师",
@@ -1777,7 +1809,7 @@
     "strokeCount": 6,
     "radical": "巾",
     "structure": "左右",
-    "unit": "2-5"
+    "unit": "2-0"
   },
   {
     "char": "国",
@@ -1794,7 +1826,7 @@
     "strokeCount": 8,
     "radical": "囗",
     "structure": "全包围",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "都",
@@ -1813,7 +1845,7 @@
     "strokeCount": 10,
     "radical": "阝",
     "structure": "左右",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "百",
@@ -1828,7 +1860,7 @@
     "strokeCount": 6,
     "radical": "白",
     "structure": "独体",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "时",
@@ -1844,7 +1876,7 @@
     "strokeCount": 7,
     "radical": "日",
     "structure": "左右",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "点",
@@ -1862,7 +1894,7 @@
     "strokeCount": 9,
     "radical": "灬",
     "structure": "上下",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "林",
@@ -1879,7 +1911,7 @@
     "strokeCount": 8,
     "radical": "木",
     "structure": "左右",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "兴",
@@ -1894,7 +1926,7 @@
     "strokeCount": 6,
     "radical": "八",
     "structure": "上下",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "往",
@@ -1911,7 +1943,7 @@
     "strokeCount": 8,
     "radical": "彳",
     "structure": "左右",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "瓜",
@@ -1925,7 +1957,7 @@
     "strokeCount": 5,
     "radical": "瓜",
     "structure": "独体",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "兔",
@@ -1942,7 +1974,7 @@
     "strokeCount": 8,
     "radical": "刀",
     "structure": "上下",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "进",
@@ -1958,7 +1990,7 @@
     "strokeCount": 7,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "灯",
@@ -1973,7 +2005,7 @@
     "strokeCount": 6,
     "radical": "火",
     "structure": "左右",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "车",
@@ -1986,7 +2018,7 @@
     "strokeCount": 4,
     "radical": "车",
     "structure": "独体",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "站",
@@ -2005,7 +2037,7 @@
     "strokeCount": 10,
     "radical": "立",
     "structure": "左右",
-    "unit": "2-6"
+    "unit": "2-0"
   },
   {
     "char": "空",
@@ -2022,7 +2054,7 @@
     "strokeCount": 8,
     "radical": "穴",
     "structure": "上下",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "还",
@@ -2038,7 +2070,7 @@
     "strokeCount": 7,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "笔",
@@ -2057,7 +2089,7 @@
     "strokeCount": 10,
     "radical": "竹",
     "structure": "上下",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "知",
@@ -2074,7 +2106,7 @@
     "strokeCount": 8,
     "radical": "矢",
     "structure": "左右",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "道",
@@ -2095,7 +2127,7 @@
     "strokeCount": 12,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "放",
@@ -2112,7 +2144,7 @@
     "strokeCount": 8,
     "radical": "攵",
     "structure": "左右",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "平",
@@ -2126,7 +2158,7 @@
     "strokeCount": 5,
     "radical": "干",
     "structure": "独体",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "安",
@@ -2141,7 +2173,7 @@
     "strokeCount": 6,
     "radical": "宀",
     "structure": "上下",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "干",
@@ -2153,7 +2185,7 @@
     "strokeCount": 3,
     "radical": "干",
     "structure": "独体",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "身",
@@ -2169,7 +2201,7 @@
     "strokeCount": 7,
     "radical": "身",
     "structure": "独体",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "星",
@@ -2187,7 +2219,7 @@
     "strokeCount": 9,
     "radical": "日",
     "structure": "上下",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "久",
@@ -2199,7 +2231,7 @@
     "strokeCount": 3,
     "radical": "丿",
     "structure": "独体",
-    "unit": "2-7"
+    "unit": "2-0"
   },
   {
     "char": "吓",
@@ -2214,7 +2246,7 @@
     "strokeCount": 6,
     "radical": "口",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "为",
@@ -2227,7 +2259,7 @@
     "strokeCount": 4,
     "radical": "丶",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "怕",
@@ -2244,7 +2276,7 @@
     "strokeCount": 8,
     "radical": "忄",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "家",
@@ -2263,7 +2295,7 @@
     "strokeCount": 10,
     "radical": "宀",
     "structure": "上下",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "象",
@@ -2283,7 +2315,7 @@
     "strokeCount": 11,
     "radical": "豕",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "没",
@@ -2299,7 +2331,7 @@
     "strokeCount": 7,
     "radical": "氵",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "到",
@@ -2316,7 +2348,7 @@
     "strokeCount": 8,
     "radical": "刂",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "向",
@@ -2331,7 +2363,7 @@
     "strokeCount": 6,
     "radical": "口",
     "structure": "半包围",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "边",
@@ -2345,7 +2377,7 @@
     "strokeCount": 5,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "行",
@@ -2360,7 +2392,7 @@
     "strokeCount": 6,
     "radical": "彳",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "草",
@@ -2378,7 +2410,7 @@
     "strokeCount": 9,
     "radical": "艹",
     "structure": "上下",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "赶",
@@ -2397,7 +2429,7 @@
     "strokeCount": 10,
     "radical": "走",
     "structure": "半包围",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "过",
@@ -2412,7 +2444,7 @@
     "strokeCount": 6,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "找",
@@ -2428,7 +2460,7 @@
     "strokeCount": 7,
     "radical": "扌",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "巾",
@@ -2440,7 +2472,7 @@
     "strokeCount": 3,
     "radical": "巾",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "洗",
@@ -2458,7 +2490,7 @@
     "strokeCount": 9,
     "radical": "氵",
     "structure": "左右",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "页",
@@ -2473,7 +2505,7 @@
     "strokeCount": 6,
     "radical": "页",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "户",
@@ -2486,7 +2518,7 @@
     "strokeCount": 4,
     "radical": "户",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "角",
@@ -2502,7 +2534,7 @@
     "strokeCount": 7,
     "radical": "角",
     "structure": "上下",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "父",
@@ -2515,7 +2547,7 @@
     "strokeCount": 4,
     "radical": "父",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   },
   {
     "char": "义",
@@ -2527,6 +2559,6 @@
     "strokeCount": 3,
     "radical": "丶",
     "structure": "独体",
-    "unit": "2-8"
+    "unit": "2-0"
   }
 ]

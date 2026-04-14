@@ -12,7 +12,6 @@
     { "path": "pages/study/index", "style": { "navigationBarTitleText": "学习小天地", "navigationStyle": "custom" } },
     { "path": "pages/study/pinyin", "style": { "navigationBarTitleText": "拼音练习", "navigationStyle": "custom" } },
     { "path": "pages/study/hanzi", "style": { "navigationBarTitleText": "汉字练习", "navigationStyle": "custom" } },
-    { "path": "pages/study/dictation", "style": { "navigationBarTitleText": "听写练习", "navigationStyle": "custom" } },
     { "path": "pages/study/mental-math", "style": { "navigationBarTitleText": "口算计时", "navigationStyle": "custom" } },
     { "path": "pages/study/result", "style": { "navigationBarTitleText": "本轮成绩", "navigationStyle": "custom" } },
     { "path": "pages/study/learn", "style": { "navigationBarTitleText": "学习", "navigationStyle": "custom" } },

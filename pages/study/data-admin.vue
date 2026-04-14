@@ -147,9 +147,24 @@ const filteredList = computed(() => {
 
 async function loadData() {
   loading.value = true
+  // 清除答题页的题库缓存，确保下次练习拉最新数据
+  try {
+    const keys = uni.getStorageInfoSync().keys || []
+    keys.filter(k => k.startsWith('questions_')).forEach(k => uni.removeStorageSync(k))
+  } catch (e) {}
   try {
     const res = await db.collection('questions').limit(500).get()
     const raw = res.result?.data || res.data || []
+    // 按 type+unit 写入答题缓存
+    const groups = {}
+    for (const r of raw) {
+      const key = `questions_${r.type}_${r.unit}`
+      if (!groups[key]) groups[key] = []
+      groups[key].push(r)
+    }
+    for (const [key, data] of Object.entries(groups)) {
+      uni.setStorageSync(key, { data, cachedAt: Date.now() })
+    }
     // 按 char 合并：一个汉字一条记录
     const byChar = {}
     for (const r of raw) {

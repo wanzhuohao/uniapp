@@ -2,9 +2,38 @@
 
 > 项目路径: `D:\code\uniapp`
 > 技术栈: UniApp Vue3 + Pinia + uniCloud-alipay
-> 最后更新: 2026-04-11（方案二全部完成：HanziQuestion重构 / 多用户切换 / toast wrapper / 错题智能复习 / 听写 / 暗色模式）
-> 状态: **代码已就绪待部署**，本日 44 个 commit（累计 100+）
+> 最后更新: 2026-04-14
+> 状态: **已上线**，累计 100+ commit
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
+
+## 2026-04-13~14 汉字练习改造 + 数据修正
+
+### 1. 笔顺题改为描红模式
+- **HanziQuestion.vue** — 笔顺题从"看字→播放动画→自判"改为 HanziWriter quiz 描红（280px），自动判定错笔数，完成后显示结果+动画回放+下一题
+- 动画加速：strokeAnimationSpeed=2, delayBetweenStrokes=200
+
+### 2. 删除听写页，合并到汉字练习
+- 删除 `dictation.vue`、pages.json 路由、学习首页入口、App.vue 暗色选择器
+- 听写功能由笔顺题替代（保留喇叭按钮可选念字）
+
+### 3. 出题逻辑改造
+- hanzi.vue `buildRound` 重写：不再随机抽几题，改为**该单元所有字按课文顺序逐个出题**
+- 单一题型：每字一道该题型；混合模式：每字随机分配一种题型
+
+### 4. 第4单元数据修正
+- 22 个字确认正确：思床前地故乡 色把讲样笑再 节米间分吃肉 册支电衣
+- 新增 4 个字（册支电衣）到 strokes/pinyin/seed-questions
+- 三个数据文件按课文顺序排列
+- 其余单元暂归 2-0 待整理
+
+### 5. 数据维护刷新优化
+- 刷新按钮：清旧缓存 → 拉云端全量 → 按 type+unit 写入本地缓存 → 答题页直接用
+
+### 部署
+- ✅ seed-questions 云函数已上传运行
+- ✅ 前端已重新发行（2026-04-14）
+
+---
 
 ## 2026-04-11 方案二大批次（44 个 commit）
 
@@ -48,8 +77,8 @@
 - 错题重练 practice-mode-hint 暗色 + 文案按 practiceAll 切换"今日/全部"
 
 ### 部署清单
-- ⏳ `wrong_records.schema.json` 已上传 uniCloud（含 box / nextReviewAt / qType dictation）
-- ⏳ HBuilderX 重新发行前端
+- ✅ `wrong_records.schema.json` 已上传 uniCloud（含 box / nextReviewAt / qType dictation）
+- ✅ HBuilderX 重新发行前端（2026-04-13 完成）
 
 ### 关键新增文件
 - `components/common/UserSwitcher.vue`
@@ -263,8 +292,11 @@
 ## 遗留事项
 
 - 果果实测持续收集反馈
-- 拼音多音字数据未二次校对（保留 PDF 原数据）
-- 笔顺按钮交互（hanzipi 数据太粗，HanziWriter 动画+自测代替）
+- 数据维护刷新拉取 limit 500 硬编码，题目超过 500 条会截断，需改为分页拉取全量
+- 其他单元（2-1~2-3, 2-5~2-8）字表待整理（当前全部归在 2-0）
+- ~~拼音多音字数据未二次校对（保留 PDF 原数据）~~ — 暂不处理
+- ~~笔顺名称逐字校对（166 字）~~ — 暂不处理
+- ~~笔顺按钮交互（hanzipi 数据太粗，HanziWriter 动画+自测代替）~~ — 暂不处理
 
 ---
 

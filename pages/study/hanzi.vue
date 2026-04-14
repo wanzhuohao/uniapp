@@ -95,7 +95,7 @@ function handleAnswer({ isCorrect }) {
   advanceQuestion()
 }
 
-// 生成一轮题目
+// 按课文顺序为每个字生成一道题
 function buildRound(charData, strokeData) {
   const unit = store.currentUnit
   const chars = charData.filter(d => d.unit === unit && d.radical && d.structure)
@@ -104,56 +104,61 @@ function buildRound(charData, strokeData) {
   // 收集所有部首（用于干扰项）
   ALL_RADICALS.value = [...new Set(charData.map(d => d.radical).filter(Boolean))]
 
-  const pool = []
   const types = filterType.value ? [filterType.value] : ['stroke', 'radical', 'structure', 'strokeCount']
 
-  // 笔顺题
-  if (types.includes('stroke')) {
-    for (const s of sampleWithout(strokes, 4)) {
-      pool.push({ qType: 'stroke', char: s.char, unit: s.unit, _id: s._id, hint: '看着汉字想一想笔顺，然后看答案自测' })
-    }
+  // 合并 strokes 和 chars，按课文顺序（数据文件原始顺序）去重
+  const seen = new Set()
+  const allChars = []
+  for (const s of strokes) {
+    if (!seen.has(s.char)) { seen.add(s.char); allChars.push(s) }
+  }
+  for (const c of chars) {
+    if (!seen.has(c.char)) { seen.add(c.char); allChars.push(c) }
   }
 
-  // 部首题
-  if (types.includes('radical')) {
-    for (const c of sampleWithout(chars, 3)) {
-      const correct = c.radical
-      const distractors = sampleWithout(ALL_RADICALS.value.filter(r => r !== correct), 3)
-      const options = shuffle([
-        { label: correct, isCorrect: true },
-        ...distractors.map(d => ({ label: d, isCorrect: false }))
-      ])
-      pool.push({ qType: 'radical', char: c.char, options, unit: c.unit, _id: c._id, hint: '这个字的部首是？' })
-    }
+  const pool = []
+  for (const c of allChars) {
+    // 单一题型：每个字出该题型；混合：随机分配一种
+    const qType = types.length === 1 ? types[0] : types[Math.floor(Math.random() * types.length)]
+    const q = buildQuestion(c, qType)
+    if (q) pool.push(q)
   }
+  return pool
+}
 
-  // 结构题
-  if (types.includes('structure')) {
-    for (const c of sampleWithout(chars, 3)) {
-      const correct = c.structure
-      const distractors = ALL_STRUCTURES.filter(s => s !== correct).slice(0, 3)
-      const options = shuffle([
-        { label: correct, isCorrect: true },
-        ...distractors.map(d => ({ label: d, isCorrect: false }))
-      ])
-      pool.push({ qType: 'structure', char: c.char, options, unit: c.unit, _id: c._id, hint: '这个字是什么结构？' })
-    }
+function buildQuestion(c, qType) {
+  if (qType === 'stroke') {
+    return { qType: 'stroke', char: c.char, unit: c.unit, _id: c._id }
   }
-
-  // 笔画数题
-  if (types.includes('strokeCount')) {
-    for (const c of sampleWithout(chars.filter(d => d.strokeCount), 3)) {
-      const correct = c.strokeCount
-      const distractors = [correct - 1, correct + 1, correct + 2].filter(n => n > 0 && n !== correct)
-      const options = shuffle([
-        { label: correct + ' 画', isCorrect: true },
-        ...distractors.slice(0, 3).map(d => ({ label: d + ' 画', isCorrect: false }))
-      ])
-      pool.push({ qType: 'strokeCount', char: c.char, options, unit: c.unit, _id: c._id, hint: '这个字有几画？' })
-    }
+  if (qType === 'radical' && c.radical) {
+    const correct = c.radical
+    const distractors = sampleWithout(ALL_RADICALS.value.filter(r => r !== correct), 3)
+    const options = shuffle([
+      { label: correct, isCorrect: true },
+      ...distractors.map(d => ({ label: d, isCorrect: false }))
+    ])
+    return { qType: 'radical', char: c.char, options, unit: c.unit, _id: c._id, hint: '这个字的部首是？' }
   }
-
-  return shuffle(pool).slice(0, 10)
+  if (qType === 'structure' && c.structure) {
+    const correct = c.structure
+    const distractors = ALL_STRUCTURES.filter(s => s !== correct).slice(0, 3)
+    const options = shuffle([
+      { label: correct, isCorrect: true },
+      ...distractors.map(d => ({ label: d, isCorrect: false }))
+    ])
+    return { qType: 'structure', char: c.char, options, unit: c.unit, _id: c._id, hint: '这个字是什么结构？' }
+  }
+  if (qType === 'strokeCount' && c.strokeCount) {
+    const correct = c.strokeCount
+    const distractors = [correct - 1, correct + 1, correct + 2].filter(n => n > 0 && n !== correct)
+    const options = shuffle([
+      { label: correct + ' 画', isCorrect: true },
+      ...distractors.slice(0, 3).map(d => ({ label: d + ' 画', isCorrect: false }))
+    ])
+    return { qType: 'strokeCount', char: c.char, options, unit: c.unit, _id: c._id, hint: '这个字有几画？' }
+  }
+  // 该字缺少对应题型数据，降级为笔顺题
+  return { qType: 'stroke', char: c.char, unit: c.unit, _id: c._id }
 }
 
 async function startRound() {
