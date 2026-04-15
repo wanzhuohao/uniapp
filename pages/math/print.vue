@@ -363,9 +363,8 @@ async function exportAnswerImage() {
 /* ── A4 sheet (screen) ────────────────────────────────────────── */
 .a4-sheet {
   width: 210mm;
-  min-height: 297mm;
   margin: 20rpx auto;
-  padding: 5mm 10mm;
+  padding: 8mm 12mm;
   background: #fff !important;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -487,28 +486,33 @@ body.dark-mode .answer-text {
     display: none !important;
   }
 
-  /* Reset page chrome */
-  body {
-    margin: 0;
-    padding: 0;
-    background: #fff;
+  /* Reset everything */
+  html, body, #app, uni-app, uni-page, uni-page-body,
+  .uni-page-head, .uni-page-head-hd {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    background: #fff !important;
+    overflow: visible !important;
   }
 
-  /* Hide everything except the trial sheet */
+  /* Hide uni navigation bar */
+  .uni-page-head, uni-page-head {
+    display: none !important;
+  }
+
   .print-page,
   .preview-panel {
     margin: 0;
     padding: 0;
     background: #fff;
     min-height: auto;
-    align-items: stretch;
   }
 
-  /* A4 sheet fills the page */
   .a4-sheet {
     width: 100%;
     margin: 0;
-    padding: 3mm 8mm;
+    padding: 0 5mm;
     box-shadow: none;
     min-height: auto;
     background: #fff !important;
@@ -518,11 +522,6 @@ body.dark-mode .answer-text {
     font-size: 14pt;
     line-height: 1.75;
     gap: 0;
-  }
-
-  /* Prevent question items from splitting across pages awkwardly */
-  .question-item {
-    break-inside: avoid;
   }
 }
 </style>
