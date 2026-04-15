@@ -148,16 +148,40 @@ function goBack() {
   }
 }
 
-function handlePrint() {
+async function handlePrint() {
   saveRecord({
     type: 'print',
     level: selectedLevel.value,
     total: questions.value.length,
     questions: questions.value.map(q => ({ expr: q.expr, answer: q.answer })),
   })
-  // Ensure answer sheet is hidden before print
   showAnswerSheet.value = false
-  window.print()
+  toast.loading('生成打印图片...')
+  try {
+    const { default: html2canvas } = await import('html2canvas')
+    const el = document.getElementById('printArea')
+    const canvas = await html2canvas(el, { scale: 2, useCORS: true })
+    const dataUrl = canvas.toDataURL('image/png')
+    toast.hideLoading()
+    // 新窗口打印图片
+    const win = window.open('', '_blank')
+    win.document.write(`
+      <html><head><title>打印</title>
+      <style>
+        @page { margin: 0; }
+        body { margin: 0; display: flex; justify-content: center; }
+        img { width: 100%; height: auto; }
+      </style>
+      </head><body>
+      <img src="${dataUrl}" onload="window.print();window.close();" />
+      </body></html>
+    `)
+    win.document.close()
+  } catch (e) {
+    toast.hideLoading()
+    toast.error('打印失败')
+    console.error(e)
+  }
 }
 
 async function exportAnswerImage() {
