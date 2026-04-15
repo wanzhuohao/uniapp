@@ -69,12 +69,38 @@ function promptUsername() {
   })
 }
 
+// 检查是否共享模式（URL 带 ?mode=math）
+function isSharedMode() {
+  if (typeof window === 'undefined') return false
+  return window.location.search.includes('mode=math') || window.location.hash.includes('mode=math')
+}
+
+// 共享模式下拦截非数学页面跳转
+function setupRouteGuard() {
+  if (!isSharedMode()) return
+  const allowedPrefix = '/pages/math/'
+  ;['navigateTo', 'redirectTo', 'reLaunch', 'switchTab'].forEach(method => {
+    uni.addInterceptor(method, {
+      invoke(args) {
+        if (args.url && !args.url.startsWith(allowedPrefix)) {
+          console.warn('[shared mode] blocked:', args.url)
+          return false
+        }
+      }
+    })
+  })
+}
+
 onLaunch(() => {
   applyTheme()
+  setupRouteGuard()
+  if (isSharedMode()) {
+    // 共享模式：跳过用户名，直接进数学首页
+    return
+  }
   if (!hasUsername()) {
     promptUsername()
   } else {
-    // 已有用户名，启动时从云端拉取数据
     const store = useGameStore()
     store.loadFromCloud()
   }
