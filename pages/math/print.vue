@@ -48,7 +48,15 @@
       </view>
 
       <!-- Trial sheet -->
-      <div id="printArea" class="a4-sheet print-page">
+      <div id="printArea" class="a4-sheet">
+        <div class="sheet-header">
+          <div class="sheet-title">数学练习</div>
+          <div class="sheet-info-row">
+            <span class="sheet-info-item">姓名___________</span>
+            <span class="sheet-info-item">班级___________</span>
+            <span class="sheet-info-item">分数___________</span>
+          </div>
+        </div>
         <div class="sheet-body">
           <div
             v-for="(q, i) in questions"

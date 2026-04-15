@@ -41,15 +41,34 @@ function genSub(level) {
   return { expr: `${a} - ${b}`, answer: String(a - b) }
 }
 
-// 比大小: two unequal numbers, answer is ＞ or ＜ only (no ＝)
+// 比大小: 两边可以是数字或简单算式，支持 ＞ ＝ ＜
 function genCompare(level) {
   const cfg = LEVEL_CONFIG[level]
-  let a, b
-  do {
-    a = rand(1, cfg.max)
-    b = rand(1, cfg.max)
-  } while (a === b)
-  return { expr: `${a} ○ ${b}`, answer: a > b ? '＞' : '＜', type: 'compare' }
+  // 随机决定两边是纯数字还是算式
+  function genSide() {
+    if (Math.random() > 0.4) {
+      // 纯数字
+      return { text: String(rand(1, cfg.max)), value: rand(1, cfg.max) }
+    }
+    // 简单算式
+    const isAdd = Math.random() > 0.5
+    if (isAdd) {
+      const a = rand(1, cfg.max - 1)
+      const b = rand(1, cfg.max - a)
+      return { text: `${a}+${b}`, value: a + b }
+    } else {
+      const a = rand(2, cfg.max)
+      const b = rand(1, a - 1)
+      return { text: `${a}-${b}`, value: a - b }
+    }
+  }
+  const left = genSide()
+  const right = genSide()
+  let answer
+  if (left.value > right.value) answer = '＞'
+  else if (left.value < right.value) answer = '＜'
+  else answer = '＝'
+  return { expr: `${left.text} ○ ${right.text}`, answer, type: 'compare' }
 }
 
 // 填空: a + __ = c or __ - b = c, blank is positive integer
@@ -106,15 +125,22 @@ const PRINT_TYPES = ['add', 'add', 'sub', 'sub', 'chain']
 const PRINT_NO_CHAIN_TYPES = ['add', 'sub']
 
 // Main export: generate questions
-// questionType: 'add'/'sub'/'compare'/'fill'/'chain'/'mix'/'print'
-// level: 1/2/3/'mix'
+// questionType: string | string[] — 'add'/'sub'/'compare'/'fill'/'chain'/'mix'/'print' 或数组如 ['add','sub']
+// level: number | string | number[] — 1/2/3/'mix' 或数组如 [1,2]
 export function generateQuestions({ level, count, questionType = 'mix' }) {
-  const levels = level === 'mix' ? [1, 2, 3] : [level]
+  // 支持数组形式的 level
+  let levels
+  if (Array.isArray(level)) levels = level
+  else if (level === 'mix') levels = [1, 2, 3]
+  else levels = [level]
+
   const seen = new Set()
   const questions = []
 
+  // 支持数组形式的 questionType
   let typePool
-  if (questionType === 'mix') typePool = MIX_TYPES
+  if (Array.isArray(questionType)) typePool = questionType
+  else if (questionType === 'mix') typePool = MIX_TYPES
   else if (questionType === 'print') typePool = PRINT_TYPES
   else if (questionType === 'print-no-chain') typePool = PRINT_NO_CHAIN_TYPES
   else typePool = [questionType]
