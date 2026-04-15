@@ -55,7 +55,7 @@
             :key="i"
             class="question-item"
           >
-            {{ q.expr }} = ______
+            {{ q.expr }} =
           </div>
         </div>
       </div>
@@ -384,6 +384,28 @@ async function exportAnswerImage() {
 
 .sheet-info-item {
   white-space: nowrap;
+}
+
+/* ── Answer sheet header ─────────────────────────────────────── */
+.sheet-header {
+  text-align: center;
+  margin-bottom: 3mm;
+}
+.sheet-title {
+  font-size: 14pt;
+  font-weight: bold;
+  color: #111;
+  margin-bottom: 2mm;
+}
+.sheet-info-row {
+  display: flex;
+  justify-content: center;
+  gap: 8mm;
+  font-size: 11pt;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 2mm;
+  margin-bottom: 3mm;
 }
 
 /* ── Sheet body: 4-column grid ────────────────────────────────── */
