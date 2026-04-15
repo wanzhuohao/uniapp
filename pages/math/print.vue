@@ -393,7 +393,7 @@ async function exportAnswerImage() {
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
   font-size: 14pt;
-  line-height: 1.5;
+  line-height: 1.75;
 }
 
 .question-item {
@@ -516,7 +516,7 @@ body.dark-mode .answer-text {
 
   .sheet-body {
     font-size: 14pt;
-    line-height: 1.5;
+    line-height: 1.75;
     gap: 0;
   }
 
