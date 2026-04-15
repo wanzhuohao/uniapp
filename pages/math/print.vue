@@ -472,62 +472,62 @@ async function exportAnswerImage() {
 <!-- Global styles (dark mode + print) -->
 <style>
 /* ── Dark mode — setup panel ──────────────────────────────────── */
-body.dark-mode .print-page {
+html body.dark-mode .print-page {
   background: #1a1a2e;
 }
 
-body.dark-mode .title {
+html body.dark-mode .title {
   color: #e0e0e0;
 }
 
-body.dark-mode .back-btn {
+html body.dark-mode .back-btn {
   color: #64B5F6;
 }
 
-body.dark-mode .config-card {
+html body.dark-mode .config-card {
   background: #252545;
   box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.3);
 }
 
-body.dark-mode .config-label {
+html body.dark-mode .config-label {
   color: #ccc;
 }
 
-body.dark-mode .level-tab {
+html body.dark-mode .level-tab {
   background: #1e1e3a;
   border-color: #444;
   color: #aaa;
 }
 
-body.dark-mode .level-tab.active {
+html body.dark-mode .level-tab.active {
   background: #42A5F5;
   border-color: #42A5F5;
   color: #fff;
 }
 
-body.dark-mode .info-row {
+html body.dark-mode .info-row {
   background: #1e2d3a;
   border-left-color: #42A5F5;
 }
 
-body.dark-mode .info-text {
+html body.dark-mode .info-text {
   color: #9ab;
 }
 
 /* ── Dark mode — A4 sheet stays white (print preview) ─────────── */
-body.dark-mode .a4-sheet {
+html body.dark-mode .a4-sheet {
   background: #fff !important;
   color: #111 !important;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
-body.dark-mode .sheet-title,
-body.dark-mode .sheet-info-item,
-body.dark-mode .question-item {
+html body.dark-mode .sheet-title,
+html body.dark-mode .sheet-info-item,
+html body.dark-mode .question-item {
   color: #111 !important;
 }
 
-body.dark-mode .answer-text {
+html body.dark-mode .answer-text {
   color: #E53935 !important;
 }
 

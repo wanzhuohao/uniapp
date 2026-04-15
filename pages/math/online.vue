@@ -926,108 +926,108 @@ onUnmounted(() => {
 .time-alert-btn:active { transform: scale(0.97); }
 
 /* ===== 深色模式 ===== */
-:global(body.dark-mode) .online-page {
+:global(html body.dark-mode) .online-page {
   background: #1A1A2E;
 }
-:global(body.dark-mode) .setup-header,
-:global(body.dark-mode) .top-bar,
-:global(body.dark-mode) .setting-group,
-:global(body.dark-mode) .desc-area {
+:global(html body.dark-mode) .setup-header,
+:global(html body.dark-mode) .top-bar,
+:global(html body.dark-mode) .setting-group,
+:global(html body.dark-mode) .desc-area {
   background: #242440;
   box-shadow: none;
 }
-:global(body.dark-mode) .setup-title,
-:global(body.dark-mode) .setting-label,
-:global(body.dark-mode) .result-score {
+:global(html body.dark-mode) .setup-title,
+:global(html body.dark-mode) .setting-label,
+:global(html body.dark-mode) .result-score {
   color: #E0E0E0;
 }
-:global(body.dark-mode) .setting-tag {
+:global(html body.dark-mode) .setting-tag {
   background: #2A2A4A;
   color: #AAA;
   border-color: #444;
 }
-:global(body.dark-mode) .setting-tag.active {
+:global(html body.dark-mode) .setting-tag.active {
   background: #42A5F5;
   color: #fff;
   border-color: #42A5F5;
 }
-:global(body.dark-mode) .desc {
+:global(html body.dark-mode) .desc {
   color: #888;
 }
-:global(body.dark-mode) .q-row {
+:global(html body.dark-mode) .q-row {
   background: #242440;
   box-shadow: none;
 }
-:global(body.dark-mode) .q-row.current {
+:global(html body.dark-mode) .q-row.current {
   background: #1A3A5C;
 }
-:global(body.dark-mode) .q-expr {
+:global(html body.dark-mode) .q-expr {
   color: #E0E0E0;
 }
-:global(body.dark-mode) .q-input,
-:global(body.dark-mode) .cmp-btn {
+:global(html body.dark-mode) .q-input,
+:global(html body.dark-mode) .cmp-btn {
   background: #1A1A2E;
   border-color: #444;
   color: #E0E0E0;
 }
-:global(body.dark-mode) .cmp-btn.selected {
+:global(html body.dark-mode) .cmp-btn.selected {
   background: #42A5F5;
   color: #fff;
   border-color: #42A5F5;
 }
-:global(body.dark-mode) .q-index {
+:global(html body.dark-mode) .q-index {
   color: #666;
 }
-:global(body.dark-mode) .submit-bar,
-:global(body.dark-mode) .submit-btn {
+:global(html body.dark-mode) .submit-bar,
+:global(html body.dark-mode) .submit-btn {
   background: #42A5F5;
 }
-:global(body.dark-mode) .submit-bar {
+:global(html body.dark-mode) .submit-bar {
   background: #242440;
   box-shadow: none;
 }
-:global(body.dark-mode) .result-area {
+:global(html body.dark-mode) .result-area {
   background: #1A1A2E;
 }
-:global(body.dark-mode) .action-btn {
+:global(html body.dark-mode) .action-btn {
   background: #242440;
   border-color: #444;
   color: #E0E0E0;
 }
-:global(body.dark-mode) .action-btn.primary {
+:global(html body.dark-mode) .action-btn.primary {
   background: #42A5F5;
   color: #fff;
   border-color: #42A5F5;
 }
-:global(body.dark-mode) .result-accuracy,
-:global(body.dark-mode) .result-time {
+:global(html body.dark-mode) .result-accuracy,
+:global(html body.dark-mode) .result-time {
   color: #888;
 }
-:global(body.dark-mode) .timer {
+:global(html body.dark-mode) .timer {
   color: #E0E0E0;
 }
-:global(body.dark-mode) .progress-text {
+:global(html body.dark-mode) .progress-text {
   color: #888;
 }
-:global(body.dark-mode) .time-alert-box {
+:global(html body.dark-mode) .time-alert-box {
   background: #242440;
 }
-:global(body.dark-mode) .time-alert-text {
+:global(html body.dark-mode) .time-alert-text {
   color: #FF7043;
 }
-:global(body.dark-mode) .wrong-item {
+:global(html body.dark-mode) .wrong-item {
   background: #3A1A1A;
 }
-:global(body.dark-mode) .wrong-expr {
+:global(html body.dark-mode) .wrong-expr {
   color: #E0E0E0;
 }
-:global(body.dark-mode) .all-correct {
+:global(html body.dark-mode) .all-correct {
   background: #1A2E1A;
 }
-:global(body.dark-mode) .all-correct-text {
+:global(html body.dark-mode) .all-correct-text {
   color: #81C784;
 }
-:global(body.dark-mode) .custom-count-input {
+:global(html body.dark-mode) .custom-count-input {
   background: #1A1A2E;
   border-color: #42A5F5;
   color: #E0E0E0;

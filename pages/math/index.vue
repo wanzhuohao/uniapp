@@ -106,21 +106,21 @@ function goTo(url) {
 </style>
 
 <style>
-body.dark-mode .index-page {
+html body.dark-mode .index-page {
   background: #1a1a2e;
 }
-body.dark-mode .module-card {
+html body.dark-mode .module-card {
   background: #252545;
   box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.3);
 }
-body.dark-mode .title,
-body.dark-mode .module-name {
+html body.dark-mode .title,
+html body.dark-mode .module-name {
   color: #e0e0e0;
 }
-body.dark-mode .module-desc {
+html body.dark-mode .module-desc {
   color: #888;
 }
-body.dark-mode .back-btn {
+html body.dark-mode .back-btn {
   color: #64B5F6;
 }
 </style>

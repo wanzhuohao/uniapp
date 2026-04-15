@@ -372,52 +372,71 @@ onShow(() => {
 }
 
 /* Dark Mode */
-:global(body.dark-mode) .container {
+:global(html body.dark-mode) .container {
   background: #1a1a2e;
 }
 
-:global(body.dark-mode) .tab-row {
+:global(html body.dark-mode) .tab-row {
   background: #16213e;
   border-bottom-color: #2a2a4a;
 }
 
-:global(body.dark-mode) .tab-btn {
+:global(html body.dark-mode) .tab-btn {
   background: #0f3460;
   color: #aaa;
 }
 
-:global(body.dark-mode) .tab-btn.active {
+:global(html body.dark-mode) .tab-btn.active {
   background: #42A5F5;
   color: #fff;
 }
 
-:global(body.dark-mode) .record-card {
+:global(html body.dark-mode) .record-card {
   background: #16213e;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.3);
 }
 
-:global(body.dark-mode) .difficulty-name {
+:global(html body.dark-mode) .difficulty-name {
   color: #e0e0e0;
 }
 
-:global(body.dark-mode) .card-detail {
+:global(html body.dark-mode) .card-detail {
   background: #0f3460;
   border-top-color: #2a2a4a;
 }
 
-:global(body.dark-mode) .grid-item {
+:global(html body.dark-mode) .grid-item {
   color: #ccc;
 }
 
-:global(body.dark-mode) .grid-item-wrong {
+:global(html body.dark-mode) .grid-item-wrong {
   background: #3a1a1a;
 }
 
-:global(body.dark-mode) .grid-expr {
+:global(html body.dark-mode) .grid-expr {
   color: #ccc;
 }
 
-:global(body.dark-mode) .empty-text {
+:global(html body.dark-mode) .empty-text {
   color: #555;
+}
+
+:global(html body.dark-mode) .date-text,
+:global(html body.dark-mode) .time-text,
+:global(html body.dark-mode) .print-label {
+  color: #888;
+}
+
+:global(html body.dark-mode) .expand-arrow {
+  color: #888;
+}
+
+:global(html body.dark-mode) .question-count,
+:global(html body.dark-mode) .accuracy-text {
+  color: #bbb;
+}
+
+:global(html body.dark-mode) .card-header {
+  border-bottom-color: #2a2a4a;
 }
 </style>
