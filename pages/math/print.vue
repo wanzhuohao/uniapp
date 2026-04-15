@@ -365,7 +365,7 @@ async function exportAnswerImage() {
   width: 210mm;
   min-height: 297mm;
   margin: 20rpx auto;
-  padding: 15mm 20mm;
+  padding: 5mm 10mm;
   background: #fff !important;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -391,9 +391,9 @@ async function exportAnswerImage() {
 .sheet-body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2mm 4mm;
+  gap: 0;
   font-size: 14pt;
-  line-height: 2;
+  line-height: 1.5;
 }
 
 .question-item {
