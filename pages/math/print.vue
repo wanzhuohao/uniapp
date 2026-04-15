@@ -49,13 +49,10 @@
 
       <!-- Trial sheet -->
       <div id="printArea" class="a4-sheet print-page">
-        <div class="sheet-header">
-          <div class="sheet-title">数学练习</div>
-          <div class="sheet-info-row">
-            <span class="sheet-info-item">姓名___________</span>
-            <span class="sheet-info-item">班级___________</span>
-            <span class="sheet-info-item">分数___________</span>
-          </div>
+        <div class="sheet-info-bar">
+          <span class="sheet-info-item">姓名___________</span>
+          <span class="sheet-info-item">班级___________</span>
+          <span class="sheet-info-item">分数___________</span>
         </div>
         <div class="sheet-body">
           <div
@@ -380,27 +377,14 @@ async function exportAnswerImage() {
   font-family: 'Arial', 'SimSun', sans-serif;
 }
 
-/* ── Sheet header ─────────────────────────────────────────────── */
-.sheet-header {
-  text-align: center;
-  margin-bottom: 4mm;
-}
-
-.sheet-title {
-  font-size: 16pt;
-  font-weight: bold;
-  color: #111;
-  margin-bottom: 2mm;
-}
-
-.sheet-info-row {
+/* ── Sheet info bar (no title, just name/class/score) ─────────── */
+.sheet-info-bar {
   display: flex;
-  justify-content: center;
-  gap: 12mm;
+  justify-content: space-between;
   font-size: 12pt;
   color: #333;
   border-bottom: 1px solid #ccc;
-  padding-bottom: 4mm;
+  padding-bottom: 3mm;
   margin-bottom: 4mm;
 }
 
@@ -531,25 +515,15 @@ body.dark-mode .answer-text {
     background: #fff !important;
   }
 
-  .sheet-header {
+  .sheet-info-bar {
+    font-size: 11pt;
+    padding-bottom: 2mm;
     margin-bottom: 3mm;
   }
 
-  .sheet-title {
-    font-size: 14pt;
-    margin-bottom: 1mm;
-  }
-
-  .sheet-info-row {
-    font-size: 10pt;
-    padding-bottom: 2mm;
-    margin-bottom: 2mm;
-  }
-
   .sheet-body {
-    font-size: 11pt;
-    line-height: 1.6;
-    gap: 1mm 3mm;
+    font-size: 14pt;
+    line-height: 2;
   }
 
   /* Prevent question items from splitting across pages awkwardly */
