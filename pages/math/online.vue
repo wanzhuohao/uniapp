@@ -119,9 +119,9 @@
         >
           <text class="q-index">{{ i + 1 }}.</text>
 
-          <!-- 比大小: 算式 + 按钮，不显示等号 -->
+          <!-- 比大小: 数字 [＞＜] 数字 -->
           <template v-if="q.type === 'compare'">
-            <text class="q-expr">{{ q.expr }}</text>
+            <text class="q-expr">{{ splitCompare(q.expr)[0] }}</text>
             <view class="compare-btns">
               <view
                 :class="['cmp-btn', q.userAnswer === '＞' && 'selected']"
@@ -132,6 +132,7 @@
                 @click="selectCompare(i, '＜')"
               >＜</view>
             </view>
+            <text class="q-expr">{{ splitCompare(q.expr)[1] }}</text>
           </template>
 
           <!-- 填空: 把 __ 替换成输入框 -->
@@ -357,6 +358,12 @@ function startQuiz() {
 }
 
 // ---- 答题交互 ----
+// 把比大小 "8 ○ 11" 拆成 ["8", "11"]
+function splitCompare(expr) {
+  const parts = expr.split('○').map(s => s.trim())
+  return parts.length === 2 ? parts : [expr, '']
+}
+
 // 把填空题 "1 + __ = 42" 拆成 ["1 + ", "__", " = 42"]
 function splitFill(expr) {
   const idx = expr.indexOf('__')
