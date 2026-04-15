@@ -49,11 +49,6 @@
 
       <!-- Trial sheet -->
       <div id="printArea" class="a4-sheet print-page">
-        <div class="sheet-info-bar">
-          <span class="sheet-info-item">姓名___________</span>
-          <span class="sheet-info-item">班级___________</span>
-          <span class="sheet-info-item">分数___________</span>
-        </div>
         <div class="sheet-body">
           <div
             v-for="(q, i) in questions"
