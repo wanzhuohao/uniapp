@@ -118,31 +118,53 @@
           }"
         >
           <text class="q-index">{{ i + 1 }}.</text>
-          <text class="q-expr">{{ q.expr }} =</text>
 
-          <!-- 比大小: 按钮选择 -->
-          <view v-if="q.type === 'compare'" class="compare-btns">
-            <view
-              :class="['cmp-btn', q.userAnswer === '＞' && 'selected']"
-              @click="selectCompare(i, '＞')"
-            >＞</view>
-            <view
-              :class="['cmp-btn', q.userAnswer === '＜' && 'selected']"
-              @click="selectCompare(i, '＜')"
-            >＜</view>
-          </view>
+          <!-- 比大小: 算式 + 按钮，不显示等号 -->
+          <template v-if="q.type === 'compare'">
+            <text class="q-expr">{{ q.expr }}</text>
+            <view class="compare-btns">
+              <view
+                :class="['cmp-btn', q.userAnswer === '＞' && 'selected']"
+                @click="selectCompare(i, '＞')"
+              >＞</view>
+              <view
+                :class="['cmp-btn', q.userAnswer === '＜' && 'selected']"
+                @click="selectCompare(i, '＜')"
+              >＜</view>
+            </view>
+          </template>
 
-          <!-- 其他题型: 数字输入 -->
-          <input
-            v-else
-            class="q-input"
-            type="number"
-            :value="q.userAnswer"
-            :focus="i === currentFocus"
-            placeholder="?"
-            @input="onInput(i, $event)"
-            @confirm="onConfirm(i)"
-          />
+          <!-- 填空: 把 __ 替换成输入框 -->
+          <template v-else-if="q.type === 'fill'">
+            <text v-for="(part, pi) in splitFill(q.expr)" :key="pi" class="q-expr">
+              <template v-if="part === '__'">
+                <input
+                  class="q-input q-input-inline"
+                  type="number"
+                  :value="q.userAnswer"
+                  :focus="i === currentFocus"
+                  placeholder="?"
+                  @input="onInput(i, $event)"
+                  @confirm="onConfirm(i)"
+                />
+              </template>
+              <template v-else>{{ part }}</template>
+            </text>
+          </template>
+
+          <!-- 普通加减/连加减: 算式 = 输入框 -->
+          <template v-else>
+            <text class="q-expr">{{ q.expr }} =</text>
+            <input
+              class="q-input"
+              type="number"
+              :value="q.userAnswer"
+              :focus="i === currentFocus"
+              placeholder="?"
+              @input="onInput(i, $event)"
+              @confirm="onConfirm(i)"
+            />
+          </template>
         </view>
       </scroll-view>
 
@@ -335,6 +357,13 @@ function startQuiz() {
 }
 
 // ---- 答题交互 ----
+// 把填空题 "1 + __ = 42" 拆成 ["1 + ", "__", " = 42"]
+function splitFill(expr) {
+  const idx = expr.indexOf('__')
+  if (idx === -1) return [expr]
+  return [expr.slice(0, idx), '__', expr.slice(idx + 2)]
+}
+
 function onInput(index, e) {
   questions.value[index].userAnswer = e.detail.value
 }
@@ -664,6 +693,18 @@ onUnmounted(() => {
   font-size: 36rpx;
   font-weight: bold;
   background: #fff;
+}
+.q-input-inline {
+  display: inline-block;
+  width: 100rpx;
+  height: 56rpx;
+  margin: 0 4rpx;
+  vertical-align: middle;
+  border-bottom: 4rpx solid #42A5F5;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
 }
 
 .compare-btns {
