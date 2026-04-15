@@ -1,16 +1,11 @@
-import { useAuth } from '../../composables/common/useAuth.js'
 import { toast } from '../common/toast.js'
 
 const MAX_RECORDS = 50
-
-function getKey() {
-  const { getUsername } = useAuth()
-  return `math_history_${getUsername()}`
-}
+const STORAGE_KEY = 'math_history'
 
 export function getHistory() {
   try {
-    return JSON.parse(uni.getStorageSync(getKey()) || '[]')
+    return JSON.parse(uni.getStorageSync(STORAGE_KEY) || '[]')
   } catch { return [] }
 }
 
@@ -21,7 +16,7 @@ export function saveRecord(record) {
     record.createdAt = new Date().toISOString()
     list.unshift(record)
     if (list.length > MAX_RECORDS) list.length = MAX_RECORDS
-    uni.setStorageSync(getKey(), JSON.stringify(list))
+    uni.setStorageSync(STORAGE_KEY, JSON.stringify(list))
   } catch (e) {
     console.error('保存数学记录失败', e)
     toast.error('保存记录失败')
