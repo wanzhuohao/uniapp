@@ -479,6 +479,10 @@ body.dark-mode .answer-text {
 
 /* ── Print media ──────────────────────────────────────────────── */
 @media print {
+  @page {
+    margin: 5mm;
+  }
+
   .no-print {
     display: none !important;
   }
@@ -504,21 +508,16 @@ body.dark-mode .answer-text {
   .a4-sheet {
     width: 100%;
     margin: 0;
-    padding: 8mm 12mm;
+    padding: 5mm 10mm;
     box-shadow: none;
     min-height: auto;
     background: #fff !important;
   }
 
-  .sheet-info-bar {
-    font-size: 11pt;
-    padding-bottom: 2mm;
-    margin-bottom: 3mm;
-  }
-
   .sheet-body {
     font-size: 14pt;
-    line-height: 2;
+    line-height: 1.8;
+    gap: 0mm 4mm;
   }
 
   /* Prevent question items from splitting across pages awkwardly */
