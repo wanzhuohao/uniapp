@@ -58,21 +58,19 @@
           </view>
         </view>
 
-        <!-- Expanded Detail -->
+        <!-- Expanded Detail: 4-column grid like print sheet -->
         <view v-if="expandedIndex === index" class="card-detail">
-          <view
-            v-for="(q, qi) in record.questions"
-            :key="qi"
-            :class="['question-item', record.type === 'online' && isWrong(record, qi) && 'question-wrong']"
-          >
-            <text class="question-index">{{ qi + 1 }}.</text>
-            <text class="question-expr">{{ q.expr }} =</text>
-            <text class="question-answer">{{ q.answer }}</text>
-
-            <!-- Online: user answer feedback -->
-            <view v-if="record.type === 'online'" class="user-answer-area">
-              <text v-if="isCorrect(record, qi)" class="correct-mark">✓</text>
-              <text v-else class="wrong-user-answer">你答：{{ getUserAnswer(record, qi) }}</text>
+          <view class="detail-grid">
+            <view
+              v-for="(q, qi) in record.questions"
+              :key="qi"
+              :class="['grid-item', record.type === 'online' && isWrong(record, qi) && 'grid-item-wrong']"
+            >
+              <text class="grid-expr">{{ q.expr }} = </text>
+              <text class="grid-answer">{{ q.answer }}</text>
+              <text v-if="record.type === 'online' && isWrong(record, qi)" class="grid-user">
+                ({{ getUserAnswer(record, qi) || '未填' }})
+              </text>
             </view>
           </view>
         </view>
@@ -337,55 +335,40 @@ onShow(() => {
   background: #fafafa;
 }
 
-.question-item {
-  display: flex;
-  align-items: center;
-  padding: 12rpx 16rpx;
-  border-radius: 10rpx;
-  margin-bottom: 8rpx;
-  background: #fff;
-  flex-wrap: wrap;
-  gap: 6rpx;
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4rpx 8rpx;
+  font-size: 24rpx;
+  line-height: 1.8;
 }
 
-.question-item.question-wrong {
+.grid-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4rpx 8rpx;
+  border-radius: 6rpx;
+}
+
+.grid-item-wrong {
   background: #fff3f3;
 }
 
-.question-index {
-  font-size: 26rpx;
-  color: #aaa;
-  min-width: 48rpx;
-}
-
-.question-expr {
-  font-size: 28rpx;
+.grid-expr {
   color: #333;
   font-family: monospace;
 }
 
-.question-answer {
-  font-size: 28rpx;
+.grid-answer {
   font-weight: bold;
   color: #E53935;
   font-family: monospace;
-  margin-left: 4rpx;
 }
 
-.user-answer-area {
-  margin-left: auto;
-}
-
-.correct-mark {
-  font-size: 28rpx;
-  color: #4CAF50;
-  font-weight: bold;
-}
-
-.wrong-user-answer {
-  font-size: 24rpx;
+.grid-user {
+  font-size: 20rpx;
   color: #E53935;
-  font-weight: bold;
 }
 
 /* Dark Mode */
@@ -422,15 +405,15 @@ onShow(() => {
   border-top-color: #2a2a4a;
 }
 
-:global(body.dark-mode) .question-item {
-  background: #16213e;
+:global(body.dark-mode) .grid-item {
+  color: #ccc;
 }
 
-:global(body.dark-mode) .question-item.question-wrong {
+:global(body.dark-mode) .grid-item-wrong {
   background: #3a1a1a;
 }
 
-:global(body.dark-mode) .question-expr {
+:global(body.dark-mode) .grid-expr {
   color: #ccc;
 }
 

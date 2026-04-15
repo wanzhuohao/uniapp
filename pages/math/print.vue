@@ -21,8 +21,16 @@
           </view>
         </view>
 
+        <text class="config-label">包含连加减</text>
+        <view class="chain-toggle" @click="includeChain = !includeChain">
+          <view class="toggle-track" :class="{ on: includeChain }">
+            <view class="toggle-thumb" />
+          </view>
+          <text class="toggle-label">{{ includeChain ? '是（如 3+5+2）' : '否（只出加减法）' }}</text>
+        </view>
+
         <view class="info-row">
-          <text class="info-text">固定 100 题，纯计算（加减法 + 连加减）</text>
+          <text class="info-text">固定 100 题，纯计算</text>
         </view>
 
         <button class="gen-btn" @click="generateSheet">生成试卷</button>
@@ -55,7 +63,7 @@
             :key="i"
             class="question-item"
           >
-            {{ i + 1 }}. {{ q.expr }} = ______
+            {{ q.expr }} = ______
           </div>
         </div>
       </div>
@@ -80,7 +88,7 @@
             :key="i"
             class="question-item"
           >
-            {{ i + 1 }}. {{ q.expr }} = <span class="answer-text">{{ q.answer }}</span>
+            {{ q.expr }} = <span class="answer-text">{{ q.answer }}</span>
           </div>
         </div>
       </div>
@@ -97,15 +105,16 @@ import { toast } from '../../utils/common/toast.js'
 // ─── State ────────────────────────────────────────────────────────────────────
 
 const selectedLevel = ref(1)
+const includeChain = ref(true)
 const questions = ref([])
 const showAnswerSheet = ref(false)
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const levelOptions = [
-  { value: 1,     label: 'Lv.1' },
-  { value: 2,     label: 'Lv.2' },
-  { value: 3,     label: 'Lv.3' },
+  { value: 1,     label: '20以内加减' },
+  { value: 2,     label: '100以内±整十' },
+  { value: 3,     label: '100以内±一位数' },
   { value: 'mix', label: '混合' },
 ]
 
@@ -131,7 +140,7 @@ function generateSheet() {
   questions.value = generateQuestions({
     level: selectedLevel.value,
     count: 100,
-    questionType: 'print',
+    questionType: includeChain.value ? 'print' : 'print-no-chain',
   })
 }
 
@@ -259,6 +268,37 @@ async function exportAnswerImage() {
   font-weight: bold;
 }
 
+.chain-toggle {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  cursor: pointer;
+}
+.toggle-track {
+  width: 80rpx;
+  height: 40rpx;
+  border-radius: 20rpx;
+  background: #ccc;
+  position: relative;
+  transition: background 0.2s;
+}
+.toggle-track.on { background: #42A5F5; }
+.toggle-thumb {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  transition: left 0.2s;
+}
+.toggle-track.on .toggle-thumb { left: 44rpx; }
+.toggle-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
 .info-row {
   padding: 16rpx 20rpx;
   background: #EFF8FF;
@@ -343,14 +383,14 @@ async function exportAnswerImage() {
 /* ── Sheet header ─────────────────────────────────────────────── */
 .sheet-header {
   text-align: center;
-  margin-bottom: 8mm;
+  margin-bottom: 4mm;
 }
 
 .sheet-title {
-  font-size: 22pt;
+  font-size: 16pt;
   font-weight: bold;
   color: #111;
-  margin-bottom: 4mm;
+  margin-bottom: 2mm;
 }
 
 .sheet-info-row {
@@ -485,15 +525,31 @@ body.dark-mode .answer-text {
   .a4-sheet {
     width: 100%;
     margin: 0;
-    padding: 10mm 15mm;
+    padding: 8mm 12mm;
     box-shadow: none;
     min-height: auto;
     background: #fff !important;
   }
 
+  .sheet-header {
+    margin-bottom: 3mm;
+  }
+
+  .sheet-title {
+    font-size: 14pt;
+    margin-bottom: 1mm;
+  }
+
+  .sheet-info-row {
+    font-size: 10pt;
+    padding-bottom: 2mm;
+    margin-bottom: 2mm;
+  }
+
   .sheet-body {
-    font-size: 12pt;
-    line-height: 1.8;
+    font-size: 11pt;
+    line-height: 1.6;
+    gap: 1mm 3mm;
   }
 
   /* Prevent question items from splitting across pages awkwardly */

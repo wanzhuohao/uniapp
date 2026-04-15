@@ -103,6 +103,7 @@ function genChain(level) {
 const TYPE_GENERATORS = { add: genAdd, sub: genSub, compare: genCompare, fill: genFillBlank, chain: genChain }
 const MIX_TYPES = ['add', 'add', 'sub', 'sub', 'compare', 'fill', 'chain']
 const PRINT_TYPES = ['add', 'add', 'sub', 'sub', 'chain']
+const PRINT_NO_CHAIN_TYPES = ['add', 'sub']
 
 // Main export: generate questions
 // questionType: 'add'/'sub'/'compare'/'fill'/'chain'/'mix'/'print'
@@ -115,6 +116,7 @@ export function generateQuestions({ level, count, questionType = 'mix' }) {
   let typePool
   if (questionType === 'mix') typePool = MIX_TYPES
   else if (questionType === 'print') typePool = PRINT_TYPES
+  else if (questionType === 'print-no-chain') typePool = PRINT_NO_CHAIN_TYPES
   else typePool = [questionType]
 
   for (let i = 0; i < count; i++) {

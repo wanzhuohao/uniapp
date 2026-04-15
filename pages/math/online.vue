@@ -69,13 +69,15 @@
           <text class="setting-label">计时</text>
           <view class="setting-tags">
             <view
-              :class="['setting-tag', timerEnabled && 'active']"
-              @click="timerEnabled = true"
-            >开启</view>
-            <view
               :class="['setting-tag', !timerEnabled && 'active']"
               @click="timerEnabled = false"
             >关闭</view>
+            <view
+              v-for="t in timerOptions"
+              :key="t.value"
+              :class="['setting-tag', timerEnabled && timerMinutes === t.value && 'active']"
+              @click="timerEnabled = true; timerMinutes = t.value"
+            >{{ t.label }}</view>
           </view>
         </view>
 
@@ -83,7 +85,7 @@
         <view class="desc-area">
           <text class="desc">· 答完后统一交卷</text>
           <text class="desc">· 比大小题点击 ＞ 或 ＜ 按钮作答</text>
-          <text v-if="timerEnabled" class="desc">· 8 分钟时会有提醒</text>
+          <text v-if="timerEnabled" class="desc">· {{ timerMinutes }} 分钟时会有提醒</text>
           <text class="desc">· 结果自动保存到历史记录</text>
         </view>
 
@@ -220,6 +222,14 @@ const customCountActive = ref(false)
 const customCountVal    = ref('')
 const customInputFocus  = ref(false)
 const timerEnabled      = ref(true)
+const timerMinutes      = ref(8)
+const timerOptions      = [
+  { value: 5, label: '5分钟' },
+  { value: 8, label: '8分钟' },
+  { value: 10, label: '10分钟' },
+  { value: 15, label: '15分钟' },
+  { value: 20, label: '20分钟' },
+]
 
 // ---- 答题状态 ----
 const phase        = ref('setup')   // 'setup' | 'quiz' | 'result'
@@ -234,7 +244,7 @@ const timerWarn     = ref(false)
 const showTimeAlert = ref(false)
 const timeAlertMsg  = ref('')
 let timer    = null
-let alerted8 = false
+let alerted = false
 
 // ---- 计算属性 ----
 const answeredCount = computed(() =>
@@ -305,18 +315,19 @@ function startQuiz() {
   elapsed.value = 0
   finalTime.value = 0
   timerWarn.value = false
-  alerted8 = false
+  alerted = false
   showTimeAlert.value = false
 
   phase.value = 'quiz'
 
   if (timerEnabled.value) {
+    const alertSeconds = timerMinutes.value * 60
     timer = setInterval(() => {
       elapsed.value++
-      if (elapsed.value === 480 && !alerted8) {
-        alerted8 = true
+      if (elapsed.value === alertSeconds && !alerted) {
+        alerted = true
         timerWarn.value = true
-        timeAlertMsg.value = '已经 8 分钟了，加油！'
+        timeAlertMsg.value = `已经 ${timerMinutes.value} 分钟了，加油！`
         showTimeAlert.value = true
       }
     }, 1000)
