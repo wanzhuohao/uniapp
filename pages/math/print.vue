@@ -480,7 +480,7 @@ body.dark-mode .answer-text {
 /* ── Print media ──────────────────────────────────────────────── */
 @media print {
   @page {
-    margin: 5mm;
+    margin: 3mm;
   }
 
   .no-print {
@@ -508,7 +508,7 @@ body.dark-mode .answer-text {
   .a4-sheet {
     width: 100%;
     margin: 0;
-    padding: 5mm 10mm;
+    padding: 3mm 8mm;
     box-shadow: none;
     min-height: auto;
     background: #fff !important;
@@ -516,8 +516,8 @@ body.dark-mode .answer-text {
 
   .sheet-body {
     font-size: 14pt;
-    line-height: 1.8;
-    gap: 0mm 4mm;
+    line-height: 1.5;
+    gap: 0;
   }
 
   /* Prevent question items from splitting across pages awkwardly */
