@@ -19,6 +19,11 @@
     { "path": "pages/study/data-admin", "style": { "navigationBarTitleText": "数据维护", "navigationStyle": "custom" } },
     { "path": "pages/study/wrong-book-practice", "style": { "navigationBarTitleText": "错题重练", "navigationStyle": "custom" } },
 
+    { "path": "pages/math/index", "style": { "navigationStyle": "custom", "navigationBarTitleText": "数学练习" } },
+    { "path": "pages/math/online", "style": { "navigationStyle": "custom", "navigationBarTitleText": "在线练习" } },
+    { "path": "pages/math/print", "style": { "navigationStyle": "custom", "navigationBarTitleText": "打印出题" } },
+    { "path": "pages/math/history", "style": { "navigationStyle": "custom", "navigationBarTitleText": "历史记录" } },
+
     { "path": "pages/interview/index", "style": { "navigationBarTitleText": "面试练习", "navigationStyle": "custom" } },
     { "path": "pages/interview/practice", "style": { "navigationBarTitleText": "答题", "navigationStyle": "custom" } },
     { "path": "pages/interview/records", "style": { "navigationBarTitleText": "练习记录", "navigationStyle": "custom" } },
