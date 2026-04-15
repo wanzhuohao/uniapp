@@ -97,7 +97,7 @@ import { toast } from '../../utils/common/toast.js'
 // ─── State ────────────────────────────────────────────────────────────────────
 
 const selectedLevel = ref(1)
-const includeChain = ref(true)
+const includeChain = ref(false)
 const questions = ref([])
 const showAnswerSheet = ref(false)
 
@@ -312,6 +312,7 @@ async function exportAnswerImage() {
   border: none;
   border-radius: 12rpx;
   padding: 28rpx 0;
+  width: 100%;
   cursor: pointer;
   transition: background 0.2s;
 }
