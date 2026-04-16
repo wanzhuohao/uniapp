@@ -1,7 +1,7 @@
 <template>
   <view class="index-page">
     <view class="header">
-      <text class="title">学习小天地</text>
+      <text class="title">语文</text>
       <view class="star-total">
         <text class="star-icon">⭐</text>
         <text class="star-num">{{ store.totalStars }}</text>

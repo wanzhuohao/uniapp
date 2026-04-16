@@ -23,7 +23,7 @@ function updateBtnVisible() {
     const pages = getCurrentPages()
     const cur = pages[pages.length - 1]
     const path = cur?.route || ''
-    // 只在学习首页和数学首页显示，避免子页面学习时的视觉干扰
+    // 只在语文首页显示，避免子页面学习时的视觉干扰
     const showPaths = ['pages/study/index']
     themeBtnEl.style.display = showPaths.includes(path) ? 'flex' : 'none'
   } catch (e) {
