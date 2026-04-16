@@ -8,12 +8,15 @@
 
 ## 2026-04-16 题库单元整理 + 课程多选 + 移除数学模块
 
-### 0. 移除数学模块（已迁移到 uniapp-aliyun）
+### 0. 移除数学模块 + 改名语文练习
+- **移除数学模块**（已迁移到 uniapp-aliyun）
 - 删除 `pages/math/` 4个页面（index/online/print/history）
 - 删除 `pages/study/mental-math.vue`（口算计时）
 - 删除 `utils/math/`（mathStorage.js、questionEngine.js）、`utils/study/mathGen.js`
 - 清理：首页数学卡片、学习首页口算入口、错题本/错题重练口算模式、store math 字段、App.vue 共享模式路由守卫 + 暗色口算样式
 - 净删除 3351 行
+- **改名**："学习小天地" → "语文练习"，子菜单：生字学习 / 拼音练习 / 汉字练习
+- **learn.vue** 单元筛选改为两级多选（之前漏改）
 
 ---
 
