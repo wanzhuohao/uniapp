@@ -14,10 +14,6 @@
         <text class="new-total">{{ oldTotal + earned }}</text>
       </view>
 
-      <view v-if="module === 'math' && levelChanged" class="level-change">
-        <text>{{ levelChangeText }}</text>
-      </view>
-
       <text class="encourage">{{ encourageText }}</text>
     </view>
 
@@ -44,16 +40,7 @@ const module = query.module || ''
 const correct = Number(query.correct) || 0
 const total = Number(query.total) || 10
 const earned = Number(query.earned) || 0
-const oldLevel = Number(query.oldLevel) || 0
-const newLevel = Number(query.newLevel) || 0
 const oldTotal = Number(query.oldTotal) || 0
-
-const levelChanged = computed(() => module === 'math' && oldLevel !== newLevel)
-const levelChangeText = computed(() => {
-  if (newLevel > oldLevel) return `恭喜升到 Lv.${newLevel}！`
-  if (newLevel < oldLevel) return `降到 Lv.${newLevel}，加油哦！`
-  return ''
-})
 
 const encourageText = computed(() => {
   const rate = total > 0 ? correct / total : 0

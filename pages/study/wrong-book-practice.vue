@@ -56,15 +56,6 @@
             <text class="type-name">汉字</text>
             <text class="type-count">{{ practiceAll ? '全部' : '今日' }} {{ counts.hanzi }} 题</text>
           </view>
-          <view
-            v-if="counts.math > 0"
-            class="type-card type-math"
-            @click="enterMode('math')"
-          >
-            <text class="type-icon">🔢</text>
-            <text class="type-name">口算</text>
-            <text class="type-count">{{ practiceAll ? '全部' : '今日' }} {{ counts.math }} 题</text>
-          </view>
         </view>
       </template>
     </view>
@@ -86,39 +77,6 @@
       :question="currentHanziQ"
       @answer="handleHanziAnswer"
     />
-    <!-- 口算重练（一屏批量）-->
-    <view v-if="mode === 'math' && !finishedMode" class="math-mode">
-      <text class="math-tip">{{ mathSubmitted ? '已批改，查看结果后点完成' : '把所有错题再做一遍' }}</text>
-      <scroll-view scroll-y class="question-list">
-        <view
-          v-for="(q, i) in mathQuestions"
-          :key="i"
-          class="q-row"
-          :class="{ done: q.userAnswer !== '', checked: q.checked }"
-        >
-          <text class="q-index">{{ i + 1 }}.</text>
-          <text class="q-expr">{{ q.expression }} =</text>
-          <input
-            class="q-input"
-            type="number"
-            :value="q.userAnswer"
-            :disabled="mathSubmitted"
-            placeholder="?"
-            @input="onMathInput(i, $event)"
-          />
-          <text
-            v-if="q.checked"
-            class="q-result"
-            :class="String(q.userAnswer) === String(q.answer) ? 'right' : 'wrong'"
-          >{{ String(q.userAnswer) === String(q.answer) ? '✓' : '✗ ' + q.answer }}</text>
-        </view>
-      </scroll-view>
-      <view class="submit-bar">
-        <view v-if="!mathSubmitted" class="submit-btn" @click="submitMath">交卷</view>
-        <view v-else class="submit-btn" @click="finishMode">完成</view>
-      </view>
-    </view>
-
     <!-- 完成态 -->
     <view v-if="finishedMode" class="finished-area">
       <text class="finished-icon">🏆</text>
@@ -151,11 +109,11 @@ const ALL_STRUCTURES = ['上下', '左右', '独体', '半包围', '全包围']
 
 const loading = ref(true)
 const practiceAll = ref(false)  // true = 练全部, false = 只练待复习（默认）
-const mode = ref('') // '' | 'pinyin' | 'hanzi' | 'math'
+const mode = ref('') // '' | 'pinyin' | 'hanzi'
 const finishedMode = ref(false)
 
 // 所有未掌握错题（按 type 分组）
-const allWrong = ref({ pinyin: [], hanzi: [], math: [] })
+const allWrong = ref({ pinyin: [], hanzi: [] })
 // 云端补全的题目数据：questionId -> data
 const questionDataMap = ref({})
 // 单元 -> [items]，用于干扰项池
@@ -164,10 +122,9 @@ const unitPoolMap = ref({})
 const counts = computed(() => ({
   pinyin: allWrong.value.pinyin.length,
   hanzi: allWrong.value.hanzi.length,
-  math: allWrong.value.math.length,
 }))
 const totalUnmastered = computed(() =>
-  counts.value.pinyin + counts.value.hanzi + counts.value.math
+  counts.value.pinyin + counts.value.hanzi
 )
 
 // 当前模式题列表
@@ -183,14 +140,9 @@ const currentPinyinQ = computed(() => pinyinQueue.value[currentIndex.value] || n
 const hanziQueue = ref([])
 const currentHanziQ = computed(() => hanziQueue.value[currentIndex.value] || null)
 
-// 口算队列
-const mathQuestions = ref([])
-const mathSubmitted = ref(false)
-
 const totalCount = computed(() => {
   if (mode.value === 'pinyin') return pinyinQueue.value.length
   if (mode.value === 'hanzi') return hanziQueue.value.length
-  if (mode.value === 'math') return mathQuestions.value.length
   return 0
 })
 
@@ -205,11 +157,10 @@ async function loadAllWrong() {
     const list = practiceAll.value
       ? await getAllWrongList(username)
       : await getDueList(username)
-    const groups = { pinyin: [], hanzi: [], math: [] }
+    const groups = { pinyin: [], hanzi: [] }
     for (const w of list) {
       if (w.type === 'pinyin') groups.pinyin.push(w)
       else if (w.type === 'hanzi' || w.type === 'stroke') groups.hanzi.push(w)
-      else if (w.type === 'math') groups.math.push(w)
     }
     allWrong.value = groups
   } catch (e) {
@@ -247,8 +198,6 @@ async function enterMode(type) {
     await preparePinyinMode()
   } else if (type === 'hanzi') {
     await prepareHanziMode()
-  } else if (type === 'math') {
-    prepareMathMode()
   }
   loading.value = false
 }
@@ -354,22 +303,6 @@ async function prepareHanziMode() {
   }
 }
 
-function prepareMathMode() {
-  const list = allWrong.value.math.map(w => {
-    const m = (w.char || '').match(/^(.+?)\s*=\s*(.+)$/)
-    return {
-      expression: m ? m[1].trim() : (w.char || ''),
-      answer: m ? m[2].trim() : '',
-      userAnswer: '',
-      checked: false,
-      _wrong: w,
-    }
-  })
-  mathQuestions.value = list
-  mathSubmitted.value = false
-  if (list.length === 0) finishMode()
-}
-
 // === 拼音答题 ===
 async function handlePinyinAnswer({ correct }) {
   const q = currentPinyinQ.value
@@ -413,37 +346,6 @@ function advanceHanzi() {
   }
 }
 
-// === 口算答题 ===
-function onMathInput(i, e) {
-  mathQuestions.value[i].userAnswer = e.detail.value
-}
-
-async function submitMath() {
-  mathSubmitted.value = true
-  mathQuestions.value.forEach(q => { q.checked = true })
-
-  const writes = []
-  for (const q of mathQuestions.value) {
-    const w = q._wrong
-    const isRight = String(q.userAnswer) === String(q.answer) && q.userAnswer !== ''
-    if (isRight) {
-      correctCount.value++
-      writes.push(
-        recordCorrect(w._id, w.box, w.correctCount || 0).then(r => {
-          if (r.mastered) masteredThisRound.value++
-        })
-      )
-    } else {
-      writes.push(recordWrongAgain(w._id, w.box, w.wrongCount || 0))
-    }
-  }
-  try {
-    await Promise.all(writes)
-  } catch (e) {
-    console.error('写入错题状态失败', e)
-  }
-}
-
 function finishMode() {
   finishedMode.value = true
 }
@@ -456,8 +358,6 @@ async function exitMode() {
   masteredThisRound.value = 0
   pinyinQueue.value = []
   hanziQueue.value = []
-  mathQuestions.value = []
-  mathSubmitted.value = false
   await loadAllWrong()
 }
 
@@ -572,7 +472,7 @@ onMounted(() => {
 .type-card:active { transform: scale(0.98); opacity: 0.9; }
 .type-pinyin { border-left-color: #FFA726; }
 .type-hanzi { border-left-color: #42A5F5; }
-.type-math { border-left-color: #9C27B0; }
+
 .type-icon {
   font-size: 56rpx;
   flex-shrink: 0;
@@ -614,84 +514,6 @@ onMounted(() => {
 
 /* 拼音答题区 */
 .quiz-wrap { padding: 16rpx 0; }
-
-/* 口算批量模式 */
-.math-mode {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.math-tip {
-  text-align: center;
-  font-size: 26rpx;
-  color: #888;
-  padding: 24rpx 0 8rpx;
-}
-.question-list {
-  flex: 1;
-  padding: 16rpx 24rpx 140rpx;
-}
-.q-row {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  padding: 20rpx 24rpx;
-  margin-bottom: 12rpx;
-  background: #fff;
-  border-radius: 16rpx;
-  border-left: 6rpx solid transparent;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
-}
-.q-row.done { border-left-color: #9C27B0; }
-.q-row.checked { background: #FAFAFA; }
-.q-index {
-  font-size: 24rpx;
-  color: #999;
-  width: 56rpx;
-  text-align: right;
-}
-.q-expr {
-  font-size: 36rpx;
-  font-weight: bold;
-  min-width: 200rpx;
-}
-.q-input {
-  width: 120rpx;
-  height: 64rpx;
-  border: 4rpx solid #E0E0E0;
-  border-radius: 12rpx;
-  text-align: center;
-  font-size: 36rpx;
-  font-weight: bold;
-}
-.q-result {
-  font-size: 28rpx;
-  margin-left: 12rpx;
-  font-weight: bold;
-}
-.q-result.right { color: #2E7D32; }
-.q-result.wrong { color: #C62828; }
-
-.submit-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 24rpx 48rpx;
-  background: #fff;
-  box-shadow: 0 -4rpx 12rpx rgba(0,0,0,0.06);
-  z-index: 10;
-}
-.submit-btn {
-  text-align: center;
-  padding: 24rpx;
-  background: #9C27B0;
-  color: #fff;
-  border-radius: var(--radius-btn);
-  font-size: 32rpx;
-  font-weight: bold;
-}
-.submit-btn:active { transform: scale(0.97); }
 
 /* 完成态 */
 .finished-area {

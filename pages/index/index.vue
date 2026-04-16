@@ -15,13 +15,7 @@
       <view class="card card-study" @click="goTo('/pages/study/index')">
         <text class="card-icon">📚</text>
         <text class="card-title">学习小天地</text>
-        <text class="card-desc">拼音、汉字、口算练习</text>
-      </view>
-
-      <view class="card card-math" @click="goTo('/pages/math/index')">
-        <text class="card-icon">🔢</text>
-        <text class="card-title">数学练习</text>
-        <text class="card-desc">在线练习、打印出题</text>
+        <text class="card-desc">拼音、汉字练习</text>
       </view>
 
     </view>
@@ -168,7 +162,7 @@ function onAddNew() {
 }
 .card-stele { border-left: 8rpx solid #96700A; }
 .card-study { border-left: 8rpx solid #66BB6A; }
-.card-math { border-left: 8rpx solid #42A5F5; }
+
 .card-interview { border-left: 8rpx solid #007AFF; }
 .card.disabled {
   opacity: 0.5;

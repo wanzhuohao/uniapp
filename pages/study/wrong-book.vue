@@ -12,11 +12,7 @@
         <text class="stat-num">{{ stats.hanziCount }}</text>
         <text class="stat-label">汉字</text>
       </view>
-      <view class="stat-card">
-        <text class="stat-num">{{ stats.mathCount }}</text>
-        <text class="stat-label">口算</text>
-      </view>
-      <view class="stat-card">
+<view class="stat-card">
         <text class="stat-num due-num">{{ stats.dueCount }}</text>
         <text class="stat-label">今日待复习</text>
       </view>
@@ -44,7 +40,7 @@
         <view class="top5-item" v-for="(item, i) in stats.top5" :key="item._id">
           <text class="top5-rank">{{ i + 1 }}</text>
           <text class="top5-char">{{ item.char }}</text>
-          <text class="top5-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字', math: '口算' })[item.type] || item.type }}</text>
+          <text class="top5-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字' })[item.type] || item.type }}</text>
           <text class="top5-count">错 {{ item.wrongCount }} 次</text>
         </view>
       </view>
@@ -64,10 +60,6 @@
         :class="['filter-btn', filter === 'hanzi' && 'active']"
         @click="filter = 'hanzi'"
       >汉字</text>
-      <text
-        :class="['filter-btn', filter === 'math' && 'active']"
-        @click="filter = 'math'"
-      >口算</text>
     </view>
 
     <!-- 错题列表 -->
@@ -77,9 +69,9 @@
         :key="item._id"
         :class="['wrong-item', item.mastered && 'mastered']"
       >
-        <view :class="['wrong-char', item.type === 'math' && 'wrong-math']">{{ item.char }}</view>
+        <view class="wrong-char">{{ item.char }}</view>
         <view class="wrong-info">
-          <text class="wrong-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字', math: '口算' })[item.type] || item.type }}</text>
+          <text class="wrong-type">{{ ({ pinyin: '拼音', hanzi: '汉字', stroke: '汉字' })[item.type] || item.type }}</text>
           <text class="wrong-unit">{{ item.unit }}</text>
         </view>
         <view class="wrong-meta">
@@ -123,7 +115,6 @@ const stats = ref({
   dueCount: 0,
   pinyinDue: 0,
   hanziDue: 0,
-  mathDue: 0,
 })
 const wrongList = ref([])
 const trendData = ref([])
@@ -341,19 +332,6 @@ function goPractice() {
   width: 80rpx;
   text-align: center;
   flex-shrink: 0;
-}
-
-/* 口算题表达式较长，不限制宽度，改为左对齐横排 */
-.wrong-char.wrong-math {
-  font-size: 32rpx;
-  width: auto;
-  min-width: 160rpx;
-  max-width: 60%;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: monospace;
 }
 
 .wrong-info {

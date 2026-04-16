@@ -12,8 +12,6 @@ export const useGameStore = defineStore('game', {
     const saved = loadState()
     return {
       totalStars: saved?.totalStars ?? 0,
-      mathLevel: saved?.mathLevel ?? 1,
-      mathHistory: saved?.mathHistory ?? [],
       currentUnit: saved?.currentUnit ?? '2-4',
       _statsId: null, // 云端记录 ID，用于更新
     }
@@ -33,14 +31,10 @@ export const useGameStore = defineStore('game', {
           if ((r.totalStars || 0) >= this.totalStars) {
             this.totalStars = r.totalStars || 0
           }
-          this.mathLevel = r.mathLevel || this.mathLevel
-          this.mathHistory = r.mathHistory || this.mathHistory
           if (r.currentUnit) this.currentUnit = r.currentUnit
           // 同步到本地
           saveState({
             totalStars: this.totalStars,
-            mathLevel: this.mathLevel,
-            mathHistory: this.mathHistory,
             currentUnit: this.currentUnit,
           })
         }
@@ -54,25 +48,6 @@ export const useGameStore = defineStore('game', {
       this._persist()
     },
 
-    recordMathRound(correct, total) {
-      this.mathHistory.push({ correct, total })
-      if (this.mathHistory.length > 2) {
-        this.mathHistory.shift()
-      }
-      if (this.mathHistory.length === 2) {
-        const allHigh = this.mathHistory.every(h => h.correct / h.total >= 0.8)
-        const allLow = this.mathHistory.every(h => h.correct / h.total < 0.5)
-        if (allHigh && this.mathLevel < 3) {
-          this.mathLevel++
-          this.mathHistory = []
-        } else if (allLow && this.mathLevel > 1) {
-          this.mathLevel--
-          this.mathHistory = []
-        }
-      }
-      this._persist()
-    },
-
     setUnit(val) {
       this.currentUnit = val
       this._persist()
@@ -80,8 +55,6 @@ export const useGameStore = defineStore('game', {
 
     resetAll() {
       this.totalStars = 0
-      this.mathLevel = 1
-      this.mathHistory = []
       this.currentUnit = '2-4'
       this._persist()
     },
@@ -89,8 +62,6 @@ export const useGameStore = defineStore('game', {
     // 切换用户：清空内存状态，重新从云端加载
     async switchUser() {
       this.totalStars = 0
-      this.mathLevel = 1
-      this.mathHistory = []
       this.currentUnit = '2-4'
       this._statsId = null
       // 从新用户的云端拉取
@@ -101,8 +72,6 @@ export const useGameStore = defineStore('game', {
       // 本地持久化
       saveState({
         totalStars: this.totalStars,
-        mathLevel: this.mathLevel,
-        mathHistory: this.mathHistory,
         currentUnit: this.currentUnit,
       })
       // 异步同步到云端（防抖）
@@ -120,8 +89,6 @@ export const useGameStore = defineStore('game', {
         const data = {
           username,
           totalStars: this.totalStars,
-          mathLevel: this.mathLevel,
-          mathHistory: this.mathHistory,
           currentUnit: this.currentUnit,
           updatedAt: Date.now(),
         }

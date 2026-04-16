@@ -24,7 +24,7 @@ function updateBtnVisible() {
     const cur = pages[pages.length - 1]
     const path = cur?.route || ''
     // 只在学习首页和数学首页显示，避免子页面学习时的视觉干扰
-    const showPaths = ['pages/study/index', 'pages/math/index']
+    const showPaths = ['pages/study/index']
     themeBtnEl.style.display = showPaths.includes(path) ? 'flex' : 'none'
   } catch (e) {
     themeBtnEl.style.display = 'none'
@@ -69,35 +69,9 @@ function promptUsername() {
   })
 }
 
-// 检查是否共享模式（URL 带 ?mode=math）
-function isSharedMode() {
-  if (typeof window === 'undefined') return false
-  return window.location.search.includes('mode=math') || window.location.hash.includes('mode=math')
-}
-
-// 共享模式下拦截非数学页面跳转
-function setupRouteGuard() {
-  if (!isSharedMode()) return
-  const allowedPrefix = '/pages/math/'
-  ;['navigateTo', 'redirectTo', 'reLaunch', 'switchTab'].forEach(method => {
-    uni.addInterceptor(method, {
-      invoke(args) {
-        if (args.url && !args.url.startsWith(allowedPrefix)) {
-          console.warn('[shared mode] blocked:', args.url)
-          return false
-        }
-      }
-    })
-  })
-}
 
 onLaunch(() => {
   applyTheme()
-  setupRouteGuard()
-  if (isSharedMode()) {
-    // 共享模式：跳过用户名，直接进数学首页
-    return
-  }
   if (!hasUsername()) {
     promptUsername()
   } else {
@@ -183,7 +157,7 @@ html body.dark-mode .index-page,
 html body.dark-mode .mock-page,
 html body.dark-mode .pinyin-page,
 html body.dark-mode .hanzi-page,
-html body.dark-mode .mental-page,
+
 html body.dark-mode .wbp-page,
 html body.dark-mode .admin-page,
 html body.dark-mode .result-page,
@@ -350,38 +324,16 @@ html body.dark-mode .us-empty {
   color: #888 !important;
 }
 
-/* 底部固定条（错题本 / 数据维护 / 口算交卷 等）*/
+/* 底部固定条（错题本 / 数据维护 等）*/
 html body.dark-mode .bottom-bar,
-html body.dark-mode .submit-bar,
-html body.dark-mode .mental-page .top-bar {
+html body.dark-mode .submit-bar {
   background: #2a2a2a !important;
   box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
-}
-
-/* 口算结果区 */
-html body.dark-mode .result-area,
-html body.dark-mode .time-alert-box {
-  background: #2a2a2a !important;
-  color: #e0e0e0 !important;
-}
-html body.dark-mode .result-title,
-html body.dark-mode .result-time,
-html body.dark-mode .result-score,
-html body.dark-mode .result-accuracy,
-html body.dark-mode .time-alert-text {
-  color: #e0e0e0 !important;
 }
 html body.dark-mode .action-btn:not(.primary) {
   background: #3a3a3a !important;
   color: #ccc !important;
   border-color: #555 !important;
-}
-/* 口算结果区的错题回顾（区分于错题本的 wrong-item）*/
-html body.dark-mode .mental-page .wrong-item {
-  background: #3a1f22 !important;
-}
-html body.dark-mode .wrong-section .wrong-title {
-  color: #ff8a65 !important;
 }
 
 /* TrendChart 内部文字（chart-title / 坐标轴） */
@@ -474,14 +426,6 @@ html body.dark-mode .answer-value {
 
 /* HanziWriter SVG：strokeColor 已在各组件按主题动态设置，
    CSS 这里不做 fill 强制覆盖（会干扰绿色部首色），信任 HanziWriter 自身 */
-
-/* 口算计时器（顶部时间显示）暗色 */
-html body.dark-mode .timer {
-  color: #e0e0e0 !important;
-}
-html body.dark-mode .timer.warn {
-  color: #ff8a65 !important;
-}
 
 /* 错题本未掌握题数 / 已掌握题数 标签 */
 html body.dark-mode .mastered-badge {

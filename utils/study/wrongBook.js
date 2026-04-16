@@ -138,14 +138,12 @@ export async function getWrongStats(username) {
     total: all.length,
     pinyinCount: all.filter(r => r.type === 'pinyin').length,
     hanziCount: all.filter(r => r.type === 'stroke' || r.type === 'hanzi').length,
-    mathCount: all.filter(r => r.type === 'math').length,
     strokeCount: all.filter(r => r.type === 'stroke' || r.type === 'hanzi').length, // 兼容旧字段
     unmasteredCount: all.filter(r => effectiveBox(r) < 5).length,
     masteredCount: all.filter(r => effectiveBox(r) >= 5).length,
     dueCount: due.length,
     pinyinDue: due.filter(r => r.type === 'pinyin').length,
     hanziDue: due.filter(r => r.type === 'stroke' || r.type === 'hanzi').length,
-    mathDue: due.filter(r => r.type === 'math').length,
     top5: all.filter(r => effectiveBox(r) < 5).sort((a, b) => b.wrongCount - a.wrongCount).slice(0, 5)
   }
 }
