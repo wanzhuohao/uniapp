@@ -10,10 +10,22 @@
     <view v-if="!started" class="filter-area">
       <text class="filter-title">选择单元</text>
       <view class="unit-tags">
-        <view v-for="u in 8" :key="u"
-          :class="['unit-tag', store.currentUnit === '2-' + u && 'active']"
-          @click="store.setUnit('2-' + u)"
-        >第{{ u }}单元</view>
+        <view v-for="uk in unitKeys" :key="uk"
+          :class="['unit-tag', store.currentUnit === uk && 'active']"
+          @click="switchUnit(uk)"
+        >{{ unitConfig[uk].label }}</view>
+      </view>
+
+      <text class="filter-title" style="margin-top: 24rpx;">选择课程</text>
+      <view class="unit-tags">
+        <view
+          :class="['unit-tag', selectedLessons.length === currentLessons.length && 'active']"
+          @click="toggleAllLessons"
+        >全选</view>
+        <view v-for="l in currentLessons" :key="l.key"
+          :class="['unit-tag', selectedLessons.includes(l.key) && 'active']"
+          @click="toggleLesson(l.key)"
+        >{{ l.label }}</view>
       </view>
 
       <view class="desc-area">
@@ -102,11 +114,36 @@ import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
 import { getQuestions } from '../../utils/common/cloudDb.js'
 import { isDark } from '../../utils/common/theme.js'
+import { UNIT_CONFIG, UNIT_KEYS, getLessonKeys } from '../../utils/study/unitConfig.js'
 import pinyinData from '../../static/data/pinyin.json'
 import TopBar from '../../components/common/TopBar.vue'
 
 const store = useGameStore()
 const { getUsername } = useAuth()
+
+const unitConfig = UNIT_CONFIG
+const unitKeys = UNIT_KEYS
+
+// 课程多选
+const selectedLessons = ref(getLessonKeys(store.currentUnit))
+const currentLessons = computed(() => UNIT_CONFIG[store.currentUnit]?.lessons || [])
+
+function switchUnit(uk) {
+  store.setUnit(uk)
+  selectedLessons.value = getLessonKeys(uk)
+}
+function toggleLesson(key) {
+  const idx = selectedLessons.value.indexOf(key)
+  if (idx >= 0) {
+    if (selectedLessons.value.length > 1) selectedLessons.value.splice(idx, 1)
+  } else {
+    selectedLessons.value.push(key)
+  }
+}
+function toggleAllLessons() {
+  const all = getLessonKeys(store.currentUnit)
+  selectedLessons.value = selectedLessons.value.length === all.length ? [all[0]] : [...all]
+}
 
 const started = ref(false)
 const currentIndex = ref(0)
@@ -148,9 +185,10 @@ async function initOutline() {
 
 async function startRound() {
   // 优先云端（带 _id 便于记录错题）
+  const lessons = selectedLessons.value
   let source = null
   try {
-    const cloud = await getQuestions('pinyin', store.currentUnit)
+    const cloud = await getQuestions('pinyin', lessons)
     if (Array.isArray(cloud) && cloud.length > 0) {
       source = cloud.filter(d => d.radical && d.structure)
     }
@@ -158,7 +196,7 @@ async function startRound() {
     console.error('云端题库拉取失败，降级本地', e)
   }
   if (!source || source.length === 0) {
-    source = pinyinData.filter(d => d.unit === store.currentUnit && d.radical && d.structure)
+    source = pinyinData.filter(d => lessons.includes(d.unit) && d.radical && d.structure)
   }
   questions.value = sampleWithout(source, 10)
   currentIndex.value = 0
