@@ -67,10 +67,16 @@
               :class="['grid-item', record.type === 'online' && isWrong(record, qi) && 'grid-item-wrong']"
             >
               <text class="grid-expr">{{ q.expr }} = </text>
-              <text class="grid-answer">{{ q.answer }}</text>
-              <text v-if="record.type === 'online' && isWrong(record, qi)" class="grid-user">
-                ({{ getUserAnswer(record, qi) || '未填' }})
-              </text>
+              <!-- 打印记录：答案红色 -->
+              <text v-if="record.type !== 'online'" class="grid-answer">{{ q.answer }}</text>
+              <!-- 在线记录：答对绿色，答错红色+用户答案 -->
+              <template v-else>
+                <text v-if="!isWrong(record, qi)" class="grid-correct">{{ q.answer }} ✓</text>
+                <template v-else>
+                  <text class="grid-wrong-user">{{ getUserAnswer(record, qi) || '?' }}</text>
+                  <text class="grid-answer">{{ q.answer }}</text>
+                </template>
+              </template>
             </view>
           </view>
         </view>
@@ -366,9 +372,17 @@ onShow(() => {
   font-family: monospace;
 }
 
-.grid-user {
-  font-size: 20rpx;
-  color: #E53935;
+.grid-correct {
+  color: #4CAF50;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.grid-wrong-user {
+  color: #999;
+  text-decoration: line-through;
+  font-family: monospace;
+  margin-right: 4rpx;
 }
 
 /* Dark Mode */

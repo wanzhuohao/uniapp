@@ -14,7 +14,7 @@ export const useGameStore = defineStore('game', {
       totalStars: saved?.totalStars ?? 0,
       mathLevel: saved?.mathLevel ?? 1,
       mathHistory: saved?.mathHistory ?? [],
-      currentUnit: saved?.currentUnit ?? '2-1',
+      currentUnit: saved?.currentUnit ?? '2-4',
       _statsId: null, // 云端记录 ID，用于更新
     }
   },
@@ -82,7 +82,7 @@ export const useGameStore = defineStore('game', {
       this.totalStars = 0
       this.mathLevel = 1
       this.mathHistory = []
-      this.currentUnit = '2-1'
+      this.currentUnit = '2-4'
       this._persist()
     },
 
@@ -91,7 +91,7 @@ export const useGameStore = defineStore('game', {
       this.totalStars = 0
       this.mathLevel = 1
       this.mathHistory = []
-      this.currentUnit = '2-1'
+      this.currentUnit = '2-4'
       this._statsId = null
       // 从新用户的云端拉取
       await this.loadFromCloud()

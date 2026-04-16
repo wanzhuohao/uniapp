@@ -2,9 +2,58 @@
 
 > 项目路径: `D:\code\uniapp`
 > 技术栈: UniApp Vue3 + Pinia + uniCloud-alipay
-> 最后更新: 2026-04-14
+> 最后更新: 2026-04-16
 > 状态: **已上线**，累计 100+ commit
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
+
+## 2026-04-16 题库单元整理 + 课程多选
+
+### 1. unit 字段改为三级格式 `2-单元-课号`
+- 旧格式 `"2-4"` → 新格式 `"2-4-7"`（第四单元-阅读7）
+- 语文园地用课号 `0`（如 `"2-5-0"`）
+- 未分类字统一为 `"2-0-0"`
+
+### 2. 整理第5、6单元数据（按写字表照片）
+- **第五单元**（26字）：识字5-8 + 语文园地五
+  - 2-5-5: 物造运欢房网 | 2-5-6: 对今雪细夕语
+  - 2-5-7: 打皮跑足沙包 | 2-5-8: 近习远学玉义
+  - 2-5-0: 饱抱
+- **第六单元**（26字）：阅读10-13 + 语文园地六
+  - 2-6-10: 首池采尖角早 | 2-6-11: 玩眼泪它贝气
+  - 2-6-12: 机台唱伞朵美 | 2-6-13: 这看鱼面问加
+  - 2-6-0: 豆斗
+- 第四单元（22字）拆分课号：阅读7/8/9 + 语文园地
+- 新建 31 个字的完整条目（pinyin + strokes），5 个字补充 strokes 数据
+
+### 3. 课程筛选改为两级多选
+- 第一级：选单元（第四/五/六单元、未分类）
+- 第二级：选课程（多选，如 识字5、识字6…），带"全选"按钮
+- 影响页面：hanzi.vue、pinyin.vue、data-admin.vue
+- 新建 `utils/study/unitConfig.js` 共享配置
+- `cloudDb.js` `getQuestions` 支持传入 unit 数组（用 `dbCmd.in`）
+
+### 4. 云端数据迁移思路
+- **不靠 seed-questions 全量重传**，而是写独立迁移云函数 `migrate-unit`
+- 迁移函数按字查映射表，只改 unit 字段，数据量小、风险低
+- 上传运行一次后可删除
+- 前端只需认新格式，不需要兼容旧格式
+
+### 部署清单
+- ✅ 上传 `migrate-unit` 云函数并运行（358条：81更新，277归未分类）
+- ✅ 上传 `seed-questions` 云函数（新增67条，更新358条）
+- ✅ 前端重新发行（2026-04-16）
+
+### 新增/修改文件
+- `utils/study/unitConfig.js`（新建）
+- `static/data/pinyin.json`、`static/data/strokes.json`（重写）
+- `uniCloud-alipay/cloudfunctions/seed-questions/index.js`（重写）
+- `uniCloud-alipay/cloudfunctions/migrate-unit/index.js`（新建）
+- `pages/study/hanzi.vue`、`pinyin.vue`、`data-admin.vue`（UI改造）
+- `utils/common/cloudDb.js`（支持多unit查询）
+- `store/game.js`（默认unit改为2-4）
+- `scripts/rebuild-questions.py`（可复用数据重建脚本）
+
+---
 
 ## 2026-04-13~14 汉字练习改造 + 数据修正
 

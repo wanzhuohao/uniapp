@@ -3,8 +3,10 @@ const db = uniCloud.database()
 
 const CACHE_TTL = 24 * 60 * 60 * 1000 // 24 小时
 
+// unit 可以是单个字符串或数组
 export async function getQuestions(type, unit) {
-  const cacheKey = `questions_${type}_${unit}`
+  const units = Array.isArray(unit) ? unit : [unit]
+  const cacheKey = `questions_${type}_${units.sort().join(',')}`
 
   try {
     const cached = uni.getStorageSync(cacheKey)
@@ -14,8 +16,13 @@ export async function getQuestions(type, unit) {
   } catch (e) {}
 
   try {
+    const dbCmd = db.command
+    const where = units.length === 1
+      ? { type, unit: units[0] }
+      : { type, unit: dbCmd.in(units) }
     const res = await db.collection('questions')
-      .where({ type, unit })
+      .where(where)
+      .limit(500)
       .get()
 
     if (res.result && res.result.data && res.result.data.length > 0) {

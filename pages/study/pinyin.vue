@@ -7,14 +7,27 @@
       <!-- 单元选择 -->
       <text class="filter-title">选择单元</text>
       <view class="unit-tags">
-        <view v-for="u in 8" :key="u"
-          :class="['unit-tag', store.currentUnit === '2-' + u && 'active']"
-          @click="store.setUnit('2-' + u)"
-        >第{{ u }}单元</view>
+        <view v-for="uk in unitKeys" :key="uk"
+          :class="['unit-tag', store.currentUnit === uk && 'active']"
+          @click="switchUnit(uk)"
+        >{{ unitConfig[uk].label }}</view>
+      </view>
+
+      <!-- 课程选择（多选） -->
+      <text class="filter-title" style="margin-top: 24rpx;">选择课程</text>
+      <view class="unit-tags">
+        <view
+          :class="['unit-tag', selectedLessons.length === currentLessons.length && 'active']"
+          @click="toggleAllLessons"
+        >全选</view>
+        <view v-for="l in currentLessons" :key="l.key"
+          :class="['unit-tag', selectedLessons.includes(l.key) && 'active']"
+          @click="toggleLesson(l.key)"
+        >{{ l.label }}</view>
       </view>
 
       <!-- 题型选择 -->
-      <text class="filter-title" style="margin-top: 32rpx;">选择题型</text>
+      <text class="filter-title" style="margin-top: 24rpx;">选择题型</text>
       <view class="filter-tags">
         <view :class="['filter-tag', filterType === '' && 'active']" @click="filterType = ''">全部混合</view>
         <view :class="['filter-tag', filterType === 'char2pinyin' && 'active']" @click="filterType = 'char2pinyin'">看汉字选拼音</view>
@@ -55,9 +68,14 @@ import { getQuestions } from '../../utils/common/cloudDb.js'
 import { recordWrong } from '../../utils/study/wrongBook.js'
 import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
+import { UNIT_CONFIG, UNIT_KEYS, getLessonKeys } from '../../utils/study/unitConfig.js'
 
 const store = useGameStore()
 const { getUsername } = useAuth()
+
+const unitConfig = UNIT_CONFIG
+const unitKeys = UNIT_KEYS
+
 const filterType = ref('')
 const started = ref(false)
 const currentIndex = ref(0)
@@ -66,8 +84,30 @@ const roundKey = ref(0)
 const roundFinished = ref(false)
 const isCloudData = ref(false)
 
+// 课程多选
+const selectedLessons = ref(getLessonKeys(store.currentUnit))
+const currentLessons = computed(() => UNIT_CONFIG[store.currentUnit]?.lessons || [])
+
+function switchUnit(uk) {
+  store.setUnit(uk)
+  selectedLessons.value = getLessonKeys(uk)
+}
+function toggleLesson(key) {
+  const idx = selectedLessons.value.indexOf(key)
+  if (idx >= 0) {
+    if (selectedLessons.value.length > 1) selectedLessons.value.splice(idx, 1)
+  } else {
+    selectedLessons.value.push(key)
+  }
+}
+function toggleAllLessons() {
+  const all = getLessonKeys(store.currentUnit)
+  selectedLessons.value = selectedLessons.value.length === all.length ? [all[0]] : [...all]
+}
+
 function buildRound(dataSource) {
-  const source = dataSource || pinyinData.filter(d => d.unit === store.currentUnit)
+  const lessons = selectedLessons.value
+  const source = dataSource || pinyinData.filter(d => lessons.includes(d.unit))
   const sampled = sampleWithout(source, 10)
 
   return sampled.map((item, i) => {
@@ -105,7 +145,7 @@ const currentQuestion = computed(() => questions.value[currentIndex.value] || nu
 async function startRound() {
   let cloudList = null
   try {
-    cloudList = await getQuestions('pinyin', store.currentUnit)
+    cloudList = await getQuestions('pinyin', selectedLessons.value)
   } catch (e) {
     cloudList = null
   }

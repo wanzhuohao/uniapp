@@ -7,14 +7,27 @@
       <!-- 单元选择 -->
       <text class="filter-title">选择单元</text>
       <view class="unit-tags">
-        <view v-for="u in 8" :key="u"
-          :class="['unit-tag', store.currentUnit === '2-' + u && 'active']"
-          @click="store.setUnit('2-' + u)"
-        >第{{ u }}单元</view>
+        <view v-for="uk in unitKeys" :key="uk"
+          :class="['unit-tag', store.currentUnit === uk && 'active']"
+          @click="switchUnit(uk)"
+        >{{ unitConfig[uk].label }}</view>
+      </view>
+
+      <!-- 课程选择（多选） -->
+      <text class="filter-title" style="margin-top: 24rpx;">选择课程</text>
+      <view class="unit-tags">
+        <view
+          :class="['unit-tag', selectedLessons.length === currentLessons.length && 'active']"
+          @click="toggleAllLessons"
+        >全选</view>
+        <view v-for="l in currentLessons" :key="l.key"
+          :class="['unit-tag', selectedLessons.includes(l.key) && 'active']"
+          @click="toggleLesson(l.key)"
+        >{{ l.label }}</view>
       </view>
 
       <!-- 题型选择 -->
-      <text class="filter-title" style="margin-top: 32rpx;">选择题型</text>
+      <text class="filter-title" style="margin-top: 24rpx;">选择题型</text>
       <view class="filter-tags">
         <view :class="['filter-tag', filterType === '' && 'active']" @click="filterType = ''">全部混合</view>
         <view :class="['filter-tag', filterType === 'stroke' && 'active']" @click="filterType = 'stroke'">笔顺</view>
@@ -50,6 +63,7 @@ import { getQuestions } from '../../utils/common/cloudDb.js'
 import { recordWrong } from '../../utils/study/wrongBook.js'
 import { recordPractice } from '../../utils/study/practiceLog.js'
 import { useAuth } from '../../composables/common/useAuth.js'
+import { UNIT_CONFIG, UNIT_KEYS, getLessonKeys } from '../../utils/study/unitConfig.js'
 import StarBar from '../../components/study/StarBar.vue'
 import HanziQuestion from '../../components/study/HanziQuestion.vue'
 import pinyinData from '../../static/data/pinyin.json'
@@ -58,6 +72,9 @@ import strokesData from '../../static/data/strokes.json'
 const store = useGameStore()
 const { getUsername } = useAuth()
 
+const unitConfig = UNIT_CONFIG
+const unitKeys = UNIT_KEYS
+
 const filterType = ref('')
 const started = ref(false)
 const currentIndex = ref(0)
@@ -65,6 +82,27 @@ const correctCount = ref(0)
 const recordedWrongIds = new Set()
 const roundFinished = ref(false)
 const isCloudData = ref(false)
+
+// 课程多选
+const selectedLessons = ref(getLessonKeys(store.currentUnit))
+const currentLessons = computed(() => UNIT_CONFIG[store.currentUnit]?.lessons || [])
+
+function switchUnit(uk) {
+  store.setUnit(uk)
+  selectedLessons.value = getLessonKeys(uk)
+}
+function toggleLesson(key) {
+  const idx = selectedLessons.value.indexOf(key)
+  if (idx >= 0) {
+    if (selectedLessons.value.length > 1) selectedLessons.value.splice(idx, 1)
+  } else {
+    selectedLessons.value.push(key)
+  }
+}
+function toggleAllLessons() {
+  const all = getLessonKeys(store.currentUnit)
+  selectedLessons.value = selectedLessons.value.length === all.length ? [all[0]] : [...all]
+}
 
 // 出题数据
 const questions = ref([])
@@ -97,9 +135,9 @@ function handleAnswer({ isCorrect }) {
 
 // 按课文顺序为每个字生成一道题
 function buildRound(charData, strokeData) {
-  const unit = store.currentUnit
-  const chars = charData.filter(d => d.unit === unit && d.radical && d.structure)
-  const strokes = strokeData.filter(d => d.unit === unit)
+  const lessons = selectedLessons.value
+  const chars = charData.filter(d => lessons.includes(d.unit) && d.radical && d.structure)
+  const strokes = strokeData.filter(d => lessons.includes(d.unit))
 
   // 收集所有部首（用于干扰项）
   ALL_RADICALS.value = [...new Set(charData.map(d => d.radical).filter(Boolean))]
@@ -163,15 +201,16 @@ function buildQuestion(c, qType) {
 
 async function startRound() {
   // 优先从云端拉取，带 _id 以便记录错题
-  let pinyinSource = pinyinData
-  let strokeSource = strokesData
+  const lessons = selectedLessons.value
+  let pinyinSource = pinyinData.filter(d => lessons.includes(d.unit))
+  let strokeSource = strokesData.filter(d => lessons.includes(d.unit))
   try {
-    const cloudPinyin = await getQuestions('pinyin', store.currentUnit)
+    const cloudPinyin = await getQuestions('pinyin', lessons)
     if (Array.isArray(cloudPinyin) && cloudPinyin.length > 0) {
       pinyinSource = cloudPinyin
       isCloudData.value = true
     }
-    const cloudStroke = await getQuestions('stroke', store.currentUnit)
+    const cloudStroke = await getQuestions('stroke', lessons)
     if (Array.isArray(cloudStroke) && cloudStroke.length > 0) {
       strokeSource = cloudStroke
       isCloudData.value = true

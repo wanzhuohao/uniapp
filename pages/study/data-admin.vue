@@ -16,10 +16,10 @@
     <scroll-view scroll-x class="unit-filter" :show-scrollbar="false">
       <view class="unit-filter-inner">
         <view :class="['unit-chip', unitFilter === '' && 'active']" @click="unitFilter = ''">全部</view>
-        <view v-for="u in 8" :key="u"
-          :class="['unit-chip', unitFilter === '2-' + u && 'active']"
-          @click="unitFilter = '2-' + u"
-        >第{{ u }}单元</view>
+        <view v-for="uk in UNIT_KEYS" :key="uk"
+          :class="['unit-chip', unitFilter === uk && 'active']"
+          @click="unitFilter = uk"
+        >{{ UNIT_CONFIG[uk].label }}</view>
       </view>
     </scroll-view>
 
@@ -52,12 +52,12 @@
           </view>
 
           <view class="field">
-            <text class="label">单元 *</text>
+            <text class="label">课程 *</text>
             <view class="unit-group">
-              <view v-for="u in 8" :key="u"
-                :class="['unit-tag', form.unit === '2-' + u && 'active']"
-                @click="form.unit = '2-' + u"
-              >第{{ u }}单元</view>
+              <view v-for="opt in allLessonOptions" :key="opt.key"
+                :class="['unit-tag', form.unit === opt.key && 'active']"
+                @click="form.unit = opt.key"
+              >{{ opt.label }}</view>
             </view>
           </view>
 
@@ -118,6 +118,14 @@ import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import TopBar from '../../components/common/TopBar.vue'
 import { toast } from '../../utils/common/toast.js'
+import { UNIT_CONFIG, UNIT_KEYS } from '../../utils/study/unitConfig.js'
+
+const allLessonOptions = []
+for (const uk of UNIT_KEYS) {
+  for (const l of UNIT_CONFIG[uk].lessons) {
+    allLessonOptions.push({ key: l.key, label: UNIT_CONFIG[uk].label + ' ' + l.label })
+  }
+}
 
 const db = uniCloud.database()
 
@@ -136,7 +144,7 @@ const charDistractorsStr = ref('')
 const filteredList = computed(() => {
   let result = list.value
   if (unitFilter.value) {
-    result = result.filter(i => i.unit === unitFilter.value)
+    result = result.filter(i => (i.unit || '').startsWith(unitFilter.value))
   }
   const q = search.value.trim()
   if (q) {
@@ -209,7 +217,7 @@ function startAdd() {
   form.value = {
     _ids: [],
     char: '',
-    unit: '2-1',
+    unit: '2-0-0',
     pinyin: '',
     radical: '',
     structure: '',

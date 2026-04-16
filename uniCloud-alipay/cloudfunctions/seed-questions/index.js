@@ -3,6 +3,1380 @@ const db = uniCloud.database()
 
 const questionsData = [
   {
+    "char": "思",
+    "pinyin": "sī",
+    "distractors": [
+      "shī",
+      "sí",
+      "sǐ"
+    ],
+    "char_distractors": [
+      "田",
+      "丝",
+      "想"
+    ],
+    "unit": "2-4-7",
+    "radical": "心",
+    "structure": "上下",
+    "strokeCount": 9,
+    "type": "pinyin"
+  },
+  {
+    "char": "床",
+    "pinyin": "chuáng",
+    "distractors": [
+      "chuán",
+      "chuāng",
+      "chuǎng"
+    ],
+    "char_distractors": [
+      "庄",
+      "窗",
+      "广"
+    ],
+    "unit": "2-4-7",
+    "radical": "广",
+    "structure": "半包围",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "前",
+    "pinyin": "qián",
+    "distractors": [
+      "qiáng",
+      "jián",
+      "qiān"
+    ],
+    "char_distractors": [
+      "月",
+      "钱",
+      "后"
+    ],
+    "unit": "2-4-7",
+    "radical": "刂",
+    "structure": "上下",
+    "strokeCount": 9,
+    "type": "pinyin"
+  },
+  {
+    "char": "地",
+    "pinyin": "dì",
+    "distractors": [
+      "tì",
+      "dī",
+      "dí"
+    ],
+    "char_distractors": [
+      "也",
+      "的",
+      "场"
+    ],
+    "unit": "2-4-7",
+    "radical": "土",
+    "structure": "左右",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "故",
+    "pinyin": "gù",
+    "distractors": [
+      "kù",
+      "gū",
+      "gú"
+    ],
+    "char_distractors": [
+      "古",
+      "顾",
+      "做"
+    ],
+    "unit": "2-4-7",
+    "radical": "攵",
+    "structure": "左右",
+    "strokeCount": 9,
+    "type": "pinyin"
+  },
+  {
+    "char": "乡",
+    "pinyin": "xiāng",
+    "distractors": [
+      "xiān",
+      "xiáng",
+      "xiǎng"
+    ],
+    "char_distractors": [
+      "香",
+      "想",
+      "多"
+    ],
+    "unit": "2-4-7",
+    "radical": "乙",
+    "structure": "独体",
+    "strokeCount": 3,
+    "type": "pinyin"
+  },
+  {
+    "char": "色",
+    "pinyin": "sè",
+    "distractors": [
+      "shè",
+      "sē",
+      "sé"
+    ],
+    "char_distractors": [
+      "巴",
+      "瑟",
+      "红"
+    ],
+    "unit": "2-4-8",
+    "radical": "色",
+    "structure": "上下",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "把",
+    "pinyin": "bǎ",
+    "distractors": [
+      "pǎ",
+      "bā",
+      "bá"
+    ],
+    "char_distractors": [
+      "巴",
+      "爸",
+      "打"
+    ],
+    "unit": "2-4-8",
+    "radical": "扌",
+    "structure": "左右",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "讲",
+    "pinyin": "jiǎng",
+    "distractors": [
+      "jiǎn",
+      "qiǎng",
+      "jiāng"
+    ],
+    "char_distractors": [
+      "井",
+      "奖",
+      "说"
+    ],
+    "unit": "2-4-8",
+    "radical": "讠",
+    "structure": "左右",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "样",
+    "pinyin": "yàng",
+    "radical": "木",
+    "structure": "左右",
+    "strokeCount": 10,
+    "distractors": [
+      "yàn",
+      "yāng",
+      "yáng"
+    ],
+    "char_distractors": [
+      "杨",
+      "养",
+      "林"
+    ],
+    "unit": "2-4-8",
+    "type": "pinyin"
+  },
+  {
+    "char": "笑",
+    "pinyin": "xiào",
+    "radical": "竹",
+    "structure": "上下",
+    "strokeCount": 10,
+    "distractors": [
+      "xiāo",
+      "xiáo",
+      "xiǎo"
+    ],
+    "char_distractors": [
+      "竹",
+      "小",
+      "哭"
+    ],
+    "unit": "2-4-8",
+    "type": "pinyin"
+  },
+  {
+    "char": "再",
+    "pinyin": "zài",
+    "radical": "冂",
+    "structure": "上下",
+    "strokeCount": 6,
+    "distractors": [
+      "zhài",
+      "zāi",
+      "zái"
+    ],
+    "char_distractors": [
+      "在",
+      "才",
+      "又"
+    ],
+    "unit": "2-4-8",
+    "type": "pinyin"
+  },
+  {
+    "char": "节",
+    "pinyin": "jié",
+    "distractors": [
+      "qié",
+      "jiē",
+      "jiě"
+    ],
+    "char_distractors": [
+      "草",
+      "结",
+      "花"
+    ],
+    "unit": "2-4-9",
+    "radical": "艹",
+    "structure": "上下",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "米",
+    "pinyin": "mǐ",
+    "radical": "米",
+    "structure": "独体",
+    "strokeCount": 6,
+    "distractors": [
+      "mī",
+      "mí",
+      "mì"
+    ],
+    "char_distractors": [
+      "木",
+      "迷",
+      "禾"
+    ],
+    "unit": "2-4-9",
+    "type": "pinyin"
+  },
+  {
+    "char": "间",
+    "pinyin": "jiān",
+    "radical": "门",
+    "structure": "半包围",
+    "strokeCount": 7,
+    "distractors": [
+      "jiāng",
+      "qiān",
+      "jián"
+    ],
+    "char_distractors": [
+      "门",
+      "件",
+      "问"
+    ],
+    "unit": "2-4-9",
+    "type": "pinyin"
+  },
+  {
+    "char": "分",
+    "pinyin": "fēn",
+    "radical": "刀",
+    "structure": "上下",
+    "strokeCount": 4,
+    "distractors": [
+      "fēng",
+      "hēn",
+      "fén"
+    ],
+    "char_distractors": [
+      "八",
+      "份",
+      "半"
+    ],
+    "unit": "2-4-9",
+    "type": "pinyin"
+  },
+  {
+    "char": "吃",
+    "pinyin": "chī",
+    "distractors": [
+      "cī",
+      "chí",
+      "chǐ"
+    ],
+    "char_distractors": [
+      "叫",
+      "池",
+      "喝"
+    ],
+    "unit": "2-4-9",
+    "radical": "口",
+    "structure": "左右",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "肉",
+    "pinyin": "ròu",
+    "radical": "肉",
+    "structure": "独体",
+    "strokeCount": 6,
+    "distractors": [
+      "lòu",
+      "rōu",
+      "róu"
+    ],
+    "char_distractors": [
+      "内",
+      "柔",
+      "月"
+    ],
+    "unit": "2-4-9",
+    "type": "pinyin"
+  },
+  {
+    "char": "册",
+    "pinyin": "cè",
+    "distractors": [
+      "chè",
+      "cì",
+      "zè"
+    ],
+    "unit": "2-4-0",
+    "type": "pinyin"
+  },
+  {
+    "char": "支",
+    "pinyin": "zhī",
+    "distractors": [
+      "zhì",
+      "zī",
+      "chī"
+    ],
+    "unit": "2-4-0",
+    "type": "pinyin"
+  },
+  {
+    "char": "电",
+    "pinyin": "diàn",
+    "distractors": [
+      "tiān",
+      "diǎn",
+      "dàn"
+    ],
+    "unit": "2-4-0",
+    "type": "pinyin"
+  },
+  {
+    "char": "衣",
+    "pinyin": "yī",
+    "distractors": [
+      "yì",
+      "yǐ",
+      "yē"
+    ],
+    "unit": "2-4-0",
+    "type": "pinyin"
+  },
+  {
+    "char": "物",
+    "pinyin": "wù",
+    "distractors": [
+      "wū",
+      "wú",
+      "wǔ"
+    ],
+    "char_distractors": [
+      "牛",
+      "勿",
+      "初"
+    ],
+    "unit": "2-5-5",
+    "radical": "牜",
+    "structure": "左右",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "造",
+    "pinyin": "zào",
+    "distractors": [
+      "cào",
+      "zǎo",
+      "zāo"
+    ],
+    "char_distractors": [
+      "告",
+      "遭",
+      "道"
+    ],
+    "unit": "2-5-5",
+    "radical": "辶",
+    "structure": "半包围",
+    "strokeCount": 10,
+    "type": "pinyin"
+  },
+  {
+    "char": "运",
+    "pinyin": "yùn",
+    "distractors": [
+      "yún",
+      "yūn",
+      "yǔn"
+    ],
+    "char_distractors": [
+      "云",
+      "远",
+      "连"
+    ],
+    "unit": "2-5-5",
+    "radical": "辶",
+    "structure": "半包围",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "欢",
+    "pinyin": "huān",
+    "distractors": [
+      "huán",
+      "huǎn",
+      "huàn"
+    ],
+    "char_distractors": [
+      "次",
+      "吹",
+      "观"
+    ],
+    "unit": "2-5-5",
+    "radical": "又",
+    "structure": "左右",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "房",
+    "pinyin": "fáng",
+    "distractors": [
+      "fāng",
+      "fǎng",
+      "fàng"
+    ],
+    "char_distractors": [
+      "方",
+      "放",
+      "防"
+    ],
+    "unit": "2-5-5",
+    "radical": "户",
+    "structure": "半包围",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "网",
+    "pinyin": "wǎng",
+    "distractors": [
+      "wáng",
+      "wāng",
+      "wàng"
+    ],
+    "char_distractors": [
+      "同",
+      "冈",
+      "往"
+    ],
+    "unit": "2-5-5",
+    "radical": "冂",
+    "structure": "半包围",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "对",
+    "pinyin": "duì",
+    "distractors": [
+      "duī",
+      "duí",
+      "duǐ"
+    ],
+    "char_distractors": [
+      "又",
+      "寸",
+      "村"
+    ],
+    "unit": "2-5-6",
+    "radical": "寸",
+    "structure": "左右",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "今",
+    "pinyin": "jīn",
+    "distractors": [
+      "jǐn",
+      "jìn",
+      "jín"
+    ],
+    "char_distractors": [
+      "令",
+      "金",
+      "全"
+    ],
+    "unit": "2-5-6",
+    "radical": "人",
+    "structure": "上下",
+    "strokeCount": 4,
+    "type": "pinyin"
+  },
+  {
+    "char": "雪",
+    "pinyin": "xuě",
+    "distractors": [
+      "xuē",
+      "xué",
+      "xuè"
+    ],
+    "char_distractors": [
+      "雨",
+      "学",
+      "霜"
+    ],
+    "unit": "2-5-6",
+    "radical": "雨",
+    "structure": "上下",
+    "strokeCount": 11,
+    "type": "pinyin"
+  },
+  {
+    "char": "细",
+    "pinyin": "xì",
+    "distractors": [
+      "xī",
+      "xí",
+      "xǐ"
+    ],
+    "char_distractors": [
+      "组",
+      "红",
+      "纸"
+    ],
+    "unit": "2-5-6",
+    "radical": "纟",
+    "structure": "左右",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "夕",
+    "pinyin": "xī",
+    "distractors": [
+      "xí",
+      "xǐ",
+      "xì"
+    ],
+    "char_distractors": [
+      "多",
+      "外",
+      "名"
+    ],
+    "unit": "2-5-6",
+    "radical": "夕",
+    "structure": "独体",
+    "strokeCount": 3,
+    "type": "pinyin"
+  },
+  {
+    "char": "语",
+    "pinyin": "yǔ",
+    "distractors": [
+      "yū",
+      "yú",
+      "yù"
+    ],
+    "char_distractors": [
+      "话",
+      "说",
+      "许"
+    ],
+    "unit": "2-5-6",
+    "radical": "讠",
+    "structure": "左右",
+    "strokeCount": 9,
+    "type": "pinyin"
+  },
+  {
+    "char": "打",
+    "pinyin": "dǎ",
+    "distractors": [
+      "dā",
+      "dá",
+      "dà"
+    ],
+    "char_distractors": [
+      "丁",
+      "订",
+      "拍"
+    ],
+    "unit": "2-5-7",
+    "radical": "扌",
+    "structure": "左右",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "皮",
+    "pinyin": "pí",
+    "distractors": [
+      "pī",
+      "pǐ",
+      "pì"
+    ],
+    "char_distractors": [
+      "波",
+      "披",
+      "被"
+    ],
+    "unit": "2-5-7",
+    "radical": "皮",
+    "structure": "独体",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "跑",
+    "pinyin": "pǎo",
+    "distractors": [
+      "bǎo",
+      "pāo",
+      "páo"
+    ],
+    "char_distractors": [
+      "炮",
+      "刨",
+      "走"
+    ],
+    "unit": "2-5-7",
+    "radical": "足",
+    "structure": "左右",
+    "strokeCount": 12,
+    "type": "pinyin"
+  },
+  {
+    "char": "足",
+    "pinyin": "zú",
+    "distractors": [
+      "zū",
+      "zǔ",
+      "zù"
+    ],
+    "char_distractors": [
+      "走",
+      "是",
+      "正"
+    ],
+    "unit": "2-5-7",
+    "radical": "足",
+    "structure": "独体",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "沙",
+    "pinyin": "shā",
+    "distractors": [
+      "shá",
+      "shǎ",
+      "shà"
+    ],
+    "char_distractors": [
+      "少",
+      "砂",
+      "纱"
+    ],
+    "unit": "2-5-7",
+    "radical": "氵",
+    "structure": "左右",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "包",
+    "pinyin": "bāo",
+    "distractors": [
+      "báo",
+      "bǎo",
+      "bào"
+    ],
+    "char_distractors": [
+      "饱",
+      "抱",
+      "跑"
+    ],
+    "unit": "2-5-7",
+    "radical": "勹",
+    "structure": "半包围",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "近",
+    "pinyin": "jìn",
+    "distractors": [
+      "jìng",
+      "qìn",
+      "jīn"
+    ],
+    "char_distractors": [
+      "远",
+      "进",
+      "斤"
+    ],
+    "unit": "2-5-8",
+    "radical": "辶",
+    "structure": "半包围",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "习",
+    "pinyin": "xí",
+    "distractors": [
+      "xī",
+      "xǐ",
+      "xì"
+    ],
+    "char_distractors": [
+      "羽",
+      "飞",
+      "刁"
+    ],
+    "unit": "2-5-8",
+    "radical": "乙",
+    "structure": "独体",
+    "strokeCount": 3,
+    "type": "pinyin"
+  },
+  {
+    "char": "远",
+    "pinyin": "yuǎn",
+    "distractors": [
+      "yuān",
+      "yuán",
+      "yuàn"
+    ],
+    "char_distractors": [
+      "还",
+      "圆",
+      "近"
+    ],
+    "unit": "2-5-8",
+    "radical": "辶",
+    "structure": "半包围",
+    "strokeCount": 7,
+    "type": "pinyin"
+  },
+  {
+    "char": "学",
+    "pinyin": "xué",
+    "distractors": [
+      "xuē",
+      "xuě",
+      "xuè"
+    ],
+    "char_distractors": [
+      "字",
+      "写",
+      "觉"
+    ],
+    "unit": "2-5-8",
+    "radical": "子",
+    "structure": "上下",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "玉",
+    "pinyin": "yù",
+    "distractors": [
+      "yū",
+      "yú",
+      "yǔ"
+    ],
+    "char_distractors": [
+      "王",
+      "主",
+      "宝"
+    ],
+    "unit": "2-5-8",
+    "radical": "玉",
+    "structure": "独体",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "义",
+    "pinyin": "yì",
+    "radical": "丶",
+    "structure": "独体",
+    "strokeCount": 3,
+    "distractors": [
+      "yī",
+      "yí",
+      "yǐ"
+    ],
+    "char_distractors": [
+      "又",
+      "议",
+      "文"
+    ],
+    "unit": "2-5-8",
+    "type": "pinyin"
+  },
+  {
+    "char": "饱",
+    "pinyin": "bǎo",
+    "distractors": [
+      "bāo",
+      "báo",
+      "bào"
+    ],
+    "char_distractors": [
+      "包",
+      "抱",
+      "跑"
+    ],
+    "unit": "2-5-0",
+    "radical": "饣",
+    "structure": "左右",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "抱",
+    "pinyin": "bào",
+    "distractors": [
+      "bāo",
+      "báo",
+      "bǎo"
+    ],
+    "char_distractors": [
+      "包",
+      "饱",
+      "跑"
+    ],
+    "unit": "2-5-0",
+    "radical": "扌",
+    "structure": "左右",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "首",
+    "pinyin": "shǒu",
+    "distractors": [
+      "shōu",
+      "shóu",
+      "shòu"
+    ],
+    "char_distractors": [
+      "手",
+      "道",
+      "自"
+    ],
+    "unit": "2-6-10",
+    "radical": "首",
+    "structure": "上下",
+    "strokeCount": 9,
+    "type": "pinyin"
+  },
+  {
+    "char": "池",
+    "pinyin": "chí",
+    "distractors": [
+      "chī",
+      "chǐ",
+      "chì"
+    ],
+    "char_distractors": [
+      "地",
+      "他",
+      "她"
+    ],
+    "unit": "2-6-10",
+    "radical": "氵",
+    "structure": "左右",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "采",
+    "pinyin": "cǎi",
+    "distractors": [
+      "cāi",
+      "cái",
+      "cài"
+    ],
+    "char_distractors": [
+      "彩",
+      "菜",
+      "踩"
+    ],
+    "unit": "2-6-10",
+    "radical": "采",
+    "structure": "上下",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "尖",
+    "pinyin": "jiān",
+    "distractors": [
+      "jiǎn",
+      "jiàn",
+      "jīn"
+    ],
+    "char_distractors": [
+      "小",
+      "大",
+      "尘"
+    ],
+    "unit": "2-6-10",
+    "radical": "小",
+    "structure": "上下",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "角",
+    "pinyin": "jiǎo",
+    "radical": "角",
+    "structure": "独体",
+    "strokeCount": 7,
+    "distractors": [
+      "qiǎo",
+      "jiāo",
+      "jiáo"
+    ],
+    "char_distractors": [
+      "用",
+      "脚",
+      "月"
+    ],
+    "unit": "2-6-10",
+    "type": "pinyin"
+  },
+  {
+    "char": "早",
+    "pinyin": "zǎo",
+    "distractors": [
+      "zāo",
+      "záo",
+      "zào"
+    ],
+    "char_distractors": [
+      "草",
+      "星",
+      "日"
+    ],
+    "unit": "2-6-10",
+    "radical": "日",
+    "structure": "上下",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "玩",
+    "pinyin": "wán",
+    "distractors": [
+      "wáng",
+      "wān",
+      "wǎn"
+    ],
+    "char_distractors": [
+      "完",
+      "晚",
+      "王"
+    ],
+    "unit": "2-6-11",
+    "radical": "王",
+    "structure": "左右",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "眼",
+    "pinyin": "yǎn",
+    "distractors": [
+      "yān",
+      "yán",
+      "yàn"
+    ],
+    "char_distractors": [
+      "目",
+      "看",
+      "睛"
+    ],
+    "unit": "2-6-11",
+    "radical": "目",
+    "structure": "左右",
+    "strokeCount": 11,
+    "type": "pinyin"
+  },
+  {
+    "char": "泪",
+    "pinyin": "lèi",
+    "distractors": [
+      "lēi",
+      "léi",
+      "lěi"
+    ],
+    "char_distractors": [
+      "目",
+      "泉",
+      "泥"
+    ],
+    "unit": "2-6-11",
+    "radical": "氵",
+    "structure": "左右",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "它",
+    "pinyin": "tā",
+    "distractors": [
+      "tà",
+      "tǎ",
+      "tá"
+    ],
+    "char_distractors": [
+      "他",
+      "她",
+      "宝"
+    ],
+    "unit": "2-6-11",
+    "radical": "宀",
+    "structure": "上下",
+    "strokeCount": 5,
+    "type": "pinyin"
+  },
+  {
+    "char": "贝",
+    "pinyin": "bèi",
+    "distractors": [
+      "bēi",
+      "béi",
+      "běi"
+    ],
+    "char_distractors": [
+      "见",
+      "页",
+      "目"
+    ],
+    "unit": "2-6-11",
+    "radical": "贝",
+    "structure": "独体",
+    "strokeCount": 4,
+    "type": "pinyin"
+  },
+  {
+    "char": "气",
+    "pinyin": "qì",
+    "distractors": [
+      "qī",
+      "qí",
+      "qǐ"
+    ],
+    "char_distractors": [
+      "汽",
+      "七",
+      "乞"
+    ],
+    "unit": "2-6-11",
+    "radical": "气",
+    "structure": "独体",
+    "strokeCount": 4,
+    "type": "pinyin"
+  },
+  {
+    "char": "机",
+    "pinyin": "jī",
+    "distractors": [
+      "qī",
+      "jí",
+      "jǐ"
+    ],
+    "char_distractors": [
+      "几",
+      "鸡",
+      "木"
+    ],
+    "unit": "2-6-12",
+    "radical": "木",
+    "structure": "左右",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "台",
+    "pinyin": "tái",
+    "radical": "口",
+    "structure": "上下",
+    "strokeCount": 5,
+    "distractors": [
+      "dái",
+      "tāi",
+      "tǎi"
+    ],
+    "char_distractors": [
+      "合",
+      "太",
+      "右"
+    ],
+    "unit": "2-6-12",
+    "type": "pinyin"
+  },
+  {
+    "char": "唱",
+    "pinyin": "chàng",
+    "radical": "口",
+    "structure": "左右",
+    "strokeCount": 11,
+    "distractors": [
+      "càng",
+      "chàn",
+      "chāng"
+    ],
+    "char_distractors": [
+      "昌",
+      "常",
+      "吹"
+    ],
+    "unit": "2-6-12",
+    "type": "pinyin"
+  },
+  {
+    "char": "伞",
+    "pinyin": "sǎn",
+    "radical": "人",
+    "structure": "上下",
+    "strokeCount": 6,
+    "distractors": [
+      "shǎn",
+      "sǎng",
+      "sān"
+    ],
+    "char_distractors": [
+      "全",
+      "散",
+      "合"
+    ],
+    "unit": "2-6-12",
+    "type": "pinyin"
+  },
+  {
+    "char": "朵",
+    "pinyin": "duǒ",
+    "radical": "木",
+    "structure": "上下",
+    "strokeCount": 6,
+    "distractors": [
+      "tuǒ",
+      "duō",
+      "duó"
+    ],
+    "char_distractors": [
+      "花",
+      "蹲",
+      "果"
+    ],
+    "unit": "2-6-12",
+    "type": "pinyin"
+  },
+  {
+    "char": "美",
+    "pinyin": "měi",
+    "radical": "八",
+    "structure": "上下",
+    "strokeCount": 9,
+    "distractors": [
+      "miě",
+      "mēi",
+      "méi"
+    ],
+    "char_distractors": [
+      "羊",
+      "每",
+      "丽"
+    ],
+    "unit": "2-6-12",
+    "type": "pinyin"
+  },
+  {
+    "char": "这",
+    "pinyin": "zhè",
+    "radical": "辶",
+    "structure": "半包围",
+    "strokeCount": 7,
+    "distractors": [
+      "zè",
+      "zhē",
+      "zhé"
+    ],
+    "char_distractors": [
+      "过",
+      "遮",
+      "还"
+    ],
+    "unit": "2-6-13",
+    "type": "pinyin"
+  },
+  {
+    "char": "看",
+    "pinyin": "kàn",
+    "radical": "目",
+    "structure": "上下",
+    "strokeCount": 9,
+    "distractors": [
+      "kàng",
+      "gàn",
+      "kān"
+    ],
+    "char_distractors": [
+      "着",
+      "刊",
+      "见"
+    ],
+    "unit": "2-6-13",
+    "type": "pinyin"
+  },
+  {
+    "char": "鱼",
+    "pinyin": "yú",
+    "distractors": [
+      "yū",
+      "yǔ",
+      "yù"
+    ],
+    "char_distractors": [
+      "角",
+      "余",
+      "鸟"
+    ],
+    "unit": "2-6-13",
+    "radical": "鱼",
+    "structure": "上下",
+    "strokeCount": 8,
+    "type": "pinyin"
+  },
+  {
+    "char": "面",
+    "pinyin": "miàn",
+    "radical": "面",
+    "structure": "独体",
+    "strokeCount": 9,
+    "distractors": [
+      "miān",
+      "mián",
+      "miǎn"
+    ],
+    "char_distractors": [
+      "目",
+      "棉",
+      "田"
+    ],
+    "unit": "2-6-13",
+    "type": "pinyin"
+  },
+  {
+    "char": "问",
+    "pinyin": "wèn",
+    "distractors": [
+      "wèng",
+      "wēn",
+      "wén"
+    ],
+    "char_distractors": [
+      "门",
+      "闻",
+      "间"
+    ],
+    "unit": "2-6-13",
+    "radical": "门",
+    "structure": "半包围",
+    "strokeCount": 6,
+    "type": "pinyin"
+  },
+  {
+    "char": "加",
+    "pinyin": "jiā",
+    "radical": "力",
+    "structure": "左右",
+    "strokeCount": 5,
+    "distractors": [
+      "qiā",
+      "jiá",
+      "jiǎ"
+    ],
+    "char_distractors": [
+      "力",
+      "家",
+      "功"
+    ],
+    "unit": "2-6-13",
+    "type": "pinyin"
+  },
+  {
+    "char": "豆",
+    "pinyin": "dòu",
+    "radical": "豆",
+    "structure": "独体",
+    "strokeCount": 7,
+    "distractors": [
+      "tòu",
+      "dōu",
+      "dóu"
+    ],
+    "char_distractors": [
+      "头",
+      "读",
+      "斗"
+    ],
+    "unit": "2-6-0",
+    "type": "pinyin"
+  },
+  {
+    "char": "斗",
+    "pinyin": "dǒu",
+    "radical": "斗",
+    "structure": "独体",
+    "strokeCount": 4,
+    "distractors": [
+      "tǒu",
+      "dōu",
+      "dóu"
+    ],
+    "char_distractors": [
+      "豆",
+      "头",
+      "升"
+    ],
+    "unit": "2-6-0",
+    "type": "pinyin"
+  },
+  {
     "char": "入",
     "pinyin": "rù",
     "distractors": [
@@ -15,7 +1389,7 @@ const questionsData = [
       "如",
       "八"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "入",
     "structure": "独体",
     "strokeCount": 2,
@@ -34,29 +1408,10 @@ const questionsData = [
       "华",
       "草"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "艹",
     "structure": "上下",
     "strokeCount": 7,
-    "type": "pinyin"
-  },
-  {
-    "char": "鱼",
-    "pinyin": "yú",
-    "distractors": [
-      "yū",
-      "yǔ",
-      "yù"
-    ],
-    "char_distractors": [
-      "角",
-      "余",
-      "鸟"
-    ],
-    "unit": "2-0",
-    "radical": "鱼",
-    "structure": "上下",
-    "strokeCount": 8,
     "type": "pinyin"
   },
   {
@@ -72,7 +1427,7 @@ const questionsData = [
       "输",
       "本"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "乙",
     "structure": "独体",
     "strokeCount": 4,
@@ -91,763 +1446,11 @@ const questionsData = [
       "闻",
       "字"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "文",
     "structure": "独体",
     "strokeCount": 4,
     "type": "pinyin"
-  },
-  {
-    "char": "思",
-    "pinyin": "sī",
-    "distractors": [
-      "shī",
-      "sí",
-      "sǐ"
-    ],
-    "char_distractors": [
-      "田",
-      "丝",
-      "想"
-    ],
-    "unit": "2-4",
-    "radical": "心",
-    "structure": "上下",
-    "strokeCount": 9,
-    "type": "pinyin"
-  },
-  {
-    "char": "思",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横",
-      "点",
-      "斜钩",
-      "点",
-      "点"
-    ],
-    "strokeCount": 9,
-    "radical": "田",
-    "structure": "上下",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "床",
-    "pinyin": "chuáng",
-    "distractors": [
-      "chuán",
-      "chuāng",
-      "chuǎng"
-    ],
-    "char_distractors": [
-      "庄",
-      "窗",
-      "广"
-    ],
-    "unit": "2-4",
-    "radical": "广",
-    "structure": "半包围",
-    "strokeCount": 7,
-    "type": "pinyin"
-  },
-  {
-    "char": "床",
-    "strokes": [
-      "点",
-      "横",
-      "撇",
-      "横",
-      "竖",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 7,
-    "radical": "广",
-    "structure": "半包围",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "前",
-    "pinyin": "qián",
-    "distractors": [
-      "qiáng",
-      "jián",
-      "qiān"
-    ],
-    "char_distractors": [
-      "月",
-      "钱",
-      "后"
-    ],
-    "unit": "2-4",
-    "radical": "刂",
-    "structure": "上下",
-    "strokeCount": 9,
-    "type": "pinyin"
-  },
-  {
-    "char": "前",
-    "strokes": [
-      "点",
-      "横",
-      "撇",
-      "竖",
-      "横折钩",
-      "横",
-      "横",
-      "竖",
-      "竖"
-    ],
-    "strokeCount": 9,
-    "unit": "2-4",
-    "radical": "刂",
-    "structure": "上下",
-    "type": "stroke"
-  },
-  {
-    "char": "地",
-    "pinyin": "dì",
-    "distractors": [
-      "tì",
-      "dī",
-      "dí"
-    ],
-    "char_distractors": [
-      "也",
-      "的",
-      "场"
-    ],
-    "unit": "2-4",
-    "radical": "土",
-    "structure": "左右",
-    "strokeCount": 6,
-    "type": "pinyin"
-  },
-  {
-    "char": "地",
-    "strokes": [
-      "横",
-      "竖",
-      "提",
-      "横折钩",
-      "竖",
-      "竖弯钩"
-    ],
-    "strokeCount": 6,
-    "radical": "土",
-    "structure": "左右",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "故",
-    "pinyin": "gù",
-    "distractors": [
-      "kù",
-      "gū",
-      "gú"
-    ],
-    "char_distractors": [
-      "古",
-      "顾",
-      "做"
-    ],
-    "unit": "2-4",
-    "radical": "攵",
-    "structure": "左右",
-    "strokeCount": 9,
-    "type": "pinyin"
-  },
-  {
-    "char": "故",
-    "strokes": [
-      "横",
-      "竖",
-      "竖",
-      "横折",
-      "横",
-      "撇",
-      "横",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 9,
-    "radical": "攵",
-    "structure": "左右",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "乡",
-    "pinyin": "xiāng",
-    "distractors": [
-      "xiān",
-      "xiáng",
-      "xiǎng"
-    ],
-    "char_distractors": [
-      "香",
-      "想",
-      "多"
-    ],
-    "unit": "2-4",
-    "radical": "乙",
-    "structure": "独体",
-    "strokeCount": 3,
-    "type": "pinyin"
-  },
-  {
-    "char": "乡",
-    "strokes": [
-      "撇折",
-      "撇折",
-      "撇"
-    ],
-    "strokeCount": 3,
-    "radical": "—",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "色",
-    "pinyin": "sè",
-    "distractors": [
-      "shè",
-      "sē",
-      "sé"
-    ],
-    "char_distractors": [
-      "巴",
-      "瑟",
-      "红"
-    ],
-    "unit": "2-4",
-    "radical": "色",
-    "structure": "上下",
-    "strokeCount": 6,
-    "type": "pinyin"
-  },
-  {
-    "char": "色",
-    "strokes": [
-      "撇",
-      "横折",
-      "横",
-      "竖弯钩",
-      "撇",
-      "竖弯钩"
-    ],
-    "strokeCount": 6,
-    "radical": "色",
-    "structure": "上下",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "把",
-    "pinyin": "bǎ",
-    "distractors": [
-      "pǎ",
-      "bā",
-      "bá"
-    ],
-    "char_distractors": [
-      "巴",
-      "爸",
-      "打"
-    ],
-    "unit": "2-4",
-    "radical": "扌",
-    "structure": "左右",
-    "strokeCount": 7,
-    "type": "pinyin"
-  },
-  {
-    "char": "把",
-    "strokes": [
-      "横",
-      "竖钩",
-      "提",
-      "横折",
-      "竖",
-      "横",
-      "竖弯钩"
-    ],
-    "strokeCount": 7,
-    "radical": "扌",
-    "structure": "左右",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "讲",
-    "pinyin": "jiǎng",
-    "distractors": [
-      "jiǎn",
-      "qiǎng",
-      "jiāng"
-    ],
-    "char_distractors": [
-      "井",
-      "奖",
-      "说"
-    ],
-    "unit": "2-4",
-    "radical": "讠",
-    "structure": "左右",
-    "strokeCount": 6,
-    "type": "pinyin"
-  },
-  {
-    "char": "讲",
-    "strokes": [
-      "点",
-      "横折提",
-      "横",
-      "竖",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 6,
-    "radical": "讠",
-    "structure": "左右",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "样",
-    "pinyin": "yàng",
-    "radical": "木",
-    "structure": "左右",
-    "strokeCount": 10,
-    "distractors": [
-      "yàn",
-      "yāng",
-      "yáng"
-    ],
-    "char_distractors": [
-      "杨",
-      "养",
-      "林"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "样",
-    "strokes": [
-      "横",
-      "竖",
-      "撇",
-      "点",
-      "点",
-      "撇",
-      "横",
-      "横",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 10,
-    "radical": "木",
-    "structure": "左右",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "笑",
-    "pinyin": "xiào",
-    "radical": "竹",
-    "structure": "上下",
-    "strokeCount": 10,
-    "distractors": [
-      "xiāo",
-      "xiáo",
-      "xiǎo"
-    ],
-    "char_distractors": [
-      "竹",
-      "小",
-      "哭"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "笑",
-    "strokes": [
-      "撇",
-      "横",
-      "点",
-      "撇",
-      "横",
-      "点",
-      "撇",
-      "横",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 10,
-    "radical": "竹",
-    "structure": "上下",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "再",
-    "pinyin": "zài",
-    "radical": "冂",
-    "structure": "上下",
-    "strokeCount": 6,
-    "distractors": [
-      "zhài",
-      "zāi",
-      "zái"
-    ],
-    "char_distractors": [
-      "在",
-      "才",
-      "又"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "再",
-    "strokes": [
-      "横",
-      "竖",
-      "横折钩",
-      "竖",
-      "横",
-      "横"
-    ],
-    "strokeCount": 6,
-    "radical": "一",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "节",
-    "pinyin": "jié",
-    "distractors": [
-      "qié",
-      "jiē",
-      "jiě"
-    ],
-    "char_distractors": [
-      "草",
-      "结",
-      "花"
-    ],
-    "unit": "2-4",
-    "radical": "艹",
-    "structure": "上下",
-    "strokeCount": 5,
-    "type": "pinyin"
-  },
-  {
-    "char": "节",
-    "strokes": [
-      "横",
-      "竖",
-      "竖",
-      "横折",
-      "竖"
-    ],
-    "strokeCount": 5,
-    "unit": "2-4",
-    "radical": "艹",
-    "structure": "上下",
-    "type": "stroke"
-  },
-  {
-    "char": "米",
-    "pinyin": "mǐ",
-    "radical": "米",
-    "structure": "独体",
-    "strokeCount": 6,
-    "distractors": [
-      "mī",
-      "mí",
-      "mì"
-    ],
-    "char_distractors": [
-      "木",
-      "迷",
-      "禾"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "米",
-    "strokes": [
-      "点",
-      "撇",
-      "横",
-      "竖",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 6,
-    "radical": "米",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "间",
-    "pinyin": "jiān",
-    "radical": "门",
-    "structure": "半包围",
-    "strokeCount": 7,
-    "distractors": [
-      "jiāng",
-      "qiān",
-      "jián"
-    ],
-    "char_distractors": [
-      "门",
-      "件",
-      "问"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "间",
-    "strokes": [
-      "点",
-      "竖",
-      "横折钩",
-      "竖",
-      "横折",
-      "横",
-      "横"
-    ],
-    "strokeCount": 7,
-    "radical": "门",
-    "structure": "半包围",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "分",
-    "pinyin": "fēn",
-    "radical": "刀",
-    "structure": "上下",
-    "strokeCount": 4,
-    "distractors": [
-      "fēng",
-      "hēn",
-      "fén"
-    ],
-    "char_distractors": [
-      "八",
-      "份",
-      "半"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "分",
-    "strokes": [
-      "撇",
-      "捺",
-      "撇",
-      "横折钩"
-    ],
-    "strokeCount": 4,
-    "radical": "八",
-    "structure": "上下",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "吃",
-    "pinyin": "chī",
-    "distractors": [
-      "cī",
-      "chí",
-      "chǐ"
-    ],
-    "char_distractors": [
-      "叫",
-      "池",
-      "喝"
-    ],
-    "unit": "2-4",
-    "radical": "口",
-    "structure": "左右",
-    "strokeCount": 6,
-    "type": "pinyin"
-  },
-  {
-    "char": "吃",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "撇",
-      "横折弯钩",
-      "点"
-    ],
-    "strokeCount": 6,
-    "unit": "2-4",
-    "radical": "口",
-    "structure": "左右",
-    "type": "stroke"
-  },
-  {
-    "char": "肉",
-    "pinyin": "ròu",
-    "radical": "肉",
-    "structure": "独体",
-    "strokeCount": 6,
-    "distractors": [
-      "lòu",
-      "rōu",
-      "róu"
-    ],
-    "char_distractors": [
-      "内",
-      "柔",
-      "月"
-    ],
-    "unit": "2-4",
-    "type": "pinyin"
-  },
-  {
-    "char": "肉",
-    "strokes": [
-      "竖",
-      "横折钩",
-      "撇",
-      "点",
-      "撇",
-      "点"
-    ],
-    "strokeCount": 6,
-    "radical": "肉",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "册",
-    "pinyin": "cè",
-    "distractors": [
-      "chè",
-      "cì",
-      "zè"
-    ],
-    "char_distractors": [
-      "删",
-      "山",
-      "柵"
-    ],
-    "unit": "2-4",
-    "radical": "丿",
-    "structure": "独体",
-    "strokeCount": 5,
-    "type": "pinyin"
-  },
-  {
-    "char": "册",
-    "strokeCount": 5,
-    "radical": "丿",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "支",
-    "pinyin": "zhī",
-    "distractors": [
-      "zhì",
-      "zī",
-      "chī"
-    ],
-    "char_distractors": [
-      "枝",
-      "只",
-      "之"
-    ],
-    "unit": "2-4",
-    "radical": "支",
-    "structure": "上下",
-    "strokeCount": 4,
-    "type": "pinyin"
-  },
-  {
-    "char": "支",
-    "strokeCount": 4,
-    "radical": "支",
-    "structure": "上下",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "电",
-    "pinyin": "diàn",
-    "distractors": [
-      "tiān",
-      "diǎn",
-      "dàn"
-    ],
-    "char_distractors": [
-      "田",
-      "典",
-      "店"
-    ],
-    "unit": "2-4",
-    "radical": "丨",
-    "structure": "独体",
-    "strokeCount": 5,
-    "type": "pinyin"
-  },
-  {
-    "char": "电",
-    "strokeCount": 5,
-    "radical": "丨",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
-  },
-  {
-    "char": "衣",
-    "pinyin": "yī",
-    "distractors": [
-      "yì",
-      "yǐ",
-      "yē"
-    ],
-    "char_distractors": [
-      "依",
-      "医",
-      "一"
-    ],
-    "unit": "2-4",
-    "radical": "衣",
-    "structure": "独体",
-    "strokeCount": 6,
-    "type": "pinyin"
-  },
-  {
-    "char": "衣",
-    "strokeCount": 6,
-    "radical": "衣",
-    "structure": "独体",
-    "unit": "2-4",
-    "type": "stroke"
   },
   {
     "char": "的",
@@ -862,7 +1465,7 @@ const questionsData = [
       "地",
       "目"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "白",
     "structure": "左右",
     "strokeCount": 8,
@@ -881,7 +1484,7 @@ const questionsData = [
       "出",
       "秋"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "日",
     "structure": "上下",
     "strokeCount": 9,
@@ -900,28 +1503,10 @@ const questionsData = [
       "东",
       "春"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "夂",
     "structure": "上下",
     "strokeCount": 5,
-    "type": "pinyin"
-  },
-  {
-    "char": "雪",
-    "pinyin": "xuě",
-    "distractors": [
-      "xuē",
-      "xué",
-      "xuè"
-    ],
-    "char_distractors": [
-      "雨",
-      "学",
-      "霜"
-    ],
-    "unit": "2-0",
-    "radical": "雨",
-    "structure": "上下",
     "type": "pinyin"
   },
   {
@@ -937,7 +1522,7 @@ const questionsData = [
       "非",
       "气"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "飞",
     "structure": "独体",
     "strokeCount": 3,
@@ -956,7 +1541,7 @@ const questionsData = [
       "教",
       "叶"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "口",
     "structure": "左右",
     "strokeCount": 5,
@@ -975,28 +1560,10 @@ const questionsData = [
       "奏",
       "跑"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "走",
     "structure": "上下",
     "strokeCount": 7,
-    "type": "pinyin"
-  },
-  {
-    "char": "跑",
-    "pinyin": "pǎo",
-    "distractors": [
-      "bǎo",
-      "pāo",
-      "páo"
-    ],
-    "char_distractors": [
-      "炮",
-      "刨",
-      "走"
-    ],
-    "unit": "2-0",
-    "radical": "足",
-    "structure": "左右",
     "type": "pinyin"
   },
   {
@@ -1012,9 +1579,10 @@ const questionsData = [
       "业",
       "她"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "乙",
     "structure": "独体",
+    "strokeCount": 3,
     "type": "pinyin"
   },
   {
@@ -1030,7 +1598,7 @@ const questionsData = [
       "它",
       "们"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "亻",
     "structure": "左右",
     "strokeCount": 5,
@@ -1049,7 +1617,7 @@ const questionsData = [
       "它",
       "妈"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "女",
     "structure": "左右",
     "strokeCount": 6,
@@ -1068,7 +1636,7 @@ const questionsData = [
       "硕",
       "请"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "讠",
     "structure": "左右",
     "strokeCount": 9,
@@ -1087,9 +1655,10 @@ const questionsData = [
       "画",
       "说"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "讠",
     "structure": "左右",
+    "strokeCount": 8,
     "type": "pinyin"
   },
   {
@@ -1105,9 +1674,10 @@ const questionsData = [
       "泥",
       "们"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "亻",
     "structure": "左右",
+    "strokeCount": 7,
     "type": "pinyin"
   },
   {
@@ -1123,7 +1693,7 @@ const questionsData = [
       "闷",
       "你"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "亻",
     "structure": "左右",
     "strokeCount": 5,
@@ -1142,7 +1712,7 @@ const questionsData = [
       "洪",
       "绿"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "纟",
     "structure": "左右",
     "strokeCount": 6,
@@ -1161,9 +1731,10 @@ const questionsData = [
       "律",
       "红"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "纟",
     "structure": "左右",
+    "strokeCount": 11,
     "type": "pinyin"
   },
   {
@@ -1179,46 +1750,10 @@ const questionsData = [
       "停",
       "说"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "口",
     "structure": "左右",
     "strokeCount": 7,
-    "type": "pinyin"
-  },
-  {
-    "char": "远",
-    "pinyin": "yuǎn",
-    "distractors": [
-      "yuān",
-      "yuán",
-      "yuàn"
-    ],
-    "char_distractors": [
-      "还",
-      "圆",
-      "近"
-    ],
-    "unit": "2-0",
-    "radical": "辶",
-    "structure": "半包围",
-    "type": "pinyin"
-  },
-  {
-    "char": "近",
-    "pinyin": "jìn",
-    "distractors": [
-      "jìng",
-      "qìn",
-      "jīn"
-    ],
-    "char_distractors": [
-      "远",
-      "进",
-      "斤"
-    ],
-    "unit": "2-0",
-    "radical": "辶",
-    "structure": "半包围",
     "type": "pinyin"
   },
   {
@@ -1234,7 +1769,7 @@ const questionsData = [
       "孩",
       "远"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "辶",
     "structure": "半包围",
     "strokeCount": 7,
@@ -1253,9 +1788,10 @@ const questionsData = [
       "赖",
       "去"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "木",
     "structure": "独体",
+    "strokeCount": 7,
     "type": "pinyin"
   },
   {
@@ -1271,9 +1807,10 @@ const questionsData = [
       "趣",
       "来"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "厶",
     "structure": "上下",
+    "strokeCount": 5,
     "type": "pinyin"
   },
   {
@@ -1289,9 +1826,10 @@ const questionsData = [
       "朵",
       "少"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "夕",
     "structure": "上下",
+    "strokeCount": 6,
     "type": "pinyin"
   },
   {
@@ -1307,9 +1845,10 @@ const questionsData = [
       "怕",
       "妈"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "父",
     "structure": "上下",
+    "strokeCount": 8,
     "type": "pinyin"
   },
   {
@@ -1325,9 +1864,10 @@ const questionsData = [
       "麻",
       "爸"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "女",
     "structure": "左右",
+    "strokeCount": 6,
     "type": "pinyin"
   },
   {
@@ -1343,9 +1883,10 @@ const questionsData = [
       "权",
       "会"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "入",
     "structure": "上下",
+    "strokeCount": 6,
     "type": "pinyin"
   },
   {
@@ -1361,7 +1902,7 @@ const questionsData = [
       "灰",
       "国"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "囗",
     "structure": "全包围",
     "strokeCount": 6,
@@ -1380,7 +1921,7 @@ const questionsData = [
       "汇",
       "回"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "人",
     "structure": "上下",
     "strokeCount": 6,
@@ -1399,28 +1940,10 @@ const questionsData = [
       "攻",
       "王"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "工",
     "structure": "独体",
-    "type": "pinyin"
-  },
-  {
-    "char": "机",
-    "pinyin": "jī",
-    "distractors": [
-      "qī",
-      "jí",
-      "jǐ"
-    ],
-    "char_distractors": [
-      "几",
-      "鸡",
-      "木"
-    ],
-    "unit": "2-0",
-    "radical": "木",
-    "structure": "左右",
-    "strokeCount": 6,
+    "strokeCount": 3,
     "type": "pinyin"
   },
   {
@@ -1436,9 +1959,10 @@ const questionsData = [
       "己",
       "九"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "几",
     "structure": "独体",
+    "strokeCount": 2,
     "type": "pinyin"
   },
   {
@@ -1454,28 +1978,10 @@ const questionsData = [
       "拥",
       "田"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "用",
     "structure": "独体",
-    "type": "pinyin"
-  },
-  {
-    "char": "问",
-    "pinyin": "wèn",
-    "distractors": [
-      "wèng",
-      "wēn",
-      "wén"
-    ],
-    "char_distractors": [
-      "门",
-      "闻",
-      "间"
-    ],
-    "unit": "2-0",
-    "radical": "门",
-    "structure": "半包围",
-    "strokeCount": 6,
+    "strokeCount": 5,
     "type": "pinyin"
   },
   {
@@ -1491,9 +1997,10 @@ const questionsData = [
       "又",
       "右"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "月",
     "structure": "上下",
+    "strokeCount": 6,
     "type": "pinyin"
   },
   {
@@ -1509,9 +2016,10 @@ const questionsData = [
       "伴",
       "午"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "十",
     "structure": "独体",
+    "strokeCount": 5,
     "type": "pinyin"
   },
   {
@@ -1527,7 +2035,7 @@ const questionsData = [
       "丛",
       "众"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "人",
     "structure": "左右",
     "strokeCount": 4,
@@ -1546,7 +2054,7 @@ const questionsData = [
       "猪",
       "王"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "丶",
     "structure": "独体",
     "strokeCount": 5,
@@ -1565,7 +2073,7 @@ const questionsData = [
       "注",
       "往"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "亻",
     "structure": "左右",
     "strokeCount": 7,
@@ -1584,7 +2092,7 @@ const questionsData = [
       "姜",
       "湖"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "氵",
     "structure": "左右",
     "strokeCount": 6,
@@ -1603,7 +2111,7 @@ const questionsData = [
       "贺",
       "江"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "氵",
     "structure": "左右",
     "strokeCount": 8,
@@ -1622,7 +2130,7 @@ const questionsData = [
       "清",
       "青"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "讠",
     "structure": "左右",
     "strokeCount": 10,
@@ -1641,7 +2149,7 @@ const questionsData = [
       "晴",
       "清"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "忄",
     "structure": "左右",
     "strokeCount": 11,
@@ -1660,7 +2168,7 @@ const questionsData = [
       "声",
       "主"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "生",
     "structure": "独体",
     "strokeCount": 5,
@@ -1679,9 +2187,10 @@ const questionsData = [
       "力",
       "田"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "里",
     "structure": "上下",
+    "strokeCount": 7,
     "type": "pinyin"
   },
   {
@@ -1697,27 +2206,10 @@ const questionsData = [
       "过",
       "木"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "木",
     "structure": "上下",
-    "type": "pinyin"
-  },
-  {
-    "char": "玩",
-    "pinyin": "wán",
-    "distractors": [
-      "wáng",
-      "wān",
-      "wǎn"
-    ],
-    "char_distractors": [
-      "完",
-      "晚",
-      "王"
-    ],
-    "unit": "2-0",
-    "radical": "王",
-    "structure": "左右",
+    "strokeCount": 8,
     "type": "pinyin"
   },
   {
@@ -1733,9 +2225,10 @@ const questionsData = [
       "跟",
       "根"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "彳",
     "structure": "左右",
+    "strokeCount": 9,
     "type": "pinyin"
   },
   {
@@ -1751,7 +2244,7 @@ const questionsData = [
       "挡",
       "常"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "彐",
     "structure": "上下",
     "strokeCount": 6,
@@ -1770,9 +2263,10 @@ const questionsData = [
       "因",
       "暗"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "音",
     "structure": "上下",
+    "strokeCount": 9,
     "type": "pinyin"
   },
   {
@@ -1788,9 +2282,10 @@ const questionsData = [
       "续",
       "计"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "讠",
     "structure": "左右",
+    "strokeCount": 6,
     "type": "pinyin"
   },
   {
@@ -1806,7 +2301,7 @@ const questionsData = [
       "广",
       "火"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "儿",
     "structure": "上下",
     "strokeCount": 6,
@@ -1825,9 +2320,10 @@ const questionsData = [
       "的",
       "你"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "亻",
     "structure": "左右",
+    "strokeCount": 7,
     "type": "pinyin"
   },
   {
@@ -1843,9 +2339,10 @@ const questionsData = [
       "五",
       "半"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "十",
     "structure": "独体",
+    "strokeCount": 4,
     "type": "pinyin"
   },
   {
@@ -1861,9 +2358,10 @@ const questionsData = [
       "也",
       "草"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "口",
     "structure": "左右",
+    "strokeCount": 5,
     "type": "pinyin"
   },
   {
@@ -1879,7 +2377,7 @@ const questionsData = [
       "筷",
       "乐"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "忄",
     "structure": "左右",
     "strokeCount": 7,
@@ -1898,7 +2396,7 @@ const questionsData = [
       "勒",
       "快"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "丿",
     "structure": "独体",
     "strokeCount": 5,
@@ -1920,7 +2418,7 @@ const questionsData = [
       "炒",
       "叫"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -1939,7 +2437,7 @@ const questionsData = [
       "星",
       "好"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -1958,7 +2456,7 @@ const questionsData = [
       "神",
       "仁"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -1977,7 +2475,7 @@ const questionsData = [
       "末",
       "多"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -1996,7 +2494,7 @@ const questionsData = [
       "苦",
       "十"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2015,7 +2513,7 @@ const questionsData = [
       "糊",
       "月"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2034,7 +2532,7 @@ const questionsData = [
       "爽",
       "又"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2053,7 +2551,7 @@ const questionsData = [
       "眼",
       "语"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2072,7 +2570,7 @@ const questionsData = [
       "晴",
       "情"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2091,7 +2589,7 @@ const questionsData = [
       "请",
       "晴"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2110,7 +2608,7 @@ const questionsData = [
       "情",
       "清"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2129,7 +2627,7 @@ const questionsData = [
       "自",
       "学"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2148,7 +2646,7 @@ const questionsData = [
       "冬",
       "力"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2167,7 +2665,7 @@ const questionsData = [
       "晚",
       "千"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2186,7 +2684,7 @@ const questionsData = [
       "午",
       "元"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2205,7 +2703,7 @@ const questionsData = [
       "名",
       "阳"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2224,7 +2722,7 @@ const questionsData = [
       "咖",
       "半"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2243,7 +2741,7 @@ const questionsData = [
       "偏",
       "斤"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2262,7 +2760,7 @@ const questionsData = [
       "河",
       "全"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2281,7 +2779,7 @@ const questionsData = [
       "拱",
       "公"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2300,7 +2798,7 @@ const questionsData = [
       "铲",
       "生"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2319,7 +2817,7 @@ const questionsData = [
       "台",
       "天"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2338,7 +2836,7 @@ const questionsData = [
       "羊",
       "阵"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2357,7 +2855,7 @@ const questionsData = [
       "景",
       "升"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2376,7 +2874,7 @@ const questionsData = [
       "房",
       "放"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2395,7 +2893,7 @@ const questionsData = [
       "候",
       "前"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2414,7 +2912,7 @@ const questionsData = [
       "告",
       "京"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2433,7 +2931,7 @@ const questionsData = [
       "背",
       "此"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2452,7 +2950,7 @@ const questionsData = [
       "经",
       "亮"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2471,7 +2969,7 @@ const questionsData = [
       "逛",
       "庄"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2490,7 +2988,7 @@ const questionsData = [
       "泻",
       "字"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2509,7 +3007,7 @@ const questionsData = [
       "人",
       "讲"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2528,7 +3026,7 @@ const questionsData = [
       "壤",
       "讲"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2547,7 +3045,7 @@ const questionsData = [
       "字",
       "目"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2566,7 +3064,7 @@ const questionsData = [
       "以",
       "巳"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2585,7 +3083,7 @@ const questionsData = [
       "号",
       "她"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2604,7 +3102,7 @@ const questionsData = [
       "化",
       "话"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2623,216 +3121,7 @@ const questionsData = [
       "猫",
       "尾"
     ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "台",
-    "pinyin": "tái",
-    "radical": "口",
-    "structure": "上下",
-    "strokeCount": 5,
-    "distractors": [
-      "dái",
-      "tāi",
-      "tǎi"
-    ],
-    "char_distractors": [
-      "合",
-      "太",
-      "右"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "唱",
-    "pinyin": "chàng",
-    "radical": "口",
-    "structure": "左右",
-    "strokeCount": 11,
-    "distractors": [
-      "càng",
-      "chàn",
-      "chāng"
-    ],
-    "char_distractors": [
-      "昌",
-      "常",
-      "吹"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "伞",
-    "pinyin": "sǎn",
-    "radical": "人",
-    "structure": "上下",
-    "strokeCount": 6,
-    "distractors": [
-      "shǎn",
-      "sǎng",
-      "sān"
-    ],
-    "char_distractors": [
-      "全",
-      "散",
-      "合"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "朵",
-    "pinyin": "duǒ",
-    "radical": "木",
-    "structure": "上下",
-    "strokeCount": 6,
-    "distractors": [
-      "tuǒ",
-      "duō",
-      "duó"
-    ],
-    "char_distractors": [
-      "花",
-      "蹲",
-      "果"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "美",
-    "pinyin": "měi",
-    "radical": "八",
-    "structure": "上下",
-    "strokeCount": 9,
-    "distractors": [
-      "miě",
-      "mēi",
-      "méi"
-    ],
-    "char_distractors": [
-      "羊",
-      "每",
-      "丽"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "这",
-    "pinyin": "zhè",
-    "radical": "辶",
-    "structure": "半包围",
-    "strokeCount": 7,
-    "distractors": [
-      "zè",
-      "zhē",
-      "zhé"
-    ],
-    "char_distractors": [
-      "过",
-      "遮",
-      "还"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "看",
-    "pinyin": "kàn",
-    "radical": "目",
-    "structure": "上下",
-    "strokeCount": 9,
-    "distractors": [
-      "kàng",
-      "gàn",
-      "kān"
-    ],
-    "char_distractors": [
-      "着",
-      "刊",
-      "见"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "面",
-    "pinyin": "miàn",
-    "radical": "面",
-    "structure": "独体",
-    "strokeCount": 9,
-    "distractors": [
-      "miān",
-      "mián",
-      "miǎn"
-    ],
-    "char_distractors": [
-      "目",
-      "棉",
-      "田"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "加",
-    "pinyin": "jiā",
-    "radical": "力",
-    "structure": "左右",
-    "strokeCount": 5,
-    "distractors": [
-      "qiā",
-      "jiá",
-      "jiǎ"
-    ],
-    "char_distractors": [
-      "力",
-      "家",
-      "功"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "豆",
-    "pinyin": "dòu",
-    "radical": "豆",
-    "structure": "独体",
-    "strokeCount": 7,
-    "distractors": [
-      "tòu",
-      "dōu",
-      "dóu"
-    ],
-    "char_distractors": [
-      "头",
-      "读",
-      "斗"
-    ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "斗",
-    "pinyin": "dǒu",
-    "radical": "斗",
-    "structure": "独体",
-    "strokeCount": 4,
-    "distractors": [
-      "tǒu",
-      "dōu",
-      "dóu"
-    ],
-    "char_distractors": [
-      "豆",
-      "头",
-      "升"
-    ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2851,7 +3140,7 @@ const questionsData = [
       "只",
       "步"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2870,7 +3159,7 @@ const questionsData = [
       "巾",
       "片"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2889,7 +3178,7 @@ const questionsData = [
       "村",
       "对"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2908,7 +3197,7 @@ const questionsData = [
       "迁",
       "万"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2927,7 +3216,7 @@ const questionsData = [
       "圆",
       "云"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2946,7 +3235,7 @@ const questionsData = [
       "棵",
       "说"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2965,7 +3254,7 @@ const questionsData = [
       "做",
       "左"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -2984,7 +3273,7 @@ const questionsData = [
       "姥",
       "师"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3003,7 +3292,7 @@ const questionsData = [
       "诗",
       "老"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3022,7 +3311,7 @@ const questionsData = [
       "过",
       "园"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3041,7 +3330,7 @@ const questionsData = [
       "读",
       "郑"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3060,7 +3349,7 @@ const questionsData = [
       "柏",
       "自"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3079,7 +3368,7 @@ const questionsData = [
       "十",
       "明"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3098,7 +3387,7 @@ const questionsData = [
       "电",
       "黑"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3117,7 +3406,7 @@ const questionsData = [
       "邻",
       "森"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3136,7 +3425,7 @@ const questionsData = [
       "星",
       "半"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3155,7 +3444,7 @@ const questionsData = [
       "忘",
       "注"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3174,7 +3463,7 @@ const questionsData = [
       "挂",
       "果"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3193,7 +3482,7 @@ const questionsData = [
       "吐",
       "象"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3212,7 +3501,7 @@ const questionsData = [
       "金",
       "还"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3231,7 +3520,7 @@ const questionsData = [
       "等",
       "火"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3250,7 +3539,7 @@ const questionsData = [
       "扯",
       "辆"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3269,7 +3558,7 @@ const questionsData = [
       "战",
       "竞"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3288,7 +3577,7 @@ const questionsData = [
       "孔",
       "宝"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3307,7 +3596,7 @@ const questionsData = [
       "比",
       "写"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3326,7 +3615,7 @@ const questionsData = [
       "只",
       "智"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3345,7 +3634,7 @@ const questionsData = [
       "到",
       "路"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3364,7 +3653,7 @@ const questionsData = [
       "房",
       "收"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3383,7 +3672,7 @@ const questionsData = [
       "评",
       "半"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3402,7 +3691,7 @@ const questionsData = [
       "暗",
       "全"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3421,7 +3710,7 @@ const questionsData = [
       "赶",
       "十"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3440,7 +3729,7 @@ const questionsData = [
       "深",
       "体"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3459,7 +3748,7 @@ const questionsData = [
       "姓",
       "明"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3478,7 +3767,7 @@ const questionsData = [
       "旧",
       "及"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3497,7 +3786,7 @@ const questionsData = [
       "下",
       "呢"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3516,7 +3805,7 @@ const questionsData = [
       "围",
       "力"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3535,7 +3824,7 @@ const questionsData = [
       "拍",
       "怪"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3554,7 +3843,7 @@ const questionsData = [
       "假",
       "宝"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3573,7 +3862,7 @@ const questionsData = [
       "向",
       "豪"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3592,7 +3881,7 @@ const questionsData = [
       "梅",
       "河"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3611,7 +3900,7 @@ const questionsData = [
       "刀",
       "倒"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3630,7 +3919,7 @@ const questionsData = [
       "象",
       "同"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3649,7 +3938,7 @@ const questionsData = [
       "变",
       "还"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3668,7 +3957,7 @@ const questionsData = [
       "形",
       "很"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3687,7 +3976,7 @@ const questionsData = [
       "早",
       "苗"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3706,7 +3995,7 @@ const questionsData = [
       "敢",
       "走"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3725,7 +4014,7 @@ const questionsData = [
       "锅",
       "还"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3744,7 +4033,7 @@ const questionsData = [
       "招",
       "打"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3763,7 +4052,7 @@ const questionsData = [
       "斤",
       "帅"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3782,7 +4071,7 @@ const questionsData = [
       "喜",
       "河"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3801,7 +4090,7 @@ const questionsData = [
       "叶",
       "见"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3820,26 +4109,7 @@ const questionsData = [
       "护",
       "斤"
     ],
-    "unit": "2-0",
-    "type": "pinyin"
-  },
-  {
-    "char": "角",
-    "pinyin": "jiǎo",
-    "radical": "角",
-    "structure": "独体",
-    "strokeCount": 7,
-    "distractors": [
-      "qiǎo",
-      "jiāo",
-      "jiáo"
-    ],
-    "char_distractors": [
-      "用",
-      "脚",
-      "月"
-    ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
@@ -3858,27 +4128,1221 @@ const questionsData = [
       "付",
       "爷"
     ],
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "pinyin"
   },
   {
+    "char": "思",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "点",
+      "斜钩",
+      "点",
+      "点"
+    ],
+    "strokeCount": 9,
+    "radical": "田",
+    "structure": "上下",
+    "unit": "2-4-7",
+    "type": "stroke"
+  },
+  {
+    "char": "床",
+    "strokes": [
+      "点",
+      "横",
+      "撇",
+      "横",
+      "竖",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "广",
+    "structure": "半包围",
+    "unit": "2-4-7",
+    "type": "stroke"
+  },
+  {
+    "char": "前",
+    "strokes": [
+      "点",
+      "横",
+      "撇",
+      "竖",
+      "横折钩",
+      "横",
+      "横",
+      "竖",
+      "竖"
+    ],
+    "strokeCount": 9,
+    "unit": "2-4-7",
+    "radical": "刂",
+    "structure": "上下",
+    "type": "stroke"
+  },
+  {
+    "char": "地",
+    "strokes": [
+      "横",
+      "竖",
+      "提",
+      "横折钩",
+      "竖",
+      "竖弯钩"
+    ],
+    "strokeCount": 6,
+    "radical": "土",
+    "structure": "左右",
+    "unit": "2-4-7",
+    "type": "stroke"
+  },
+  {
+    "char": "故",
+    "strokes": [
+      "横",
+      "竖",
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 9,
+    "radical": "攵",
+    "structure": "左右",
+    "unit": "2-4-7",
+    "type": "stroke"
+  },
+  {
+    "char": "乡",
+    "strokes": [
+      "撇折",
+      "撇折",
+      "撇"
+    ],
+    "strokeCount": 3,
+    "radical": "—",
+    "structure": "独体",
+    "unit": "2-4-7",
+    "type": "stroke"
+  },
+  {
+    "char": "色",
+    "strokes": [
+      "撇",
+      "横折",
+      "横",
+      "竖弯钩",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 6,
+    "radical": "色",
+    "structure": "上下",
+    "unit": "2-4-8",
+    "type": "stroke"
+  },
+  {
+    "char": "把",
+    "strokes": [
+      "横",
+      "竖钩",
+      "提",
+      "横折",
+      "竖",
+      "横",
+      "竖弯钩"
+    ],
+    "strokeCount": 7,
+    "radical": "扌",
+    "structure": "左右",
+    "unit": "2-4-8",
+    "type": "stroke"
+  },
+  {
+    "char": "讲",
+    "strokes": [
+      "点",
+      "横折提",
+      "横",
+      "竖",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 6,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-4-8",
+    "type": "stroke"
+  },
+  {
+    "char": "样",
+    "strokes": [
+      "横",
+      "竖",
+      "撇",
+      "点",
+      "点",
+      "撇",
+      "横",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 10,
+    "radical": "木",
+    "structure": "左右",
+    "unit": "2-4-8",
+    "type": "stroke"
+  },
+  {
+    "char": "笑",
+    "strokes": [
+      "撇",
+      "横",
+      "点",
+      "撇",
+      "横",
+      "点",
+      "撇",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 10,
+    "radical": "竹",
+    "structure": "上下",
+    "unit": "2-4-8",
+    "type": "stroke"
+  },
+  {
+    "char": "再",
+    "strokes": [
+      "横",
+      "竖",
+      "横折钩",
+      "竖",
+      "横",
+      "横"
+    ],
+    "strokeCount": 6,
+    "radical": "一",
+    "structure": "独体",
+    "unit": "2-4-8",
+    "type": "stroke"
+  },
+  {
+    "char": "节",
+    "strokes": [
+      "横",
+      "竖",
+      "竖",
+      "横折",
+      "竖"
+    ],
+    "strokeCount": 5,
+    "unit": "2-4-9",
+    "radical": "艹",
+    "structure": "上下",
+    "type": "stroke"
+  },
+  {
+    "char": "米",
+    "strokes": [
+      "点",
+      "撇",
+      "横",
+      "竖",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 6,
+    "radical": "米",
+    "structure": "独体",
+    "unit": "2-4-9",
+    "type": "stroke"
+  },
+  {
+    "char": "间",
+    "strokes": [
+      "点",
+      "竖",
+      "横折钩",
+      "竖",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 7,
+    "radical": "门",
+    "structure": "半包围",
+    "unit": "2-4-9",
+    "type": "stroke"
+  },
+  {
+    "char": "分",
+    "strokes": [
+      "撇",
+      "捺",
+      "撇",
+      "横折钩"
+    ],
+    "strokeCount": 4,
+    "radical": "八",
+    "structure": "上下",
+    "unit": "2-4-9",
+    "type": "stroke"
+  },
+  {
+    "char": "吃",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "撇",
+      "横折弯钩",
+      "点"
+    ],
+    "strokeCount": 6,
+    "unit": "2-4-9",
+    "radical": "口",
+    "structure": "左右",
+    "type": "stroke"
+  },
+  {
+    "char": "肉",
+    "strokes": [
+      "竖",
+      "横折钩",
+      "撇",
+      "点",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 6,
+    "radical": "肉",
+    "structure": "独体",
+    "unit": "2-4-9",
+    "type": "stroke"
+  },
+  {
+    "char": "册",
+    "pinyin": "cè",
+    "radical": "丿",
+    "structure": "独体",
+    "strokeCount": 5,
+    "unit": "2-4-0",
+    "type": "stroke"
+  },
+  {
+    "char": "支",
+    "pinyin": "zhī",
+    "radical": "支",
+    "structure": "上下",
+    "strokeCount": 4,
+    "unit": "2-4-0",
+    "type": "stroke"
+  },
+  {
+    "char": "电",
+    "pinyin": "diàn",
+    "radical": "丨",
+    "structure": "独体",
+    "strokeCount": 5,
+    "unit": "2-4-0",
+    "type": "stroke"
+  },
+  {
+    "char": "衣",
+    "pinyin": "yī",
+    "radical": "衣",
+    "structure": "独体",
+    "strokeCount": 6,
+    "unit": "2-4-0",
+    "type": "stroke"
+  },
+  {
+    "char": "物",
+    "strokes": [
+      "撇",
+      "横",
+      "竖",
+      "提",
+      "撇",
+      "横折钩",
+      "撇",
+      "撇"
+    ],
+    "strokeCount": 8,
+    "radical": "牜",
+    "structure": "左右",
+    "unit": "2-5-5",
+    "type": "stroke"
+  },
+  {
+    "char": "造",
+    "strokes": [
+      "撇",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "点",
+      "横折折撇",
+      "捺"
+    ],
+    "strokeCount": 10,
+    "radical": "辶",
+    "structure": "半包围",
+    "unit": "2-5-5",
+    "type": "stroke"
+  },
+  {
+    "char": "运",
+    "strokes": [
+      "横",
+      "横",
+      "撇折",
+      "点",
+      "点",
+      "横折折撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "辶",
+    "structure": "半包围",
+    "unit": "2-5-5",
+    "type": "stroke"
+  },
+  {
+    "char": "欢",
+    "strokes": [
+      "横撇",
+      "点",
+      "撇",
+      "横撇",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 6,
+    "radical": "又",
+    "structure": "左右",
+    "unit": "2-5-5",
+    "type": "stroke"
+  },
+  {
+    "char": "房",
+    "strokes": [
+      "点",
+      "横折",
+      "横",
+      "撇",
+      "点",
+      "横",
+      "横折钩",
+      "撇"
+    ],
+    "strokeCount": 8,
+    "radical": "户",
+    "structure": "半包围",
+    "unit": "2-5-5",
+    "type": "stroke"
+  },
+  {
+    "char": "网",
+    "strokes": [
+      "竖",
+      "横折钩",
+      "撇",
+      "点",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 6,
+    "radical": "冂",
+    "structure": "半包围",
+    "unit": "2-5-5",
+    "type": "stroke"
+  },
+  {
+    "char": "对",
+    "strokes": [
+      "横撇",
+      "点",
+      "横",
+      "竖钩",
+      "点"
+    ],
+    "strokeCount": 5,
+    "radical": "寸",
+    "structure": "左右",
+    "unit": "2-5-6",
+    "type": "stroke"
+  },
+  {
+    "char": "今",
+    "strokes": [
+      "撇",
+      "捺",
+      "点",
+      "横撇"
+    ],
+    "strokeCount": 4,
+    "radical": "人",
+    "structure": "上下",
+    "unit": "2-5-6",
+    "type": "stroke"
+  },
+  {
+    "char": "雪",
+    "strokes": [
+      "横",
+      "点",
+      "横撇",
+      "竖",
+      "点",
+      "点",
+      "点",
+      "点",
+      "横折",
+      "横",
+      "横"
+    ],
+    "strokeCount": 11,
+    "radical": "雨",
+    "structure": "上下",
+    "unit": "2-5-6",
+    "type": "stroke"
+  },
+  {
+    "char": "细",
+    "strokes": [
+      "撇折",
+      "撇折",
+      "提",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "纟",
+    "structure": "左右",
+    "unit": "2-5-6",
+    "type": "stroke"
+  },
+  {
+    "char": "夕",
+    "strokes": [
+      "撇",
+      "横撇",
+      "点"
+    ],
+    "strokeCount": 3,
+    "radical": "夕",
+    "structure": "独体",
+    "unit": "2-5-6",
+    "type": "stroke"
+  },
+  {
+    "char": "语",
+    "strokes": [
+      "点",
+      "横折提",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "讠",
+    "structure": "左右",
+    "unit": "2-5-6",
+    "type": "stroke"
+  },
+  {
+    "char": "打",
+    "strokes": [
+      "横",
+      "竖钩",
+      "提",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 5,
+    "radical": "扌",
+    "structure": "左右",
+    "unit": "2-5-7",
+    "type": "stroke"
+  },
+  {
+    "char": "皮",
+    "strokes": [
+      "横钩",
+      "撇",
+      "竖",
+      "横撇",
+      "捺"
+    ],
+    "strokeCount": 5,
+    "radical": "皮",
+    "structure": "独体",
+    "unit": "2-5-7",
+    "type": "stroke"
+  },
+  {
+    "char": "跑",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "竖",
+      "提",
+      "撇",
+      "横折钩",
+      "横折",
+      "横",
+      "竖弯钩"
+    ],
+    "strokeCount": 12,
+    "radical": "足",
+    "structure": "左右",
+    "unit": "2-5-7",
+    "type": "stroke"
+  },
+  {
+    "char": "足",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "足",
+    "structure": "独体",
+    "unit": "2-5-7",
+    "type": "stroke"
+  },
+  {
+    "char": "沙",
+    "strokes": [
+      "点",
+      "点",
+      "提",
+      "竖",
+      "撇",
+      "点",
+      "撇"
+    ],
+    "strokeCount": 7,
+    "radical": "氵",
+    "structure": "左右",
+    "unit": "2-5-7",
+    "type": "stroke"
+  },
+  {
+    "char": "包",
+    "strokes": [
+      "撇",
+      "横折钩",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "勹",
+    "structure": "半包围",
+    "unit": "2-5-7",
+    "type": "stroke"
+  },
+  {
+    "char": "近",
+    "strokes": [
+      "撇",
+      "撇",
+      "横",
+      "竖",
+      "点",
+      "横折折撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "辶",
+    "structure": "半包围",
+    "unit": "2-5-8",
+    "type": "stroke"
+  },
+  {
+    "char": "习",
+    "strokes": [
+      "横折钩",
+      "点",
+      "提"
+    ],
+    "strokeCount": 3,
+    "radical": "乙",
+    "structure": "独体",
+    "unit": "2-5-8",
+    "type": "stroke"
+  },
+  {
+    "char": "远",
+    "strokes": [
+      "横",
+      "横",
+      "撇",
+      "竖弯钩",
+      "点",
+      "横折折撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "辶",
+    "structure": "半包围",
+    "unit": "2-5-8",
+    "type": "stroke"
+  },
+  {
+    "char": "学",
+    "strokes": [
+      "点",
+      "点",
+      "撇",
+      "点",
+      "横撇",
+      "竖",
+      "横",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "子",
+    "structure": "上下",
+    "unit": "2-5-8",
+    "type": "stroke"
+  },
+  {
+    "char": "玉",
+    "strokes": [
+      "横",
+      "横",
+      "竖",
+      "横",
+      "点"
+    ],
+    "strokeCount": 5,
+    "radical": "玉",
+    "structure": "独体",
+    "unit": "2-5-8",
+    "type": "stroke"
+  },
+  {
     "char": "义",
-    "pinyin": "yì",
+    "strokes": [
+      "点",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 3,
     "radical": "丶",
     "structure": "独体",
-    "strokeCount": 3,
-    "distractors": [
-      "yī",
-      "yí",
-      "yǐ"
+    "unit": "2-5-8",
+    "type": "stroke"
+  },
+  {
+    "char": "饱",
+    "strokes": [
+      "撇",
+      "横钩",
+      "竖提",
+      "撇",
+      "横折钩",
+      "竖",
+      "横折",
+      "横"
     ],
-    "char_distractors": [
-      "又",
-      "议",
-      "文"
+    "strokeCount": 8,
+    "radical": "饣",
+    "structure": "左右",
+    "unit": "2-5-0",
+    "type": "stroke"
+  },
+  {
+    "char": "抱",
+    "strokes": [
+      "横",
+      "竖钩",
+      "提",
+      "撇",
+      "横折钩",
+      "竖",
+      "横折",
+      "横"
     ],
-    "unit": "2-0",
-    "type": "pinyin"
+    "strokeCount": 8,
+    "radical": "扌",
+    "structure": "左右",
+    "unit": "2-5-0",
+    "type": "stroke"
+  },
+  {
+    "char": "首",
+    "strokes": [
+      "点",
+      "撇",
+      "横",
+      "横",
+      "横",
+      "撇",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "首",
+    "structure": "上下",
+    "unit": "2-6-10",
+    "type": "stroke"
+  },
+  {
+    "char": "池",
+    "strokes": [
+      "点",
+      "点",
+      "提",
+      "横折钩",
+      "竖",
+      "竖弯钩"
+    ],
+    "strokeCount": 6,
+    "radical": "氵",
+    "structure": "左右",
+    "unit": "2-6-10",
+    "type": "stroke"
+  },
+  {
+    "char": "采",
+    "strokes": [
+      "撇",
+      "点",
+      "点",
+      "撇",
+      "横",
+      "竖",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 8,
+    "radical": "采",
+    "structure": "上下",
+    "unit": "2-6-10",
+    "type": "stroke"
+  },
+  {
+    "char": "尖",
+    "strokes": [
+      "竖",
+      "撇",
+      "点",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 6,
+    "radical": "小",
+    "structure": "上下",
+    "unit": "2-6-10",
+    "type": "stroke"
+  },
+  {
+    "char": "角",
+    "strokes": [
+      "撇",
+      "横折",
+      "撇",
+      "横折",
+      "竖",
+      "横",
+      "横"
+    ],
+    "strokeCount": 7,
+    "radical": "角",
+    "structure": "上下",
+    "unit": "2-6-10",
+    "type": "stroke"
+  },
+  {
+    "char": "早",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 6,
+    "radical": "日",
+    "structure": "上下",
+    "unit": "2-6-10",
+    "type": "stroke"
+  },
+  {
+    "char": "玩",
+    "strokes": [
+      "横",
+      "横",
+      "竖",
+      "提",
+      "横",
+      "横",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 8,
+    "radical": "王",
+    "structure": "左右",
+    "unit": "2-6-11",
+    "type": "stroke"
+  },
+  {
+    "char": "眼",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横",
+      "横折",
+      "横",
+      "横",
+      "竖提",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 11,
+    "radical": "目",
+    "structure": "左右",
+    "unit": "2-6-11",
+    "type": "stroke"
+  },
+  {
+    "char": "泪",
+    "strokes": [
+      "点",
+      "点",
+      "提",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "氵",
+    "structure": "左右",
+    "unit": "2-6-11",
+    "type": "stroke"
+  },
+  {
+    "char": "它",
+    "strokes": [
+      "点",
+      "点",
+      "横撇",
+      "撇",
+      "竖弯钩"
+    ],
+    "strokeCount": 5,
+    "radical": "宀",
+    "structure": "上下",
+    "unit": "2-6-11",
+    "type": "stroke"
+  },
+  {
+    "char": "贝",
+    "strokes": [
+      "竖",
+      "横折",
+      "撇",
+      "点"
+    ],
+    "strokeCount": 4,
+    "radical": "贝",
+    "structure": "独体",
+    "unit": "2-6-11",
+    "type": "stroke"
+  },
+  {
+    "char": "气",
+    "strokes": [
+      "撇",
+      "横",
+      "横",
+      "横折弯钩"
+    ],
+    "strokeCount": 4,
+    "radical": "气",
+    "structure": "独体",
+    "unit": "2-6-11",
+    "type": "stroke"
+  },
+  {
+    "char": "机",
+    "strokes": [
+      "横",
+      "竖",
+      "撇",
+      "点",
+      "撇",
+      "横折弯钩"
+    ],
+    "strokeCount": 6,
+    "radical": "木",
+    "structure": "左右",
+    "unit": "2-6-12",
+    "type": "stroke"
+  },
+  {
+    "char": "台",
+    "strokes": [
+      "撇折",
+      "点",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "口",
+    "structure": "上下",
+    "unit": "2-6-12",
+    "type": "stroke"
+  },
+  {
+    "char": "唱",
+    "strokes": [
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横"
+    ],
+    "strokeCount": 11,
+    "radical": "口",
+    "structure": "左右",
+    "unit": "2-6-12",
+    "type": "stroke"
+  },
+  {
+    "char": "伞",
+    "strokes": [
+      "撇",
+      "捺",
+      "横",
+      "横",
+      "竖钩",
+      "点"
+    ],
+    "strokeCount": 6,
+    "radical": "人",
+    "structure": "上下",
+    "unit": "2-6-12",
+    "type": "stroke"
+  },
+  {
+    "char": "朵",
+    "strokes": [
+      "撇",
+      "横折弯",
+      "横",
+      "横",
+      "撇",
+      "竖"
+    ],
+    "strokeCount": 6,
+    "radical": "几",
+    "structure": "上下",
+    "unit": "2-6-12",
+    "type": "stroke"
+  },
+  {
+    "char": "美",
+    "strokes": [
+      "点",
+      "撇",
+      "横",
+      "横",
+      "竖",
+      "横",
+      "横",
+      "撇",
+      "捺"
+    ],
+    "strokeCount": 9,
+    "radical": "羊",
+    "structure": "上下",
+    "unit": "2-6-12",
+    "type": "stroke"
+  },
+  {
+    "char": "这",
+    "strokes": [
+      "点",
+      "横",
+      "撇",
+      "点",
+      "点",
+      "横折折撇",
+      "捺"
+    ],
+    "strokeCount": 7,
+    "radical": "辶",
+    "structure": "半包围",
+    "unit": "2-6-13",
+    "type": "stroke"
+  },
+  {
+    "char": "看",
+    "strokes": [
+      "撇",
+      "横",
+      "横",
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "手",
+    "structure": "半包围",
+    "unit": "2-6-13",
+    "type": "stroke"
+  },
+  {
+    "char": "鱼",
+    "strokes": [
+      "撇",
+      "横撇",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "横"
+    ],
+    "strokeCount": 8,
+    "radical": "鱼",
+    "structure": "上下",
+    "unit": "2-6-13",
+    "type": "stroke"
+  },
+  {
+    "char": "面",
+    "strokes": [
+      "横",
+      "撇",
+      "竖",
+      "横折",
+      "横",
+      "横",
+      "横",
+      "竖",
+      "横"
+    ],
+    "strokeCount": 9,
+    "radical": "面",
+    "structure": "独体",
+    "unit": "2-6-13",
+    "type": "stroke"
+  },
+  {
+    "char": "问",
+    "strokes": [
+      "点",
+      "竖",
+      "横折钩",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 6,
+    "unit": "2-6-13",
+    "radical": "门",
+    "structure": "半包围",
+    "type": "stroke"
+  },
+  {
+    "char": "加",
+    "strokes": [
+      "横折钩",
+      "撇",
+      "竖",
+      "横折",
+      "横"
+    ],
+    "strokeCount": 5,
+    "radical": "力",
+    "structure": "左右",
+    "unit": "2-6-13",
+    "type": "stroke"
+  },
+  {
+    "char": "豆",
+    "strokes": [
+      "横",
+      "竖",
+      "横折",
+      "横",
+      "竖",
+      "横",
+      "点"
+    ],
+    "strokeCount": 7,
+    "radical": "豆",
+    "structure": "独体",
+    "unit": "2-6-0",
+    "type": "stroke"
+  },
+  {
+    "char": "斗",
+    "strokes": [
+      "点",
+      "点",
+      "横",
+      "竖"
+    ],
+    "strokeCount": 4,
+    "radical": "斗",
+    "structure": "独体",
+    "unit": "2-6-0",
+    "type": "stroke"
   },
   {
     "char": "文",
@@ -3889,7 +5353,7 @@ const questionsData = [
       "捺"
     ],
     "strokeCount": 4,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "文",
     "structure": "独体",
     "type": "stroke"
@@ -3906,7 +5370,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 7,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "艹",
     "structure": "上下",
     "type": "stroke"
@@ -3920,7 +5384,7 @@ const questionsData = [
       "点"
     ],
     "strokeCount": 4,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "乙",
     "structure": "独体",
     "type": "stroke"
@@ -3939,7 +5403,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 9,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "日",
     "structure": "上下",
     "type": "stroke"
@@ -3954,7 +5418,7 @@ const questionsData = [
       "点"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "夂",
     "structure": "上下",
     "type": "stroke"
@@ -3970,7 +5434,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -3981,7 +5445,7 @@ const questionsData = [
       "点"
     ],
     "strokeCount": 3,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "—",
     "structure": "独体",
     "type": "stroke"
@@ -3996,7 +5460,7 @@ const questionsData = [
       "横折钩"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "口",
     "structure": "左右",
     "type": "stroke"
@@ -4013,7 +5477,7 @@ const questionsData = [
       "捺"
     ],
     "strokeCount": 7,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "走",
     "structure": "上下",
     "type": "stroke"
@@ -4026,7 +5490,7 @@ const questionsData = [
       "竖弯钩"
     ],
     "strokeCount": 3,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4039,7 +5503,7 @@ const questionsData = [
       "竖弯钩"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "亻",
     "structure": "左右",
     "type": "stroke"
@@ -4055,7 +5519,7 @@ const questionsData = [
       "竖弯钩"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "女",
     "structure": "左右",
     "type": "stroke"
@@ -4071,7 +5535,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "纟",
     "structure": "左右",
     "type": "stroke"
@@ -4088,7 +5552,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 7,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "口",
     "structure": "左右",
     "type": "stroke"
@@ -4105,7 +5569,7 @@ const questionsData = [
       "点"
     ],
     "strokeCount": 7,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4119,7 +5583,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "口",
     "structure": "全包围",
     "type": "stroke"
@@ -4135,7 +5599,7 @@ const questionsData = [
       "点"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "人",
     "structure": "上下",
     "type": "stroke"
@@ -4148,7 +5612,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 3,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4161,23 +5625,7 @@ const questionsData = [
       "竖"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "问",
-    "strokes": [
-      "点",
-      "竖",
-      "横折钩",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 6,
-    "unit": "2-0",
-    "radical": "门",
-    "structure": "半包围",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4191,7 +5639,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4204,7 +5652,7 @@ const questionsData = [
       "竖"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4216,7 +5664,7 @@ const questionsData = [
       "捺"
     ],
     "strokeCount": 4,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "人",
     "structure": "左右",
     "type": "stroke"
@@ -4232,7 +5680,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 6,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "氵",
     "structure": "左右",
     "type": "stroke"
@@ -4250,7 +5698,7 @@ const questionsData = [
       "竖钩"
     ],
     "strokeCount": 8,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "氵",
     "structure": "左右",
     "type": "stroke"
@@ -4265,7 +5713,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "—",
     "structure": "独体",
     "type": "stroke"
@@ -4282,7 +5730,7 @@ const questionsData = [
       "横"
     ],
     "strokeCount": 7,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4298,7 +5746,7 @@ const questionsData = [
       "捺"
     ],
     "strokeCount": 8,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4313,7 +5761,7 @@ const questionsData = [
       "捺"
     ],
     "strokeCount": 7,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "忄",
     "structure": "左右",
     "type": "stroke"
@@ -4328,7 +5776,7 @@ const questionsData = [
       "点"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "radical": "丿",
     "structure": "独体",
     "type": "stroke"
@@ -4342,7 +5790,7 @@ const questionsData = [
       "竖"
     ],
     "strokeCount": 4,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4355,7 +5803,7 @@ const questionsData = [
       "竖"
     ],
     "strokeCount": 5,
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4372,7 +5820,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "口",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4390,7 +5838,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "女",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4404,7 +5852,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "亻",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4417,7 +5865,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "丿",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4432,7 +5880,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "十",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4451,7 +5899,7 @@ const questionsData = [
     "strokeCount": 9,
     "radical": "月",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4465,7 +5913,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "又",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4482,7 +5930,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "—",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4500,7 +5948,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "青",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4521,7 +5969,7 @@ const questionsData = [
     "strokeCount": 11,
     "radical": "氵",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4543,7 +5991,7 @@ const questionsData = [
     "strokeCount": 12,
     "radical": "日",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4564,7 +6012,7 @@ const questionsData = [
     "strokeCount": 11,
     "radical": "忄",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4584,7 +6032,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "讠",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4600,7 +6048,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "宀",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4616,7 +6064,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "力",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4629,7 +6077,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "一",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4643,7 +6091,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "一",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4661,7 +6109,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "日",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4676,7 +6124,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "卜",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4690,7 +6138,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "片",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4706,7 +6154,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "人",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4722,7 +6170,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "八",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4738,7 +6186,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "立",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4752,7 +6200,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "大",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4768,7 +6216,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "阝",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4784,7 +6232,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "小",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4798,7 +6246,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "一",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4813,7 +6261,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "一",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4830,7 +6278,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "亻",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4844,7 +6292,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "方",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4860,7 +6308,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "口",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4880,7 +6328,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "高",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4898,7 +6346,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "白",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4913,7 +6361,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "匕",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4931,7 +6379,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "亠",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4944,7 +6392,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "广",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4959,7 +6407,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "冖",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4973,7 +6421,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "讠",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -4992,7 +6440,7 @@ const questionsData = [
     "strokeCount": 9,
     "radical": "讠",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5007,7 +6455,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "讠",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5023,7 +6471,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "自",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5036,7 +6484,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "已",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5052,7 +6500,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "女",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5067,7 +6515,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "亻",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5083,7 +6531,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "彐",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5101,7 +6549,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "一",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5115,229 +6563,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "毛",
     "structure": "独体",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "机",
-    "strokes": [
-      "横",
-      "竖",
-      "撇",
-      "点",
-      "撇",
-      "横折弯钩"
-    ],
-    "strokeCount": 6,
-    "radical": "木",
-    "structure": "左右",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "台",
-    "strokes": [
-      "撇折",
-      "点",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 5,
-    "radical": "口",
-    "structure": "上下",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "唱",
-    "strokes": [
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横"
-    ],
-    "strokeCount": 11,
-    "radical": "口",
-    "structure": "左右",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "伞",
-    "strokes": [
-      "撇",
-      "捺",
-      "横",
-      "横",
-      "竖钩",
-      "点"
-    ],
-    "strokeCount": 6,
-    "radical": "人",
-    "structure": "上下",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "朵",
-    "strokes": [
-      "撇",
-      "横折弯",
-      "横",
-      "横",
-      "撇",
-      "竖"
-    ],
-    "strokeCount": 6,
-    "radical": "几",
-    "structure": "上下",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "美",
-    "strokes": [
-      "点",
-      "撇",
-      "横",
-      "横",
-      "竖",
-      "横",
-      "横",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 9,
-    "radical": "羊",
-    "structure": "上下",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "这",
-    "strokes": [
-      "点",
-      "横",
-      "撇",
-      "点",
-      "点",
-      "横折折撇",
-      "捺"
-    ],
-    "strokeCount": 7,
-    "radical": "辶",
-    "structure": "半包围",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "看",
-    "strokes": [
-      "撇",
-      "横",
-      "横",
-      "撇",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横"
-    ],
-    "strokeCount": 9,
-    "radical": "手",
-    "structure": "半包围",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "鱼",
-    "strokes": [
-      "撇",
-      "横撇",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横",
-      "横"
-    ],
-    "strokeCount": 8,
-    "radical": "鱼",
-    "structure": "上下",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "面",
-    "strokes": [
-      "横",
-      "撇",
-      "竖",
-      "横折",
-      "横",
-      "横",
-      "横",
-      "竖",
-      "横"
-    ],
-    "strokeCount": 9,
-    "radical": "面",
-    "structure": "独体",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "加",
-    "strokes": [
-      "横折钩",
-      "撇",
-      "竖",
-      "横折",
-      "横"
-    ],
-    "strokeCount": 5,
-    "radical": "力",
-    "structure": "左右",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "豆",
-    "strokes": [
-      "横",
-      "竖",
-      "横折",
-      "横",
-      "竖",
-      "横",
-      "点"
-    ],
-    "strokeCount": 7,
-    "radical": "豆",
-    "structure": "独体",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "斗",
-    "strokes": [
-      "点",
-      "点",
-      "横",
-      "竖"
-    ],
-    "strokeCount": 4,
-    "radical": "斗",
-    "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5351,7 +6577,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "止",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5365,7 +6591,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "斤",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5378,7 +6604,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "寸",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5391,7 +6617,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "十",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5405,7 +6631,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "一",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5425,7 +6651,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "讠",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5442,7 +6668,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "土",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5458,7 +6684,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "老",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5474,7 +6700,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "巾",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5492,7 +6718,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "囗",
     "structure": "全包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5512,7 +6738,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "阝",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5528,7 +6754,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "白",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5545,7 +6771,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "日",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5564,7 +6790,7 @@ const questionsData = [
     "strokeCount": 9,
     "radical": "灬",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5582,7 +6808,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "木",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5598,7 +6824,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "八",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5616,7 +6842,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "彳",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5631,7 +6857,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "瓜",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5649,7 +6875,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "刀",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5666,7 +6892,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5682,7 +6908,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "火",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5696,7 +6922,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "车",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5716,7 +6942,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "立",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5734,7 +6960,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "穴",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5751,7 +6977,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5771,7 +6997,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "竹",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5789,7 +7015,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "矢",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5811,7 +7037,7 @@ const questionsData = [
     "strokeCount": 12,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5829,7 +7055,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "攵",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5844,7 +7070,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "干",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5860,7 +7086,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "宀",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5873,7 +7099,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "干",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5890,7 +7116,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "身",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5909,7 +7135,7 @@ const questionsData = [
     "strokeCount": 9,
     "radical": "日",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5922,7 +7148,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "丿",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5938,7 +7164,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "口",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5952,7 +7178,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "丶",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5970,7 +7196,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "忄",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -5990,7 +7216,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "宀",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6011,7 +7237,7 @@ const questionsData = [
     "strokeCount": 11,
     "radical": "豕",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6028,7 +7254,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "氵",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6046,7 +7272,7 @@ const questionsData = [
     "strokeCount": 8,
     "radical": "刂",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6062,7 +7288,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "口",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6077,7 +7303,7 @@ const questionsData = [
     "strokeCount": 5,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6093,7 +7319,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "彳",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6112,7 +7338,7 @@ const questionsData = [
     "strokeCount": 9,
     "radical": "艹",
     "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6132,7 +7358,7 @@ const questionsData = [
     "strokeCount": 10,
     "radical": "走",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6148,7 +7374,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "辶",
     "structure": "半包围",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6165,7 +7391,7 @@ const questionsData = [
     "strokeCount": 7,
     "radical": "扌",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6178,7 +7404,7 @@ const questionsData = [
     "strokeCount": 3,
     "radical": "巾",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6197,7 +7423,7 @@ const questionsData = [
     "strokeCount": 9,
     "radical": "氵",
     "structure": "左右",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6213,7 +7439,7 @@ const questionsData = [
     "strokeCount": 6,
     "radical": "页",
     "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6227,24 +7453,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "户",
     "structure": "独体",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "角",
-    "strokes": [
-      "撇",
-      "横折",
-      "撇",
-      "横折",
-      "竖",
-      "横",
-      "横"
-    ],
-    "strokeCount": 7,
-    "radical": "角",
-    "structure": "上下",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   },
   {
@@ -6258,20 +7467,7 @@ const questionsData = [
     "strokeCount": 4,
     "radical": "父",
     "structure": "独体",
-    "unit": "2-0",
-    "type": "stroke"
-  },
-  {
-    "char": "义",
-    "strokes": [
-      "点",
-      "撇",
-      "捺"
-    ],
-    "strokeCount": 3,
-    "radical": "丶",
-    "structure": "独体",
-    "unit": "2-0",
+    "unit": "2-0-0",
     "type": "stroke"
   }
 ]
