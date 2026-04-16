@@ -1,7 +1,7 @@
 <template>
   <view class="index-page">
     <view class="header">
-      <text class="title">语文</text>
+      <text class="title">语文练习</text>
       <view class="star-total">
         <text class="star-icon">⭐</text>
         <text class="star-num">{{ store.totalStars }}</text>
@@ -11,17 +11,17 @@
     <view class="modules">
       <view class="module-card mock-card" @click="goTo('/pages/study/learn')">
         <text class="module-icon">📚</text>
-        <text class="module-name">学习</text>
+        <text class="module-name">生字学习</text>
         <text class="module-desc">看答案自判，拓展学习</text>
       </view>
       <view class="module-card pinyin-card" @click="goTo('/pages/study/pinyin')">
         <text class="module-icon">📖</text>
-        <text class="module-name">拼音</text>
+        <text class="module-name">拼音练习</text>
         <text class="module-desc">看字选拼音</text>
       </view>
       <view class="module-card hanzi-card" @click="goTo('/pages/study/hanzi')">
         <text class="module-icon">✏️</text>
-        <text class="module-name">汉字</text>
+        <text class="module-name">汉字练习</text>
         <text class="module-desc">笔顺、部首、结构、笔画</text>
       </view>
 <view class="module-card wrong-book-card" @click="goTo('/pages/study/wrong-book')">

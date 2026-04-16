@@ -14,7 +14,7 @@
 
       <view class="card card-study" @click="goTo('/pages/study/index')">
         <text class="card-icon">📚</text>
-        <text class="card-title">语文</text>
+        <text class="card-title">语文练习</text>
         <text class="card-desc">拼音、汉字、错题本</text>
       </view>
 

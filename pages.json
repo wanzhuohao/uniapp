@@ -9,7 +9,7 @@
     { "path": "pages/stele/photo", "style": { "navigationBarTitleText": "查看照片", "navigationStyle": "custom" } },
     { "path": "pages/stele/help", "style": { "navigationBarTitleText": "帮助", "navigationStyle": "custom" } },
 
-    { "path": "pages/study/index", "style": { "navigationBarTitleText": "语文", "navigationStyle": "custom" } },
+    { "path": "pages/study/index", "style": { "navigationBarTitleText": "语文练习", "navigationStyle": "custom" } },
     { "path": "pages/study/pinyin", "style": { "navigationBarTitleText": "拼音练习", "navigationStyle": "custom" } },
     { "path": "pages/study/hanzi", "style": { "navigationBarTitleText": "汉字练习", "navigationStyle": "custom" } },
 
