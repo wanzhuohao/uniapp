@@ -6,7 +6,16 @@
 > 状态: **已上线**，累计 100+ commit
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
 
-## 2026-04-16 题库单元整理 + 课程多选
+## 2026-04-16 题库单元整理 + 课程多选 + 移除数学模块
+
+### 0. 移除数学模块（已迁移到 uniapp-aliyun）
+- 删除 `pages/math/` 4个页面（index/online/print/history）
+- 删除 `pages/study/mental-math.vue`（口算计时）
+- 删除 `utils/math/`（mathStorage.js、questionEngine.js）、`utils/study/mathGen.js`
+- 清理：首页数学卡片、学习首页口算入口、错题本/错题重练口算模式、store math 字段、App.vue 共享模式路由守卫 + 暗色口算样式
+- 净删除 3351 行
+
+---
 
 ### 1. unit 字段改为三级格式 `2-单元-课号`
 - 旧格式 `"2-4"` → 新格式 `"2-4-7"`（第四单元-阅读7）
