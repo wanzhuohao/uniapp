@@ -1,34 +1,16 @@
 {
   "pages": [
-    { "path": "pages/index/index", "style": { "navigationBarTitleText": "统一平台", "navigationStyle": "custom" } },
+    { "path": "pages/index/index", "style": { "navigationBarTitleText": "碑文排版", "navigationStyle": "custom" } },
 
     { "path": "pages/stele/index", "style": { "navigationBarTitleText": "碑文下单", "navigationStyle": "custom" } },
     { "path": "pages/stele/list", "style": { "navigationBarTitleText": "订单管理", "navigationStyle": "custom" } },
     { "path": "pages/stele/detail", "style": { "navigationBarTitleText": "详情", "navigationStyle": "custom" } },
     { "path": "pages/stele/preview", "style": { "navigationBarTitleText": "预览", "navigationStyle": "custom" } },
-    { "path": "pages/stele/photo", "style": { "navigationBarTitleText": "查看照片", "navigationStyle": "custom" } },
-    { "path": "pages/stele/help", "style": { "navigationBarTitleText": "帮助", "navigationStyle": "custom" } },
-
-    { "path": "pages/study/index", "style": { "navigationBarTitleText": "语文练习", "navigationStyle": "custom" } },
-    { "path": "pages/study/pinyin", "style": { "navigationBarTitleText": "拼音练习", "navigationStyle": "custom" } },
-    { "path": "pages/study/hanzi", "style": { "navigationBarTitleText": "汉字练习", "navigationStyle": "custom" } },
-
-    { "path": "pages/study/result", "style": { "navigationBarTitleText": "本轮成绩", "navigationStyle": "custom" } },
-    { "path": "pages/study/learn", "style": { "navigationBarTitleText": "学习", "navigationStyle": "custom" } },
-    { "path": "pages/study/wrong-book", "style": { "navigationBarTitleText": "错题本", "navigationStyle": "custom" } },
-    { "path": "pages/study/data-admin", "style": { "navigationBarTitleText": "数据维护", "navigationStyle": "custom" } },
-    { "path": "pages/study/wrong-book-practice", "style": { "navigationBarTitleText": "错题重练", "navigationStyle": "custom" } },
-
-    { "path": "pages/interview/index", "style": { "navigationBarTitleText": "面试练习", "navigationStyle": "custom" } },
-    { "path": "pages/interview/practice", "style": { "navigationBarTitleText": "答题", "navigationStyle": "custom" } },
-    { "path": "pages/interview/records", "style": { "navigationBarTitleText": "练习记录", "navigationStyle": "custom" } },
-    { "path": "pages/interview/record-detail", "style": { "navigationBarTitleText": "答题详情", "navigationStyle": "custom" } },
-    { "path": "pages/interview/exam-result", "style": { "navigationBarTitleText": "考场结果", "navigationStyle": "custom" } },
-    { "path": "pages/interview/settings", "style": { "navigationBarTitleText": "设置", "navigationStyle": "custom" } }
+    { "path": "pages/stele/help", "style": { "navigationBarTitleText": "帮助", "navigationStyle": "custom" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "统一平台",
+    "navigationBarTitleText": "碑文排版",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },

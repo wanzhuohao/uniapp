@@ -17,7 +17,6 @@
         </el-input>
         <div class="toolbar-btns">
           <el-button type="primary" @click="onAdd">新增</el-button>
-          <el-button @click="goToPhoto">相册</el-button>
           <el-button @click="goToHelp">帮助</el-button>
         </div>
       </div>
@@ -191,10 +190,6 @@ const onEdit = (row: OrderItem) => {
     ? '/pages/stele/index?id=' + row._id
     : '/pages/stele/detail?id=' + row._id;
   uni.navigateTo({ url });
-};
-
-const goToPhoto = () => {
-  uni.navigateTo({ url: '/pages/stele/photo' });
 };
 
 const goToHelp = () => {
