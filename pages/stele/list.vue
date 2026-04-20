@@ -290,7 +290,12 @@ const onDelete = (row: OrderItem) => {
     success: async (res) => {
       if (!res.confirm) return;
       try {
-        await uniCloud.callFunction({ name: 'order-delete', data: { id: row._id } });
+        const delRes = await uniCloud.callFunction({ name: 'order-delete', data: { id: row._id } });
+        const delResult = delRes?.result;
+        if (!delResult || delResult.code !== 0) {
+          toast.error(delResult?.msg || '移除失败');
+          return;
+        }
         toast.success('已移除');
         if (list.value.length <= 1 && pageNo.value > 1) pageNo.value--;
         fetchList();
