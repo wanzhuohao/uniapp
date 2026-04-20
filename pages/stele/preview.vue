@@ -203,6 +203,7 @@ function renderThreeStele(preview: any) {
   const container = document.getElementById('three-container');
   if (!container) return;
 
+  if (threeAnimateId !== null) { cancelAnimationFrame(threeAnimateId); threeAnimateId = null; }
   if (threeScene) {
     threeScene.traverse((obj: any) => {
       if (obj.geometry) obj.geometry.dispose();
@@ -314,7 +315,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (hintTimer) { clearTimeout(hintTimer); hintTimer = null; }
-  if (threeAnimateId) { cancelAnimationFrame(threeAnimateId); threeAnimateId = null; }
+  if (threeAnimateId !== null) { cancelAnimationFrame(threeAnimateId); threeAnimateId = null; }
   if (threeScene) {
     threeScene.traverse((obj: any) => {
       if (obj.geometry) obj.geometry.dispose();
