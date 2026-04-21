@@ -1,16 +1,16 @@
 {
   "pages": [
-    { "path": "pages/index/index", "style": { "navigationBarTitleText": "碑文排版", "navigationStyle": "custom" } },
+    { "path": "pages/index/index", "style": { "navigationBarTitleText": "老万石雕", "navigationStyle": "custom" } },
 
-    { "path": "pages/stele/index", "style": { "navigationBarTitleText": "碑文下单", "navigationStyle": "custom" } },
-    { "path": "pages/stele/list", "style": { "navigationBarTitleText": "订单管理", "navigationStyle": "custom" } },
-    { "path": "pages/stele/detail", "style": { "navigationBarTitleText": "详情", "navigationStyle": "custom" } },
-    { "path": "pages/stele/preview", "style": { "navigationBarTitleText": "预览", "navigationStyle": "custom" } },
-    { "path": "pages/stele/help", "style": { "navigationBarTitleText": "帮助", "navigationStyle": "custom" } }
+    { "path": "pages/stele/index", "style": { "navigationBarTitleText": "碑文下单 · 老万石雕", "navigationStyle": "custom" } },
+    { "path": "pages/stele/list", "style": { "navigationBarTitleText": "碑文记录 · 老万石雕", "navigationStyle": "custom" } },
+    { "path": "pages/stele/detail", "style": { "navigationBarTitleText": "编辑碑文 · 老万石雕", "navigationStyle": "custom" } },
+    { "path": "pages/stele/preview", "style": { "navigationBarTitleText": "3D 预览 · 老万石雕", "navigationStyle": "custom" } },
+    { "path": "pages/stele/help", "style": { "navigationBarTitleText": "操作说明 · 老万石雕", "navigationStyle": "custom" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "碑文排版",
+    "navigationBarTitleText": "老万石雕",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },

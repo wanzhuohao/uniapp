@@ -13,7 +13,7 @@
           :class="{ active: currentStep === i + 1, done: currentStep > i + 1 }"
           @click="goStep(i + 1)"
         >
-          <span class="step-icon">{{ currentStep > i + 1 ? '✓' : i + 1 }}</span>
+          <span class="step-icon">{{ currentStep > i + 1 ? '✓' : ['壹', '貳', '叄'][i] }}</span>
           <span class="step-title">{{ label }}</span>
         </div>
       </div>
@@ -376,10 +376,29 @@ function confirmPhoneAndSubmit() {
 
 <style scoped>
 .order-page {
+  position: relative;
   min-height: 100vh;
-  background: linear-gradient(180deg, #EDE8E2 0%, var(--color-bg-blue-light) 100%);
+  background:
+    radial-gradient(ellipse at top left, #F3ECE0 0%, transparent 55%),
+    radial-gradient(ellipse at bottom right, #EFE8DC 0%, transparent 60%),
+    #F6F1E8;
   padding: 16px;
   padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+}
+.order-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.588  0 0 0 0 0.439  0 0 0 0 0.039  0 0 0 0.12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.top-bar,
+.steps-header,
+.step-content {
+  position: relative;
+  z-index: 1;
 }
 .top-bar {
   display: flex;
@@ -392,77 +411,142 @@ function confirmPhoneAndSubmit() {
   color: var(--color-primary) !important;
   font-size: 15px;
   padding: 4px 0;
+  font-family: var(--font-display);
 }
 .top-bar-title {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 19px;
+  font-weight: 500;
   color: var(--color-primary);
+  font-family: var(--font-display);
+  letter-spacing: 4px;
 }
 .steps-header {
-  background: #fff;
-  padding: 16px;
-  border-radius: 12px;
+  background: #FFFDF8;
+  padding: 20px 16px;
+  border-radius: 8px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.1);
-  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 0 rgba(150, 112, 10, 0.12) inset,
+    0 6px 20px rgba(44, 36, 32, 0.05);
+  border: none;
 }
 .steps-bar {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 4px;
+  position: relative;
+}
+/* 步骤之间的连接线 */
+.steps-bar::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 16%;
+  right: 16%;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(150, 112, 10, 0.3) 0,
+    rgba(150, 112, 10, 0.3) 3px,
+    transparent 3px,
+    transparent 7px
+  );
+  z-index: 0;
 }
 .step-item {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
   cursor: pointer;
-  padding: 6px 4px;
-  border-radius: 8px;
-  transition: background 0.2s;
+  padding: 4px;
+  border-radius: 6px;
+  transition: transform 0.2s;
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
 }
-.step-item:hover {
-  background: var(--color-bg-blue);
-}
+.step-item:hover { transform: translateY(-1px); }
+
+/* 印章造型：方形边框 + 朱砂色 */
 .step-icon {
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
+  width: 44px;
+  height: 44px;
+  line-height: 40px;
   text-align: center;
-  border-radius: 50%;
-  font-size: 14px;
-  background: var(--color-border-light);
-  color: var(--color-primary-light);
+  border: 2px solid rgba(150, 112, 10, 0.4);
+  background: #FDF8EC;
+  color: rgba(150, 112, 10, 0.55);
+  border-radius: 4px;
+  font-size: 20px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 .step-item.done .step-icon {
-  background: linear-gradient(180deg, var(--color-success-hover) 0%, var(--color-success) 100%);
-  color: #fff;
+  background: #F3E7D0;
+  border-color: #96700A;
+  color: #96700A;
+  font-size: 22px;
 }
 .step-item.active .step-icon {
-  background: linear-gradient(180deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
-  color: #fff;
+  background: #A13732;
+  border-color: #A13732;
+  color: #FDF8EC;
+  box-shadow:
+    0 0 0 3px #FFFDF8,
+    0 0 0 4px #A13732,
+    0 4px 12px rgba(161, 55, 50, 0.3);
+  transform: rotate(-3deg);
+}
+/* 步骤印章 hover 轻抖：像要重新盖一次 */
+.step-item:hover .step-icon {
+  animation: stepSealJitter 0.4s ease;
+}
+@keyframes stepSealJitter {
+  0%   { transform: rotate(0) scale(1); }
+  25%  { transform: rotate(3deg) scale(1.08); }
+  50%  { transform: rotate(-4deg) scale(1.04); }
+  75%  { transform: rotate(2deg) scale(1.02); }
+  100% { transform: rotate(0) scale(1); }
+}
+.step-item.active:hover .step-icon {
+  animation: stepSealJitterActive 0.4s ease;
+}
+@keyframes stepSealJitterActive {
+  0%   { transform: rotate(-3deg) scale(1); }
+  25%  { transform: rotate(2deg) scale(1.08); }
+  50%  { transform: rotate(-8deg) scale(1.04); }
+  75%  { transform: rotate(-1deg) scale(1.02); }
+  100% { transform: rotate(-3deg) scale(1); }
 }
 .step-title {
   font-size: 14px;
-  color: var(--color-primary-light);
+  color: rgba(150, 112, 10, 0.7);
+  font-family: var(--font-display);
+  letter-spacing: 3px;
 }
 .step-item.active .step-title {
-  color: var(--color-primary);
-  font-weight: 600;
+  color: #A13732;
+  font-weight: 500;
 }
 .step-item.done .step-title {
-  color: var(--color-success);
+  color: var(--color-primary);
   font-weight: 500;
 }
 .step-content {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
+  background: #FFFDF8;
+  border-radius: 8px;
+  padding: 24px;
   min-height: 520px;
-  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.1);
-  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 0 rgba(150, 112, 10, 0.12) inset,
+    0 6px 20px rgba(44, 36, 32, 0.05);
+  border: none;
 }
 .step-panel {
   width: 100%;
@@ -472,13 +556,35 @@ function confirmPhoneAndSubmit() {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 12px 16px 12px 48px;
   margin-bottom: 16px;
-  background: var(--color-bg-blue-light);
-  border-left: 4px solid var(--color-warning);
-  border-radius: 6px;
+  background: var(--paper-light);
+  border: 1px solid var(--gold-a25);
+  border-left: 3px solid var(--ink-vermilion);
+  border-radius: 4px;
   font-size: 14px;
-  color: var(--color-text);
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  letter-spacing: 2px;
+  position: relative;
+}
+.draft-notice::before {
+  content: "稿";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--ink-vermilion);
+  color: var(--ink-vermilion);
+  font-family: var(--font-display);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  background: var(--paper-white);
 }
 .draft-notice-text { flex: 1; }
 .draft-notice-btns { display: flex; gap: 8px; flex-shrink: 0; }
@@ -488,21 +594,35 @@ function confirmPhoneAndSubmit() {
 .mt-8 {
   margin-top: 8px;
 }
-/* 名单区：蓝绿主题 */
+/* 名单区：宣纸格式 */
 .names-group {
-  background: linear-gradient(180deg, var(--color-bg-blue) 0%, var(--color-bg-blue-light) 100%);
-  border: 2px solid var(--color-primary-light);
-  border-radius: 8px;
+  background: linear-gradient(180deg, var(--paper-light) 0%, var(--paper-white) 100%);
+  border: 1px solid var(--gold-a25);
+  border-radius: 4px;
   margin-bottom: 16px;
-  padding: 12px 14px;
+  padding: 14px 14px 10px;
+  position: relative;
+}
+.names-group::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  background: var(--ink-gold);
+  border-radius: 2px;
 }
 .group-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--color-primary);
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--ink-gold);
+  font-family: var(--font-display);
+  letter-spacing: 4px;
+  font-size: 15px;
 }
 .group-header-btns {
   display: flex;
@@ -515,23 +635,31 @@ function confirmPhoneAndSubmit() {
   gap: 8px;
   margin-bottom: 10px;
   padding: 10px 8px;
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  background: var(--paper-white);
+  border: 1px solid var(--gold-a15);
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.names-row:hover {
+  border-color: var(--gold-a35);
+  box-shadow: 0 2px 6px var(--gold-a10);
 }
 .drag-handle {
   cursor: grab;
-  color: var(--color-primary-light);
-  font-size: 20px;
+  color: var(--ink-gold);
+  font-size: 18px;
   user-select: none;
   flex-shrink: 0;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 36px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   touch-action: none;
+  opacity: 0.5;
+  transition: opacity 0.2s;
 }
+.names-row:hover .drag-handle { opacity: 1; }
 .drag-handle:active {
   cursor: grabbing;
 }
@@ -564,19 +692,49 @@ function confirmPhoneAndSubmit() {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 16px;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 14px 20px;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: center;
-  gap: 12px;
-  background: #fff;
-  border-top: 1px solid var(--color-border-light);
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+  gap: 14px;
+  background:
+    linear-gradient(180deg, rgba(253, 248, 236, 0.95) 0%, rgba(253, 248, 236, 1) 100%);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(150, 112, 10, 0.25);
+  box-shadow: 0 -4px 16px rgba(44, 36, 32, 0.06);
   z-index: 10;
 }
+.footer-actions::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 40px;
+  right: 40px;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(150, 112, 10, 0.35) 0,
+    rgba(150, 112, 10, 0.35) 3px,
+    transparent 3px,
+    transparent 7px
+  );
+}
+.footer-actions :deep(.el-button) {
+  font-family: var(--font-display);
+  letter-spacing: 4px;
+  border-radius: 4px;
+  padding: 10px 28px;
+  font-size: 15px;
+  min-width: 120px;
+}
 .footer-actions :deep(.el-button--primary) {
-  background: linear-gradient(180deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
-  border-color: var(--color-primary);
+  background: linear-gradient(180deg, #B8860B 0%, #96700A 100%);
+  border-color: #96700A;
+  box-shadow: 0 2px 6px rgba(150, 112, 10, 0.3);
+}
+.footer-actions :deep(.el-button--primary:hover) {
+  background: linear-gradient(180deg, #C9960E 0%, #A47B0C 100%);
+  transform: translateY(-1px);
 }
 .step-panel-preview {
   padding: 12px 0 8px;
@@ -598,20 +756,24 @@ function confirmPhoneAndSubmit() {
 }
 .preview-empty {
   text-align: center;
-  color: var(--color-primary-light);
+  color: var(--ink-gold);
   padding: 48px 16px;
+  font-family: var(--font-display);
+  letter-spacing: 4px;
+  opacity: 0.7;
 }
 .preview-toolbar-bar {
   width: 100%;
   margin-bottom: 16px;
-  padding: 12px 10px;
-  background: linear-gradient(180deg, var(--color-bg-blue-light) 0%, var(--color-bg-blue) 100%);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  padding: 14px 14px;
+  background: var(--paper-white);
+  border: 1px solid var(--gold-a25);
+  border-radius: 4px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  box-shadow: var(--shadow-paper);
 }
 .preview-bar-row {
   display: flex;
@@ -620,10 +782,15 @@ function confirmPhoneAndSubmit() {
   gap: 8px;
 }
 .preview-bar-label {
-  font-size: 14px;
-  color: var(--color-primary);
-  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink-gold);
+  font-weight: 500;
   flex-shrink: 0;
+  font-family: var(--font-display);
+  letter-spacing: 3px;
+  padding-right: 4px;
+  border-right: 1px solid var(--gold-a25);
+  margin-right: 4px;
 }
 .preview-bar-btns {
   display: flex;
@@ -631,18 +798,30 @@ function confirmPhoneAndSubmit() {
   gap: 8px;
 }
 .toolbar-btn {
-  padding: 8px 14px;
-  font-size: 14px;
-  color: var(--color-primary);
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--ink-gold);
+  background: var(--paper-light);
+  border: 1px solid var(--gold-a25);
+  border-radius: 3px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: all 0.2s;
+  font-family: var(--font-display);
+  letter-spacing: 2px;
+}
+.toolbar-btn:hover {
+  background: var(--ink-gold);
+  color: var(--paper-white);
+  border-color: var(--ink-gold);
+  transform: translateY(-1px);
 }
 .toolbar-btn:active {
-  background: var(--color-bg-blue);
-  border-color: var(--color-primary);
+  transform: translateY(0);
+}
+.toolbar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 /* 碑文预览：手机端竖长矩形 */
 .beibei-word-preview {

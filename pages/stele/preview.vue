@@ -334,47 +334,114 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .preview-3d-page {
+  position: relative;
   padding: 24px;
-  background: linear-gradient(180deg, #EDE8E2 0%, var(--color-bg-blue-light) 100%);
+  background: var(--paper-bg);
   min-height: 100vh;
+}
+.preview-3d-page::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: var(--paper-noise-url);
+  z-index: 0;
+}
+.preview-toolbar,
+.three-wrapper,
+.empty-state {
+  position: relative;
+  z-index: 1;
 }
 .preview-toolbar {
   display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
-  padding: 12px 16px; background: #fff; border-radius: 12px;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 2px 12px rgba(184, 134, 11, 0.08);
+  padding: 14px 20px;
+  background: var(--paper-white);
+  border-radius: 8px;
+  border: none;
+  box-shadow: var(--shadow-paper);
 }
-.preview-back-btn { color: var(--color-primary) !important; border-color: var(--color-border); }
-.preview-back-btn:hover { background: var(--color-bg-blue) !important; border-color: var(--color-primary) !important; }
-.preview-toolbar-title { font-size: 16px; font-weight: 600; color: var(--color-primary); }
+.preview-back-btn {
+  color: var(--ink-gold) !important;
+  border-color: var(--gold-a25) !important;
+  font-family: var(--font-display) !important;
+  letter-spacing: 2px !important;
+}
+.preview-back-btn:hover {
+  background: var(--paper-light) !important;
+  border-color: var(--ink-gold) !important;
+}
+.preview-toolbar-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink-gold);
+  font-family: var(--font-display);
+  letter-spacing: 6px;
+}
 .preview-toolbar-right { margin-left: auto; display: flex; align-items: center; }
 .preview-3d-page :deep(.el-switch.is-checked .el-switch__core) {
-  background: linear-gradient(180deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
-  border-color: var(--color-primary);
+  background: linear-gradient(180deg, var(--ink-gold-hi) 0%, var(--ink-gold) 100%);
+  border-color: var(--ink-gold);
 }
 .three-container {
   width: 100%; height: calc(100vh - 120px); min-height: 400px;
-  border-radius: 12px; overflow: hidden;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.1);
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--gold-a25);
+  box-shadow: var(--shadow-paper-deep);
+  background: #1a1a18;
 }
 .three-wrapper { position: relative; }
 .three-hint {
   position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-  background: rgba(0,0,0,0.6); color: #fff; padding: 8px 20px;
-  border-radius: 20px; font-size: 14px; pointer-events: auto; cursor: pointer;
-  z-index: 10; animation: hintFade 4s ease forwards;
+  background: rgba(26, 26, 24, 0.8);
+  color: var(--ink-gold-pale);
+  padding: 10px 24px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-family: var(--font-display);
+  letter-spacing: 4px;
+  border: 1px solid var(--gold-a35);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+  animation: hintFade 4s ease forwards;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 @keyframes hintFade {
   0%, 70% { opacity: 1; }
   100% { opacity: 0; }
 }
 .empty-state {
-  display: flex; align-items: center; justify-content: center;
-  height: calc(100vh - 120px); min-height: 300px; background: #fff;
-  border-radius: 12px; border: 1px dashed var(--color-border);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px;
+  height: calc(100vh - 120px); min-height: 300px;
+  background: var(--paper-white);
+  border-radius: 8px;
+  border: 1px dashed var(--gold-a35);
+  box-shadow: var(--shadow-paper);
 }
-.empty-text { color: var(--color-primary-light); font-size: 16px; }
+.empty-state::before {
+  content: "观";
+  width: 72px;
+  height: 72px;
+  border: 2px solid var(--gold-a35);
+  color: var(--ink-gold);
+  font-family: var(--font-display);
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  opacity: 0.6;
+}
+.empty-text {
+  color: var(--ink-gold);
+  font-size: 15px;
+  font-family: var(--font-display);
+  letter-spacing: 4px;
+  opacity: 0.8;
+}
 
 @media (max-width: 768px) {
   .preview-3d-page { padding: 12px; }

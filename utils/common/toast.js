@@ -1,6 +1,6 @@
 // utils/common/toast.js
-// 薄 wrapper，统一封装 uni.showToast / uni.showLoading / uni.hideLoading
-// 不做响应式，不做日志，不做埋点
+// H5 环境使用印章式 toast，非 H5 fallback 到 uni.showToast
+// API 兼容：toast.success / error / info / loading / hideLoading
 
 const DEFAULTS = {
   success: 1500,
@@ -8,67 +8,96 @@ const DEFAULTS = {
   info: 1500,
 }
 
-export const toast = {
-  /**
-   * 成功提示，绿色对勾图标
-   * @param {string} msg
-   * @param {number} [duration]
-   */
-  success(msg, duration) {
-    uni.showToast({
-      title: String(msg ?? ''),
-      icon: 'success',
-      duration: duration ?? DEFAULTS.success,
-    })
-  },
+const isH5 = typeof window !== 'undefined' && typeof document !== 'undefined'
 
-  /**
-   * 错误提示。uniapp H5 下 icon='error' 只支持 title ≤ 7 字符，
-   * 超过会自动降级为纯文字。wrapper 主动检测长度保持一致行为：
-   * 短错误保留红叉图标，长错误降级为 icon:'none'。
-   * @param {string} msg
-   * @param {number} [duration]
-   */
-  error(msg, duration) {
-    const title = String(msg ?? '')
-    uni.showToast({
-      title,
-      icon: title.length <= 7 ? 'error' : 'none',
-      duration: duration ?? DEFAULTS.error,
-    })
-  },
+let currentHost = null
+let currentTimer = null
+let loadingHost = null
 
-  /**
-   * 信息 / 警告提示，纯文字无图标
-   * @param {string} msg
-   * @param {number} [duration]
-   */
-  info(msg, duration) {
+function ensureHost() {
+  if (currentHost && document.body.contains(currentHost)) return currentHost
+  const host = document.createElement('div')
+  host.className = 'seal-toast-host'
+  document.body.appendChild(host)
+  currentHost = host
+  return host
+}
+
+function clearCurrent() {
+  if (currentTimer) { clearTimeout(currentTimer); currentTimer = null }
+  if (currentHost && currentHost.firstChild) {
+    const el = currentHost.firstChild
+    el.classList.add('is-leaving')
+    setTimeout(() => {
+      if (el.parentNode) el.parentNode.removeChild(el)
+    }, 200)
+  }
+}
+
+function show({ msg, stamp, gold = false, duration }) {
+  if (!isH5) {
     uni.showToast({
       title: String(msg ?? ''),
       icon: 'none',
-      duration: duration ?? DEFAULTS.info,
+      duration,
     })
-  },
+    return
+  }
+  clearCurrent()
+  const host = ensureHost()
+  const wrap = document.createElement('div')
+  wrap.className = 'seal-toast-wrap'
+  wrap.innerHTML = `
+    <div class="seal-toast">
+      <div class="seal-toast-stamp${gold ? ' is-gold' : ''}">${stamp}</div>
+      <div class="seal-toast-msg">${escapeHtml(String(msg ?? ''))}</div>
+    </div>
+  `
+  host.appendChild(wrap)
+  currentTimer = setTimeout(() => clearCurrent(), duration)
+}
 
-  /**
-   * 显示加载。默认不 mask（与 uni.showLoading 一致）。
-   * 若需阻止底层交互，显式传 { mask: true }。
-   * 连续调用覆盖文案，不计数。
-   * @param {string} [msg]
-   * @param {{ mask?: boolean }} [options]
-   */
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]))
+}
+
+export const toast = {
+  success(msg, duration) {
+    show({ msg, stamp: '成', gold: true, duration: duration ?? DEFAULTS.success })
+  },
+  error(msg, duration) {
+    show({ msg, stamp: '误', gold: false, duration: duration ?? DEFAULTS.error })
+  },
+  info(msg, duration) {
+    show({ msg, stamp: '告', gold: true, duration: duration ?? DEFAULTS.info })
+  },
   loading(msg = '加载中', options = {}) {
-    uni.showLoading({
-      title: String(msg),
-      mask: options.mask === true,
-    })
+    if (!isH5) {
+      uni.showLoading({ title: String(msg), mask: options.mask === true })
+      return
+    }
+    this.hideLoading()
+    const host = document.createElement('div')
+    host.className = 'seal-toast-host'
+    if (options.mask) host.style.background = 'rgba(44, 36, 32, 0.25)'
+    host.innerHTML = `
+      <div class="seal-toast-wrap">
+        <div class="seal-toast">
+          <div class="seal-toast-stamp is-loading"></div>
+          <div class="seal-toast-msg">${escapeHtml(String(msg))}</div>
+        </div>
+      </div>
+    `
+    document.body.appendChild(host)
+    loadingHost = host
   },
-
-  /**
-   * 隐藏加载
-   */
   hideLoading() {
-    uni.hideLoading()
+    if (!isH5) { uni.hideLoading(); return }
+    if (loadingHost && loadingHost.parentNode) {
+      loadingHost.parentNode.removeChild(loadingHost)
+    }
+    loadingHost = null
   },
 }

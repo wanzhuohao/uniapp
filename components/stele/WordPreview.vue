@@ -52,6 +52,15 @@ const bigLines = computed(() =>
   (props.data.big || '').split('\n').filter(Boolean)
 );
 
+/** 题款日期：农历 + 公历组合，失败回退公历 */
+const signatureDate = computed(() => {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}·${m}·${d}`;
+});
+
 /** 导出预览为 PNG 图片，filename 为下载文件名 */
 async function exportImage(filename: string): Promise<boolean> {
   const el = wordAreaRef.value;

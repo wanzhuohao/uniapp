@@ -5,14 +5,13 @@
  */
 .beibei-word-preview .word-area {
   margin-bottom: 0;
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: 10px;
   overflow: auto;
   min-height: var(--beibei-preview-height, 560px);
   display: flex;
   flex-direction: column;
   background: #1a1a18;
-  box-shadow: 0 2px 12px rgba(184, 134, 11, 0.1);
 }
 
 .beibei-word-preview .word-top {
@@ -25,7 +24,7 @@
 
 .beibei-word-preview .word-title {
   font-size: var(--beibei-title-size, 36px);
-  font-family: "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
+  font-family: "LXGW WenKai Screen", "LXGW WenKai", "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
   font-weight: normal;
   color: #D4A528;
   direction: rtl;
@@ -95,7 +94,7 @@
   flex-direction: column;
   align-items: flex-start;
   font-size: var(--beibei-big-size, 32px);
-  font-family: "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
+  font-family: "LXGW WenKai Screen", "LXGW WenKai", "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
   color: #D4A528;
 }
 
@@ -124,7 +123,7 @@
 .beibei-word-preview .word-date,
 .beibei-word-preview .word-birth {
   font-size: var(--beibei-small-size, 14px);
-  font-family: "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
+  font-family: "LXGW WenKai Screen", "LXGW WenKai", "KaiTi", "楷体", "STKaiti", "华文楷体", "Kaiti SC", "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", serif;
   color: #D4A528;
   white-space: pre;
   line-height: 1.5;
