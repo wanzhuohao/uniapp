@@ -64,7 +64,6 @@
           <text class="tool-title">碑文排版</text>
           <text class="tool-desc">订单管理 · 文字排版 · 预览导出</text>
           <view class="tool-arrow">
-            <text class="tool-arrow-txt">入</text>
             <text class="tool-arrow-line">──→</text>
           </view>
         </view>
@@ -463,7 +462,6 @@ function goTo(url) {
   transform: translateX(6rpx);
 }
 
-.tool-arrow-txt { font-size: 32rpx; }
 .tool-arrow-line { font-size: 26rpx; letter-spacing: 0; }
 
 /* 副列：两张堆叠的小卡 */
