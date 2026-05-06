@@ -70,6 +70,7 @@
             </el-form-item>
             <!-- 4. 名单 -->
             <el-form-item label="名单">
+              <div class="names-list">
               <div v-for="(row, rowIdx) in form.names" :key="rowIdx" class="names-group">
                 <div class="group-header">
                   <span>第{{ rowIdx + 1 }}排</span>
@@ -110,6 +111,7 @@
                     </div>
                   </template>
                 </draggable>
+              </div>
               </div>
             </el-form-item>
             <!-- 5. 备注 -->
@@ -564,11 +566,17 @@ watch(() => form.dateQingming, (val) => {
   user-select: none; flex-shrink: 0; padding: 0 4px;
 }
 .drag-handle:active { cursor: grabbing; }
+.names-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
 .names-group {
   background: linear-gradient(180deg, #FAF5EC 0%, #FFFDF8 100%);
   border: 1px solid rgba(150, 112, 10, 0.3);
   border-radius: 6px;
-  margin-bottom: 16px;
   padding: 14px 12px 10px 12px;
   position: relative;
 }
