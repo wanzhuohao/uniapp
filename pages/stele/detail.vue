@@ -1,10 +1,14 @@
 <template>
-  <div class="detail-page">
+  <div :class="['detail-page', `layout-${splitterLayout}`]">
     <header class="detail-top-bar">
       <el-button text @click="onBack" class="back-btn">← 返回列表</el-button>
+      <el-radio-group v-model="splitterLayout" size="small" class="layout-toggle">
+        <el-radio-button value="horizontal">左右</el-radio-button>
+        <el-radio-button value="vertical">上下</el-radio-button>
+      </el-radio-group>
       <h2 class="detail-page-title">{{ idRef ? '编辑碑文' : '新增碑文' }}<span v-if="justSaved" class="saved-badge">已保存</span></h2>
     </header>
-    <el-splitter class="detail-splitter">
+    <el-splitter :layout="splitterLayout" class="detail-splitter">
       <el-splitter-panel :size="'50%'" min="25%">
         <div class="edit-section">
           <h3 class="section-title">编辑区</h3>
@@ -204,6 +208,9 @@ const saving = ref(false);
 const idRef = ref('');
 const justSaved = ref(false);
 const previewTheme = ref<'dark' | 'light'>('dark');
+const splitterLayout = ref<'horizontal' | 'vertical'>(
+  typeof window !== 'undefined' && window.innerWidth >= window.innerHeight ? 'horizontal' : 'vertical'
+);
 const previewRef = ref<InstanceType<typeof WordPreview> | null>(null);
 const exporting = ref(false);
 
@@ -625,6 +632,31 @@ watch(() => form.dateQingming, (val) => {
 .draft-notice-btns { display: flex; gap: 8px; flex-shrink: 0; }
 
 .detail-splitter { flex: 1; overflow: hidden; height: calc(100vh - 70px); }
+/* 上下结构：去掉高度限制和独立滚动，整页自然滚动 */
+.detail-page.layout-vertical {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.detail-page.layout-vertical .detail-splitter {
+  flex: none;
+  height: auto !important;
+  overflow: visible !important;
+}
+.detail-page.layout-vertical .detail-splitter :deep(.el-splitter-panel) {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  height: auto !important;
+}
+.detail-page.layout-vertical .detail-splitter :deep(.el-splitter-panel > div) {
+  height: auto !important;
+  overflow: visible !important;
+  padding: 0 12px;
+}
+.detail-page.layout-vertical .detail-splitter :deep(.el-splitter-bar) {
+  display: none !important;
+}
 /* 两个 panel 内部可滚动 + 左右间距 */
 .detail-splitter :deep(.el-splitter-panel > div) {
   height: 100%;
