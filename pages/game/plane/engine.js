@@ -16,8 +16,8 @@ export function createEngine(opts) {
   // 玩家
   const player = {
     x: width / 2,
-    y: height / 2,
-    r: unit() * 2,
+    y: height - unit() * 6,
+    r: unit() * 1.1,
     hp: 3,
     maxHp: 3,
     speed: width / 30 * 20,  // ~ 20 unit/s
@@ -32,6 +32,7 @@ export function createEngine(opts) {
   };
 
   const bullets = [];
+  const enemyBullets = [];
   const enemies = [];
   const boxes = [];
   const particles = [];
@@ -68,20 +69,43 @@ export function createEngine(opts) {
 
   // 实体工厂
   function spawnEnemy() {
-    const tier = Math.min(3, Math.floor(elapsed / 30000));
+    // tier 切换：0-20s tier0; 20-40s tier1; 40-60s tier2; 60s+ tier3
+    const tier = Math.min(3, Math.floor(elapsed / 20000));
     const u = unit();
     const r = u * (0.7 + Math.random() * 0.3 + tier * 0.12);
     const palette = ['#FF3D5A', '#FF9F1C', '#B14AED', '#2EC4B6', '#F72585'];
+    // 精英怪概率：tier1=30%, tier2=50%, tier3=70%
+    const eliteChance = [0, 0.3, 0.5, 0.7][tier];
+    const isElite = Math.random() < eliteChance;
     enemies.push({
       x: r + Math.random() * (width - r * 2),
       y: -r,
       r,
       vy: u * (5 + Math.random() * 3 + tier * 1.8),
       vx: (Math.random() - 0.5) * u * 2,
-      hp: 1 + tier,
-      maxHp: 1 + tier,
-      xp: 1 + tier,
-      color: palette[Math.floor(Math.random() * palette.length)]
+      hp: 1 + tier + (isElite ? 1 : 0),
+      maxHp: 1 + tier + (isElite ? 1 : 0),
+      xp: 1 + tier + (isElite ? 1 : 0),
+      color: palette[Math.floor(Math.random() * palette.length)],
+      elite: isElite,
+      fireTimer: -800 - Math.random() * 800, // 错开首次开火时机
+      fireInterval: 1800 + Math.random() * 800 - tier * 150
+    });
+  }
+
+  function spawnEnemyBullet(e) {
+    const u = unit();
+    // 朝玩家方向发射
+    const dx = player.x - e.x;
+    const dy = player.y - e.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    const speed = u * 18;
+    enemyBullets.push({
+      x: e.x,
+      y: e.y,
+      vx: (dx / dist) * speed,
+      vy: (dy / dist) * speed,
+      r: u * 0.3
     });
   }
 
@@ -144,7 +168,7 @@ export function createEngine(opts) {
       kills++;
     }
     enemies.length = 0;
-    // 全屏闪白特效
+    enemyBullets.length = 0;
     flash = 200;
   }
   let flash = 0;
@@ -245,15 +269,34 @@ export function createEngine(opts) {
       }
     }
 
-    // 敌人生成
+    // 敌人生成（加快节奏：上限 220ms / 起点 800ms / 衰减 /60）
     spawnTimer += dt;
-    spawnInterval = Math.max(280, 900 - elapsed / 80);
+    spawnInterval = Math.max(220, 800 - elapsed / 60);
     while (spawnTimer >= spawnInterval) {
       spawnTimer -= spawnInterval;
       spawnEnemy();
     }
 
-    // 敌人移动 & 与子弹碰撞
+    // 敌弹移动 + 撞玩家
+    for (let i = enemyBullets.length - 1; i >= 0; i--) {
+      const b = enemyBullets[i];
+      b.x += b.vx * dt / 1000;
+      b.y += b.vy * dt / 1000;
+      if (b.x < -20 || b.x > width + 20 || b.y < -20 || b.y > height + 20) {
+        enemyBullets.splice(i, 1);
+        continue;
+      }
+      if (player.invuln <= 0) {
+        const dx = b.x - player.x, dy = b.y - player.y;
+        if (dx * dx + dy * dy < (b.r + player.r) * (b.r + player.r)) {
+          enemyBullets.splice(i, 1);
+          spawnParticles(b.x, b.y, '#FF3D5A', 6);
+          hitPlayer();
+        }
+      }
+    }
+
+    // 敌人移动 & 与子弹碰撞 & 精英开火
     for (let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
       e.y += e.vy * dt / 1000;
@@ -262,6 +305,14 @@ export function createEngine(opts) {
       if (e.y > height + e.r) {
         enemies.splice(i, 1);
         continue;
+      }
+      // 精英怪开火（要求 y > 0 才能开始开火，避免画面外开枪）
+      if (e.elite && e.y > 0) {
+        e.fireTimer += dt;
+        if (e.fireTimer >= e.fireInterval) {
+          e.fireTimer = 0;
+          spawnEnemyBullet(e);
+        }
       }
       let killed = false;
       for (let j = bullets.length - 1; j >= 0; j--) {
@@ -419,10 +470,18 @@ export function createEngine(opts) {
       ctx.restore();
     }
 
-    // 敌人（六边形 + 内圈高光）
+    // 敌人（六边形 + 内圈高光，精英怪带外圈光环）
     for (const e of enemies) {
       ctx.save();
       ctx.translate(e.x, e.y);
+      // 精英外圈光环
+      if (e.elite) {
+        ctx.strokeStyle = `rgba(255,224,102,${0.5 + Math.sin(elapsed / 150) * 0.3})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, e.r * 1.35, 0, Math.PI * 2);
+        ctx.stroke();
+      }
       // 外形
       ctx.beginPath();
       for (let k = 0; k < 6; k++) {
@@ -433,8 +492,8 @@ export function createEngine(opts) {
       ctx.closePath();
       ctx.fillStyle = e.color;
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = e.elite ? '#FFE066' : 'rgba(255,255,255,0.7)';
+      ctx.lineWidth = e.elite ? 1.8 : 1.2;
       ctx.stroke();
       // 内圈
       ctx.beginPath();
@@ -452,7 +511,7 @@ export function createEngine(opts) {
       }
     }
 
-    // 子弹（胶囊 + 黄绿光晕）
+    // 玩家子弹（黄色 + 光晕）
     for (const b of bullets) {
       ctx.save();
       ctx.shadowColor = '#FFE066';
@@ -460,6 +519,18 @@ export function createEngine(opts) {
       ctx.fillStyle = '#FFF1A8';
       const w = b.r, h = b.r * 2.4;
       ctx.fillRect(b.x - w / 2, b.y - h / 2, w, h);
+      ctx.restore();
+    }
+
+    // 敌弹（紫红光球）
+    for (const b of enemyBullets) {
+      ctx.save();
+      ctx.shadowColor = '#FF3D5A';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#FF6B8A';
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     }
 
@@ -581,13 +652,14 @@ export function createEngine(opts) {
   function reset() {
     stop();
     bullets.length = 0;
+    enemyBullets.length = 0;
     enemies.length = 0;
     boxes.length = 0;
     particles.length = 0;
     floatTexts.length = 0;
     const u = unit();
     Object.assign(player, {
-      x: width / 2, y: height / 2, r: u * 2,
+      x: width / 2, y: height - u * 6, r: u * 1.1,
       hp: 3, maxHp: 3, speed: u * 20,
       fireInterval: 320, fireTimer: 0,
       bulletCount: 1, damage: 1, shield: 0, pierce: 0,
