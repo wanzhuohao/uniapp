@@ -70,10 +70,10 @@
       </view>
 
       <view class="tool-sub-column">
-        <view class="tool-card tool-card-coming">
+        <view class="tool-card tool-card-game" @click="goTo('/pages/game/plane/index')">
           <text class="coming-no">02</text>
-          <text class="coming-txt">敬请期待</text>
-          <text class="coming-en">Coming Soon</text>
+          <text class="coming-txt">弹幕一刻</text>
+          <text class="coming-en">Plane Roguelite</text>
         </view>
         <view class="tool-card tool-card-coming">
           <text class="coming-no">03</text>
@@ -489,6 +489,38 @@ function goTo(url) {
 
 .tool-card-coming:hover {
   border-color: rgba(150, 112, 10, 0.55);
+}
+
+.tool-card-game {
+  flex: 1;
+  min-height: 220rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  background: linear-gradient(160deg, #1C2541 0%, #0B132B 100%);
+  border: 1rpx solid rgba(255, 224, 102, 0.5);
+  box-shadow: 0 4rpx 20rpx rgba(11, 19, 43, 0.4);
+  color: #FFE066;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tool-card-game:active {
+  transform: scale(0.97);
+  box-shadow: 0 2rpx 10rpx rgba(11, 19, 43, 0.6);
+}
+
+.tool-card-game .coming-no,
+.tool-card-game .coming-txt,
+.tool-card-game .coming-en {
+  color: #FFE066;
+  opacity: 1;
+}
+
+.tool-card-game .coming-en {
+  color: rgba(255, 224, 102, 0.7);
 }
 
 .coming-no {
