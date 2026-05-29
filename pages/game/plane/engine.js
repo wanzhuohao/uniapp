@@ -30,6 +30,8 @@ export function createEngine(opts) {
     pierce: 0,
     xpRate: 1,
     invuln: 0,
+    bulletSize: 1,    // 子弹半径倍率
+    magnetRange: 0,   // 磁吸范围 (单位:unit 倍数)
   };
 
   const bullets = [];
@@ -68,26 +70,35 @@ export function createEngine(opts) {
   function keyUp(k) { input.keys.delete(k); }
 
   function spawnEnemy() {
-    const tier = Math.min(3, Math.floor(elapsed / 20000));
+    // tier 取消硬 cap,30s 升一档,无上限——5 分钟 tier 10,10 分钟 tier 20
+    const tier = Math.floor(elapsed / 30000);
     const u = unit();
-    const r = u * (0.7 + Math.random() * 0.3 + tier * 0.12);
+    // 体型上限 cap 8(tier*0.08),太大遮屏
+    const sizeBoost = Math.min(0.8, tier * 0.08);
+    const r = u * (0.7 + Math.random() * 0.3 + sizeBoost);
     const palette = ['#FF3D5A', '#FF9F1C', '#B14AED', '#2EC4B6', '#F72585'];
-    const eliteChance = [0, 0.3, 0.5, 0.7][tier];
+    // 精英概率随 tier 平滑增长,封顶 85%
+    const eliteChance = Math.min(0.85, tier * 0.05);
     const isElite = Math.random() < eliteChance;
+    // HP 无上限,每档 +1:tier 0→1, tier 5→6, tier 10→11; 精英再 +2
+    const hp = 1 + tier + (isElite ? 2 : 0);
+    // 速度有上限,tier>6 后不再加速避免乱飞
+    const tierForSpeed = Math.min(6, tier);
     enemies.push({
       id: newId(),
       x: r + Math.random() * (width - r * 2),
       y: -r,
       r,
-      vy: u * (5 + Math.random() * 3 + tier * 1.8),
+      vy: u * (5 + Math.random() * 3 + tierForSpeed * 1.5),
       vx: (Math.random() - 0.5) * u * 2,
-      hp: 1 + tier + (isElite ? 1 : 0),
-      maxHp: 1 + tier + (isElite ? 1 : 0),
-      xp: 1 + tier + (isElite ? 1 : 0),
+      hp,
+      maxHp: hp,
+      xp: 1 + Math.floor(tier * 0.5) + (isElite ? 2 : 0),
       color: palette[Math.floor(Math.random() * palette.length)],
       elite: isElite,
       fireTimer: -800 - Math.random() * 800,
-      fireInterval: 1800 + Math.random() * 800 - tier * 150
+      // 精英开火频率随 tier 加快,封底 600ms
+      fireInterval: Math.max(600, 1800 - tier * 100) + Math.random() * 400
     });
   }
 
@@ -111,6 +122,7 @@ export function createEngine(opts) {
     const count = player.bulletCount;
     const spread = 14;
     const u = unit();
+    const bulletR = u * 0.28 * (player.bulletSize || 1);
     for (let i = 0; i < count; i++) {
       const ang = count === 1
         ? -Math.PI / 2
@@ -121,7 +133,7 @@ export function createEngine(opts) {
         y: player.y - player.r,
         vx: Math.cos(ang) * u * 36,
         vy: Math.sin(ang) * u * 36,
-        r: u * 0.28,
+        r: bulletR,
         damage: player.damage,
         pierce: player.pierce,
         hits: new Set()
@@ -268,7 +280,8 @@ export function createEngine(opts) {
     }
 
     spawnTimer += dt;
-    spawnInterval = Math.max(220, 800 - elapsed / 60);
+    // 起步 900ms 慢一点,衰减更平缓(/100 vs 原/60),触底放宽到 120ms;约 100s 接近底
+    spawnInterval = Math.max(120, 900 - elapsed / 100);
     while (spawnTimer >= spawnInterval) {
       spawnTimer -= spawnInterval;
       spawnEnemy();
@@ -342,8 +355,26 @@ export function createEngine(opts) {
 
     for (let i = boxes.length - 1; i >= 0; i--) {
       const bx = boxes[i];
-      bx.y += bx.vy * dt / 1000;
       bx.rot += dt / 400;
+      // 磁吸:在 magnetRange*u 范围内,宝箱直接朝玩家飞,距离越近吸力越强
+      let moveY = bx.vy;
+      let moveX = 0;
+      if (player.magnetRange > 0) {
+        const u = unit();
+        const range = player.magnetRange * u;
+        const dxp = player.x - bx.x;
+        const dyp = player.y - bx.y;
+        const d = Math.hypot(dxp, dyp);
+        if (d < range && d > 1) {
+          // pullSpeed 30 unit/s 满力,距离反比衰减
+          const pullSpeed = u * 30;
+          const blend = 1 - d / range;
+          moveX = (dxp / d) * pullSpeed * blend;
+          moveY = bx.vy * (1 - blend * 0.6) + (dyp / d) * pullSpeed * blend;
+        }
+      }
+      bx.x += moveX * dt / 1000;
+      bx.y += moveY * dt / 1000;
       if (bx.y > height + bx.r) {
         boxes.splice(i, 1);
         continue;
@@ -458,7 +489,8 @@ export function createEngine(opts) {
       hp: 3, maxHp: 3, speed: u * 20,
       fireInterval: 320, fireTimer: 0,
       bulletCount: 1, damage: 1, shield: 0, pierce: 0,
-      xpRate: 1, invuln: 0
+      xpRate: 1, invuln: 0,
+      bulletSize: 1, magnetRange: 0
     });
     Object.keys(skillLevels).forEach(k => delete skillLevels[k]);
     xp = 0; level = 1; xpNeed = 6; kills = 0; elapsed = 0;

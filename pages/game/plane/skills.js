@@ -83,6 +83,27 @@ export const SKILLS = [
       p.pierce = (p.pierce || 0) + 1;
     }
   },
+  {
+    id: 'bulletSize',
+    name: '弹体扩张',
+    desc: '子弹大小 +25%',
+    color: '#FF8FA3',
+    max: 5,
+    apply(p) {
+      p.bulletSize = +((p.bulletSize || 1) * 1.25).toFixed(2);
+    }
+  },
+  {
+    id: 'magnet',
+    name: '磁吸装置',
+    desc: '吸引附近宝箱',
+    color: '#80FFDB',
+    max: 4,
+    apply(p) {
+      // 每级 +5 unit ≈ 屏宽 1/6;满级 20 unit 覆盖大半屏
+      p.magnetRange = (p.magnetRange || 0) + 5;
+    }
+  },
   // 兜底：所有 skill 满级后仍可选的小幅强化（max 极高保证不会满）
   {
     id: 'omni',
