@@ -1,25 +1,140 @@
 <template>
   <view class="game-page">
-    <view class="game-area">
-      <view
-        class="canvas-wrap"
-        @touchstart.prevent="onTouch"
-        @touchmove.prevent="onTouch"
-        @touchend.prevent="onTouchEnd"
-        @mousedown="onMouseDown"
-        @mousemove="onMouseMove"
-        @mouseup="onMouseUp"
-        @mouseleave="onMouseUp"
-      >
-        <canvas
-          id="gameCanvas"
-          canvas-id="gameCanvas"
-          type="2d"
-          class="game-canvas"
-        />
+    <view
+      class="game-area"
+      @touchstart.prevent="onTouch"
+      @touchmove.prevent="onTouch"
+      @touchend.prevent="onTouchEnd"
+      @mousedown="onMouseDown"
+      @mousemove="onMouseMove"
+      @mouseup="onMouseUp"
+      @mouseleave="onMouseUp"
+    >
+      <!-- 静态背景 -->
+      <view class="bg-gradient" />
+      <view class="bg-glow" />
+
+      <!-- 星空 -->
+      <view class="stars stars-far">
+        <view v-for="i in 18" :key="'sf'+i" class="star"
+          :style="{ left: ((i*97)%100)+'%', top: ((i*53)%100)+'%' }" />
+      </view>
+      <view class="stars stars-near">
+        <view v-for="i in 10" :key="'sn'+i" class="star star-big"
+          :style="{ left: ((i*167)%100)+'%', top: ((i*89)%100)+'%' }" />
       </view>
 
-      <!-- 顶部 HUD -->
+      <!-- 实体层 -->
+      <view class="layer">
+        <!-- 粒子 -->
+        <view
+          v-for="p in scene.particles"
+          :key="'p'+p.id"
+          class="particle"
+          :style="{
+            transform: `translate3d(${p.x}px,${p.y}px,0)`,
+            width: (p.r*2)+'px', height: (p.r*2)+'px',
+            background: p.color,
+            opacity: Math.max(0, p.life/p.max),
+            marginLeft: (-p.r)+'px', marginTop: (-p.r)+'px',
+          }" />
+
+        <!-- 宝箱 -->
+        <view
+          v-for="b in scene.boxes"
+          :key="'b'+b.id"
+          class="box"
+          :style="{
+            transform: `translate3d(${b.x}px,${b.y}px,0) rotate(${b.rot}rad)`,
+            width: (b.r*2)+'px', height: (b.r*2)+'px',
+            marginLeft: (-b.r)+'px', marginTop: (-b.r)+'px',
+          }" />
+
+        <!-- 敌人 -->
+        <view
+          v-for="e in scene.enemies"
+          :key="'e'+e.id"
+          class="enemy-wrap"
+          :style="{
+            transform: `translate3d(${e.x}px,${e.y}px,0)`,
+            width: (e.r*2)+'px', height: (e.r*2)+'px',
+            marginLeft: (-e.r)+'px', marginTop: (-e.r)+'px',
+          }"
+        >
+          <view
+            class="enemy"
+            :class="{ elite: e.elite }"
+            :style="{ background: e.color }"
+          />
+          <view v-if="e.hp<e.maxHp" class="enemy-hp">
+            <view class="enemy-hp-fill" :style="{ width: (e.hp/e.maxHp*100)+'%' }" />
+          </view>
+        </view>
+
+        <!-- 玩家子弹 -->
+        <view
+          v-for="b in scene.bullets"
+          :key="'pb'+b.id"
+          class="p-bullet"
+          :style="{
+            transform: `translate3d(${b.x}px,${b.y}px,0)`,
+            width: b.r+'px', height: (b.r*2.4)+'px',
+            marginLeft: (-b.r/2)+'px', marginTop: (-b.r*1.2)+'px',
+          }" />
+
+        <!-- 敌弹 -->
+        <view
+          v-for="b in scene.enemyBullets"
+          :key="'eb'+b.id"
+          class="e-bullet"
+          :style="{
+            transform: `translate3d(${b.x}px,${b.y}px,0)`,
+            width: (b.r*2)+'px', height: (b.r*2)+'px',
+            marginLeft: (-b.r)+'px', marginTop: (-b.r)+'px',
+          }" />
+
+        <!-- 玩家飞机 -->
+        <view
+          class="player"
+          :class="{ blink: scene.player.blink }"
+          :style="{
+            transform: `translate3d(${scene.player.x}px,${scene.player.y}px,0)`,
+            width: (scene.player.r*2.4)+'px',
+            height: (scene.player.r*2.4)+'px',
+            marginLeft: (-scene.player.r*1.2)+'px',
+            marginTop: (-scene.player.r*1.2)+'px',
+          }"
+        >
+          <view class="player-art">
+            <view class="wing wing-left" />
+            <view class="wing wing-right" />
+            <view class="fuselage" />
+            <view class="cockpit" />
+            <view class="flame flame-outer" />
+            <view class="flame flame-inner" />
+          </view>
+          <view v-if="scene.player.shield>0" class="shield-ring" />
+          <text v-if="scene.player.shield>0" class="shield-num">x{{ scene.player.shield }}</text>
+        </view>
+
+        <!-- 浮动文字 -->
+        <text
+          v-for="t in scene.floatTexts"
+          :key="'t'+t.id"
+          class="float-text"
+          :style="{
+            transform: `translate3d(${t.x}px,${t.y}px,0)`,
+            color: t.color,
+            opacity: Math.max(0, t.life/t.max),
+          }"
+        >{{ t.text }}</text>
+      </view>
+
+      <!-- 闪屏 -->
+      <view v-if="scene.flash>0" class="flash"
+        :style="{ opacity: scene.flash/400 }" />
+
+      <!-- HUD -->
       <view class="hud-top">
         <view class="hud-row">
           <view class="hud-label">HP</view>
@@ -96,21 +211,22 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount, computed, nextTick } from 'vue';
+import { ref, shallowRef, reactive, onMounted, onBeforeUnmount, computed, nextTick } from 'vue';
 import { createEngine } from './engine.js';
 
-const cssW = ref(0);
-const cssH = ref(0);
 const stats = reactive({ hp: 3, maxHp: 3, shield: 0, xp: 0, xpNeed: 6, level: 1, kills: 0, time: 0 });
 const upgradeChoices = ref([]);
 const overInfo = ref(null);
 const showHint = ref(true);
 
+const scene = shallowRef({
+  player: { x: 0, y: 0, r: 10, shield: 0, invuln: 0, blink: false },
+  enemies: [], bullets: [], enemyBullets: [], boxes: [],
+  particles: [], floatTexts: [], flash: 0,
+});
+
 let engine = null;
-let canvasNode = null;
-let canvasCtx = null;
-let canvasDpr = 1;
-const canvasRect = { left: 0, top: 0 };
+const stageRect = { left: 0, top: 0, width: 0, height: 0 };
 
 const xpPct = computed(() => Math.min(100, (stats.xp / stats.xpNeed) * 100));
 
@@ -120,27 +236,59 @@ function formatTime(sec) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-// 从真 canvas DOM 实际渲染尺寸读出 CSS 宽高
-function readCanvasCssSize() {
+function measureStage() {
   // #ifdef H5
-  let dom = document.getElementById('gameCanvas');
-  if (dom && dom.tagName !== 'CANVAS') dom = dom.querySelector('canvas');
-  if (dom) {
-    const rect = dom.getBoundingClientRect();
-    cssW.value = Math.round(rect.width);
-    cssH.value = Math.round(rect.height);
-    return dom;
-  }
+  const area = document.querySelector('.game-area');
+  if (!area) return false;
+  const r = area.getBoundingClientRect();
+  if (!r.width || !r.height) return false;
+  stageRect.left = r.left;
+  stageRect.top = r.top;
+  stageRect.width = Math.round(r.width);
+  stageRect.height = Math.round(r.height);
+  return true;
   // #endif
+  // #ifndef H5
   const sys = uni.getSystemInfoSync();
-  cssW.value = sys.windowWidth;
-  cssH.value = sys.windowHeight;
-  return null;
+  stageRect.left = 0;
+  stageRect.top = 0;
+  stageRect.width = sys.windowWidth;
+  stageRect.height = sys.windowHeight;
+  return true;
+  // #endif
+}
+
+function startEngine() {
+  if (!measureStage()) {
+    setTimeout(startEngine, 50);
+    return;
+  }
+  let raf, caf;
+  // #ifdef H5
+  raf = (cb) => window.requestAnimationFrame(cb);
+  caf = (id) => window.cancelAnimationFrame(id);
+  // #endif
+  // #ifndef H5
+  raf = (cb) => setTimeout(() => cb(Date.now()), 16);
+  caf = (id) => clearTimeout(id);
+  // #endif
+  engine = createEngine({
+    width: stageRect.width,
+    height: stageRect.height,
+    raf, caf,
+    onStats: (s) => Object.assign(stats, s),
+    onUpgrade: (choices) => { upgradeChoices.value = choices; },
+    onGameOver: (info) => { overInfo.value = info; },
+    onFrame: () => {
+      scene.value = engine.getRenderState();
+    },
+  });
+  engine.start();
 }
 
 onMounted(async () => {
   await nextTick();
-  setTimeout(initCanvas, 50);
+  setTimeout(startEngine, 50);
 
   // #ifdef H5
   window.addEventListener('keydown', onKeyDown);
@@ -167,113 +315,10 @@ onBeforeUnmount(() => {
 let resizeTimer = null;
 function onWindowResize() {
   if (resizeTimer) clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(applyResize, 120);
-}
-
-function applyResize() {
-  if (!canvasNode || !canvasCtx) return;
-  // #ifdef H5
-  const area = document.querySelector('.game-area');
-  if (area) {
-    const r = area.getBoundingClientRect();
-    cssW.value = Math.round(r.width);
-    cssH.value = Math.round(r.height);
-    canvasRect.left = r.left;
-    canvasRect.top = r.top;
-  }
-  canvasNode.style.width = cssW.value + 'px';
-  canvasNode.style.height = cssH.value + 'px';
-  // #endif
-  canvasNode.width = cssW.value * canvasDpr;
-  canvasNode.height = cssH.value * canvasDpr;
-  canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
-  canvasCtx.scale(canvasDpr, canvasDpr);
-  if (engine) engine.resize(cssW.value, cssH.value);
-}
-
-function initCanvas() {
-  // #ifdef H5
-  // 1) 用 .game-area 容器尺寸作为 cssW/cssH 真相源（不依赖 canvas 包装层）
-  const area = document.querySelector('.game-area');
-  if (!area) { setTimeout(initCanvas, 50); return; }
-  const areaRect = area.getBoundingClientRect();
-  cssW.value = Math.round(areaRect.width);
-  cssH.value = Math.round(areaRect.height);
-  if (!cssW.value || !cssH.value) { setTimeout(initCanvas, 50); return; }
-
-  // 2) 拿真 <canvas> DOM
-  let dom = document.getElementById('gameCanvas');
-  if (dom && dom.tagName !== 'CANVAS') dom = dom.querySelector('canvas');
-  if (!dom) { setTimeout(initCanvas, 50); return; }
-
-  // 3) 强制 canvas 视觉尺寸 = 容器尺寸（绕开 uni-canvas 包装层可能的尺寸不正确）
-  dom.style.display = 'block';
-  dom.style.width = cssW.value + 'px';
-  dom.style.height = cssH.value + 'px';
-  dom.style.position = 'absolute';
-  dom.style.left = '0';
-  dom.style.top = '0';
-
-  // 4) 内部 buffer = CSS × dpr
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  dom.width = cssW.value * dpr;
-  dom.height = cssH.value * dpr;
-
-  // 5) 触屏坐标基准用 .game-area 的位置
-  canvasRect.left = areaRect.left;
-  canvasRect.top = areaRect.top;
-
-  const ctx = dom.getContext('2d');
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.scale(dpr, dpr);
-  canvasNode = dom;
-  canvasCtx = ctx;
-  canvasDpr = dpr;
-  const raf = (cb) => window.requestAnimationFrame(cb);
-  const caf = (id) => window.cancelAnimationFrame(id);
-  startEngine(ctx, cssW.value, cssH.value, dpr, raf, caf);
-  return;
-  // #endif
-  // 小程序 / App 端走 selectorQuery
-  const query = uni.createSelectorQuery();
-  query.select('#gameCanvas')
-    .fields({ node: true, size: true, rect: true })
-    .exec((res) => {
-      if (!res || !res[0] || !res[0].node) return;
-      const node = res[0].node;
-      const sys = uni.getSystemInfoSync();
-      cssW.value = res[0].width || sys.windowWidth;
-      cssH.value = res[0].height || sys.windowHeight;
-      const dpr = Math.min(sys.pixelRatio || 1, 2);
-      node.width = cssW.value * dpr;
-      node.height = cssH.value * dpr;
-      const ctx = node.getContext('2d');
-      ctx.scale(dpr, dpr);
-      canvasNode = node;
-      canvasCtx = ctx;
-      canvasDpr = dpr;
-      canvasRect.left = res[0].left || 0;
-      canvasRect.top = res[0].top || 0;
-      let raf, caf;
-      if (node.requestAnimationFrame) {
-        raf = (cb) => node.requestAnimationFrame(cb);
-        caf = (id) => node.cancelAnimationFrame(id);
-      } else {
-        raf = (cb) => setTimeout(() => cb(Date.now()), 16);
-        caf = (id) => clearTimeout(id);
-      }
-      startEngine(ctx, cssW.value, cssH.value, dpr, raf, caf);
-    });
-}
-
-function startEngine(ctx, w, h, dpr, raf, caf) {
-  engine = createEngine({
-    ctx, width: w, height: h, dpr, raf, caf,
-    onStats: (s) => Object.assign(stats, s),
-    onUpgrade: (choices) => { upgradeChoices.value = choices; },
-    onGameOver: (info) => { overInfo.value = info; }
-  });
-  engine.start();
+  resizeTimer = setTimeout(() => {
+    if (!engine || !measureStage()) return;
+    engine.resize(stageRect.width, stageRect.height);
+  }, 120);
 }
 
 function pickUpgrade(s) {
@@ -297,9 +342,9 @@ function onTouch(e) {
   showHint.value = false;
   const t = e.touches && e.touches[0];
   if (!t) return;
-  const x = (t.clientX !== undefined ? t.clientX : t.pageX) - canvasRect.left;
-  const y = (t.clientY !== undefined ? t.clientY : t.pageY) - canvasRect.top;
-  engine.setTarget(x, y);
+  const cx = t.clientX !== undefined ? t.clientX : t.pageX;
+  const cy = t.clientY !== undefined ? t.clientY : t.pageY;
+  engine.setTarget(cx - stageRect.left, cy - stageRect.top);
 }
 function onTouchEnd() {
   if (engine) engine.clearTarget();
@@ -309,11 +354,11 @@ let mouseDown = false;
 function onMouseDown(e) {
   mouseDown = true;
   showHint.value = false;
-  if (engine) engine.setTarget(e.clientX - canvasRect.left, e.clientY - canvasRect.top);
+  if (engine) engine.setTarget(e.clientX - stageRect.left, e.clientY - stageRect.top);
 }
 function onMouseMove(e) {
   if (!mouseDown || !engine) return;
-  engine.setTarget(e.clientX - canvasRect.left, e.clientY - canvasRect.top);
+  engine.setTarget(e.clientX - stageRect.left, e.clientY - stageRect.top);
 }
 function onMouseUp() {
   mouseDown = false;
@@ -352,7 +397,7 @@ function mapKey(key) {
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: radial-gradient(ellipse at center, #0E1530 0%, #02030A 100%);
+  background: #02030A;
   user-select: none;
   display: flex;
   align-items: center;
@@ -366,17 +411,236 @@ function mapKey(key) {
   width: 100%;
   height: 100%;
   background: #02030A;
-}
-.canvas-wrap {
-  position: absolute;
-  inset: 0;
   touch-action: none;
 }
-.game-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
+
+/* 静态背景 */
+.bg-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, #1A0E3D 0%, #0B1840 50%, #04081F 100%);
+  pointer-events: none;
 }
+.bg-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(94,80,200,0.22) 0%, rgba(0,0,0,0) 60%);
+  pointer-events: none;
+}
+
+/* 星空 */
+.stars {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  width: 1.5px; height: 1.5px;
+  background: rgba(255,255,255,0.55);
+  border-radius: 50%;
+}
+.star-big {
+  width: 2.5px; height: 2.5px;
+  background: rgba(180,220,255,0.9);
+  box-shadow: 0 0 3px rgba(180,220,255,0.8);
+}
+.stars-far { animation: starscroll 90s linear infinite; }
+.stars-near { animation: starscroll 35s linear infinite; }
+@keyframes starscroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+
+/* 实体层 */
+.layer {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  left: 0; top: 0;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+.box {
+  position: absolute;
+  left: 0; top: 0;
+  background: #FFD166;
+  border: 2px solid #B7791F;
+  box-sizing: border-box;
+  will-change: transform;
+}
+.box::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 4px;
+  background: #B7791F;
+  transform: translateY(-50%);
+}
+
+/* 敌人:外层 wrap 负责定位/HP 条,内层 enemy 负责六边形剪裁 */
+.enemy-wrap {
+  position: absolute;
+  left: 0; top: 0;
+  will-change: transform;
+}
+.enemy {
+  width: 100%; height: 100%;
+  border: 1.2px solid rgba(255,255,255,0.7);
+  box-sizing: border-box;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  position: relative;
+}
+.enemy::before {
+  content: '';
+  position: absolute;
+  left: 27.5%; top: 27.5%;
+  width: 45%; height: 45%;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+}
+.enemy.elite {
+  border: 1.8px solid #FFE066;
+  filter: drop-shadow(0 0 4px rgba(255,224,102,0.8));
+  animation: elitepulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes elitepulse {
+  from { filter: drop-shadow(0 0 2px rgba(255,224,102,0.4)); }
+  to { filter: drop-shadow(0 0 6px rgba(255,224,102,1)); }
+}
+.enemy-hp {
+  position: absolute;
+  left: 0; right: 0;
+  top: -6px;
+  height: 3px;
+  background: rgba(0,0,0,0.5);
+}
+.enemy-hp-fill {
+  height: 100%;
+  background: #06D6A0;
+}
+
+.p-bullet {
+  position: absolute;
+  left: 0; top: 0;
+  background: #FFF1A8;
+  border-radius: 2px;
+  box-shadow: 0 0 6px #FFE066;
+  will-change: transform;
+}
+.e-bullet {
+  position: absolute;
+  left: 0; top: 0;
+  background: #FF6B8A;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #FF3D5A;
+  will-change: transform;
+}
+
+/* 玩家飞机 - 纯 CSS 拼装 */
+.player {
+  position: absolute;
+  left: 0; top: 0;
+  will-change: transform;
+}
+.player.blink { opacity: 0; }
+.player-art {
+  position: relative;
+  width: 100%; height: 100%;
+}
+.fuselage {
+  position: absolute;
+  left: 50%; top: 0%;
+  width: 42%; height: 85%;
+  margin-left: -21%;
+  background: linear-gradient(180deg, #7FE7FF 0%, #1689B8 100%);
+  clip-path: polygon(50% 0%, 100% 70%, 50% 90%, 0% 70%);
+  border: 0;
+}
+.cockpit {
+  position: absolute;
+  left: 50%; top: 28%;
+  width: 18%; height: 18%;
+  margin-left: -9%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+}
+.wing {
+  position: absolute;
+  top: 42%;
+  width: 48%; height: 30%;
+  background: #2A5C8A;
+}
+.wing-left {
+  left: 2%;
+  clip-path: polygon(0% 40%, 65% 0%, 65% 75%, 30% 85%);
+}
+.wing-right {
+  right: 2%;
+  clip-path: polygon(100% 40%, 35% 0%, 35% 75%, 70% 85%);
+}
+.flame {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+.flame-outer {
+  width: 24%; height: 18%;
+  background: #FF6B6B;
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+  animation: flameflicker 0.12s steps(2) infinite;
+}
+.flame-inner {
+  width: 14%; height: 12%;
+  background: #FFE066;
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+  animation: flameflicker 0.12s steps(2) infinite;
+}
+@keyframes flameflicker {
+  from { transform: translateX(-50%) scaleY(1); }
+  to { transform: translateX(-50%) scaleY(1.25); }
+}
+.shield-ring {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 130%; height: 130%;
+  margin-left: -65%; margin-top: -65%;
+  border-radius: 50%;
+  border: 2px solid #5EC8FF;
+  box-shadow: 0 0 8px rgba(94,200,255,0.6);
+  animation: shieldpulse 0.4s ease-in-out infinite alternate;
+}
+@keyframes shieldpulse {
+  from { opacity: 0.5; }
+  to { opacity: 0.9; }
+}
+.shield-num {
+  position: absolute;
+  left: 50%; top: -16px;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.float-text {
+  position: absolute;
+  left: 0; top: 0;
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.flash {
+  position: absolute; inset: 0;
+  background: #fff;
+  pointer-events: none;
+}
+
+/* HUD */
 .hud-top {
   position: absolute;
   top: 14px;
@@ -392,6 +656,7 @@ function mapKey(key) {
   border-radius: 10px;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255,255,255,0.08);
+  box-sizing: border-box;
 }
 .hud-row {
   display: flex;
@@ -483,6 +748,7 @@ function mapKey(key) {
   width: 86%;
   max-width: 360px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  box-sizing: border-box;
 }
 .upgrade-title {
   display: block;
@@ -512,6 +778,7 @@ function mapKey(key) {
   display: flex;
   flex-direction: column;
   position: relative;
+  box-sizing: border-box;
 }
 .upgrade-card:active {
   background: rgba(255,255,255,0.12);
@@ -570,6 +837,7 @@ function mapKey(key) {
   color: #fff;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.2);
+  box-sizing: border-box;
 }
 .over-btn.primary {
   background: #06D6A0;
