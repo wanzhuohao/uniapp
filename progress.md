@@ -1,8 +1,8 @@
 # 碑文排版 - 开发进度
 
-> 项目路径: `D:\code\uniapp`
+> 项目路径: `C:\claude code\uniapp`
 > 技术栈: UniApp Vue3 + uniCloud-alipay（仅 3 个订单云函数 + order 集合）
-> 最后更新: 2026-05-29
+> 最后更新: 2026-05-31
 > 状态: **已上线**
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
 > 品牌: **老万石雕**
@@ -10,6 +10,18 @@
 ## 待办
 
 - 无
+
+## 2026-05-31 全量代码审查修复
+
+- order-update 云函数：id 判断增加 null 覆盖，防御空 id 误创建新订单
+
+## 2026-05-31 飞机大战代码迁移清理
+
+- 飞机大战完整迁移到 uniapp-aliyun/pages/games/plane/，本项目删除相关代码
+- 删除 pages/game/ 整个目录（plane/ + api.js）
+- 删除 uniCloud-alipay/cloudfunctions/leaderboard-* 云函数
+- 删除 uniCloud-alipay/database/leaderboard.schema.json
+- CLAUDE.md 同步更新
 
 ## 2026-05-29 飞机肉鸽 难度曲线拉长 + 两个新道具
 

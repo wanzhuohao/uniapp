@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
 	const timeNum = Date.now();
 
 	try {
-		if (id === '' || id === undefined) {
+		if (id === '' || id === undefined || id === null) {
 			// 新增：只取已知字段，防止注入
 			const res = await collection.add({
 				big, title, small, birth, date, user, info, remark: remark || '',

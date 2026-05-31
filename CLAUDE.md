@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-碑文在线排版下单系统，支持 3D 预览、订单管理、飞机肉鸽小游戏。
+碑文在线排版下单系统，支持 3D 预览、订单管理。
 
 ## 技术栈
 
@@ -17,8 +17,7 @@
 ```
 uniapp/
 ├── pages/
-│   ├── stele/          # 碑文业务（index/list/detail/preview/help）
-│   └── game/plane/     # 飞机肉鸽游戏
+│   └── stele/          # 碑文业务（index/list/detail/preview/help）
 ├── components/
 │   └── stele/WordPreview.vue
 ├── composables/
@@ -27,11 +26,17 @@ uniapp/
 │   ├── stele/stele-utils.ts
 │   └── common/toast.js
 ├── types/order.ts
+├── docs/
+│   ├── specs/          # 设计文档
+│   ├── plans/          # 实现方案
+│   └── temp/           # 临时文件
 └── uniCloud-alipay/cloudfunctions/
     ├── order-delete/
     ├── order-query/
     └── order-update/
 ```
+
+> 飞机大战已迁移到 uniapp-aliyun/pages/games/plane/
 
 ## 构建与运行
 

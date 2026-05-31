@@ -1,5 +1,7 @@
 # 测试注意事项
 
+> 最后更新: 2026-05-31
+
 ## Playwright 自动化测试 uniCloud 站点有防刷风险
 
 headless Chromium 的 bot 特征（`navigator.webdriver`、UA、无鼠标轨迹）可能触发 uniCloud 防刷限流，即使 QPS 远低于上限也会返回 `[DCloud-clientDB]: 防刷限流异常-触发禁止访问规则`，IP 被临时封禁 360 秒。
