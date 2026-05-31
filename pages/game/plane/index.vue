@@ -231,18 +231,11 @@
       <view class="over-modal">
         <text class="over-title">输入昵称</text>
         <text class="nickname-hint">2-12 个字符，用于排行榜显示</text>
+        <!-- #ifdef H5 -->
+        <view class="nickname-input-wrap" ref="nicknameWrap" />
+        <!-- #endif -->
+        <!-- #ifndef H5 -->
         <view class="nickname-input-wrap">
-          <!-- #ifdef H5 -->
-          <input
-            type="text"
-            class="nickname-input native-input"
-            placeholder="请输入昵称"
-            maxlength="12"
-            @input="onNicknameInput"
-            @keyup.enter="onNicknameConfirm"
-          />
-          <!-- #endif -->
-          <!-- #ifndef H5 -->
           <input
             v-model="nicknameInput"
             class="nickname-input"
@@ -251,8 +244,8 @@
             :focus="showNickname"
             @confirm="onNicknameConfirm"
           />
-          <!-- #endif -->
         </view>
+        <!-- #endif -->
         <view class="over-actions">
           <view class="over-btn primary" @click="onNicknameConfirm">确认</view>
           <view class="over-btn" @click="showNickname = false">取消</view>
@@ -293,13 +286,24 @@ const scene = shallowRef({
 let engine = null;
 const stageRect = { left: 0, top: 0, width: 0, height: 0 };
 
-// H5: 弹窗出现时自动聚焦输入框
+// H5: 弹窗出现时创建原生输入框并聚焦
 // #ifdef H5
 watch(showNickname, (val) => {
   if (val) {
     nextTick(() => {
-      const el = document.querySelector('.nickname-input.native-input');
-      if (el) el.focus();
+      const wrap = document.querySelector('.nickname-input-wrap');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'nickname-input native-input';
+      input.placeholder = '请输入昵称';
+      input.maxLength = 12;
+      input.value = nicknameInput.value || '';
+      input.addEventListener('input', (e) => { nicknameInput.value = e.target.value; });
+      input.addEventListener('keyup', (e) => { if (e.key === 'Enter') onNicknameConfirm(); });
+      wrap.appendChild(input);
+      setTimeout(() => input.focus(), 100);
     });
   }
 });
