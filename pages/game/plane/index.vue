@@ -231,13 +231,28 @@
       <view class="over-modal">
         <text class="over-title">输入昵称</text>
         <text class="nickname-hint">2-12 个字符，用于排行榜显示</text>
-        <input
-          v-model="nicknameInput"
-          class="nickname-input"
-          placeholder="请输入昵称"
-          maxlength="12"
-          @confirm="onNicknameConfirm"
-        />
+        <view class="nickname-input-wrap">
+          <!-- #ifdef H5 -->
+          <input
+            type="text"
+            class="nickname-input native-input"
+            placeholder="请输入昵称"
+            maxlength="12"
+            @input="onNicknameInput"
+            @keyup.enter="onNicknameConfirm"
+          />
+          <!-- #endif -->
+          <!-- #ifndef H5 -->
+          <input
+            v-model="nicknameInput"
+            class="nickname-input"
+            placeholder="请输入昵称"
+            maxlength="12"
+            :focus="showNickname"
+            @confirm="onNicknameConfirm"
+          />
+          <!-- #endif -->
+        </view>
         <view class="over-actions">
           <view class="over-btn primary" @click="onNicknameConfirm">确认</view>
           <view class="over-btn" @click="showNickname = false">取消</view>
@@ -254,7 +269,7 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, reactive, onMounted, onBeforeUnmount, computed, nextTick } from 'vue';
+import { ref, shallowRef, reactive, onMounted, onBeforeUnmount, computed, nextTick, watch } from 'vue';
 import { createEngine } from './engine.js';
 import { submitScore, getNickname, saveNickname } from '../api.js';
 
@@ -277,6 +292,18 @@ const scene = shallowRef({
 
 let engine = null;
 const stageRect = { left: 0, top: 0, width: 0, height: 0 };
+
+// H5: 弹窗出现时自动聚焦输入框
+// #ifdef H5
+watch(showNickname, (val) => {
+  if (val) {
+    nextTick(() => {
+      const el = document.querySelector('.nickname-input.native-input');
+      if (el) el.focus();
+    });
+  }
+});
+// #endif
 
 const xpPct = computed(() => Math.min(100, (stats.xp / stats.xpNeed) * 100));
 
@@ -411,6 +438,10 @@ async function onSubmitScore() {
     return;
   }
   await doSubmit(nick);
+}
+
+function onNicknameInput(e) {
+  nicknameInput.value = e.target.value;
 }
 
 function onNicknameConfirm() {
@@ -835,6 +866,7 @@ function mapKey(key) {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto;
 }
 .upgrade-modal, .over-modal {
   background: #1C2541;
@@ -972,6 +1004,18 @@ function mapKey(key) {
   text-align: center;
   margin-bottom: 12px;
 }
+.nickname-input-wrap {
+  width: 100%;
+  margin-bottom: 14px;
+}
+.native-input {
+  outline: none;
+  -webkit-appearance: none;
+  caret-color: #FFE066;
+}
+.native-input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
 .nickname-input {
   width: 100%;
   padding: 10px 14px;
@@ -981,7 +1025,6 @@ function mapKey(key) {
   color: #fff;
   font-size: 15px;
   box-sizing: border-box;
-  margin-bottom: 14px;
 }
 .revive-title {
   color: #FFD700 !important;
