@@ -8,7 +8,8 @@
     { "path": "pages/stele/preview", "style": { "navigationBarTitleText": "3D 预览 · 老万石雕", "navigationStyle": "custom" } },
     { "path": "pages/stele/help", "style": { "navigationBarTitleText": "操作说明 · 老万石雕", "navigationStyle": "custom" } },
 
-    { "path": "pages/game/plane/index", "style": { "navigationBarTitleText": "弹幕一刻", "navigationStyle": "custom", "disableScroll": true } }
+    { "path": "pages/game/plane/index", "style": { "navigationBarTitleText": "弹幕一刻", "navigationStyle": "custom", "disableScroll": true } },
+    { "path": "pages/game/plane/leaderboard", "style": { "navigationBarTitleText": "排行榜", "navigationStyle": "custom" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

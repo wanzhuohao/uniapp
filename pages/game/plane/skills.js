@@ -17,29 +17,19 @@ export const SKILLS = [
     name: '极速射击',
     desc: '攻速 +18%',
     color: '#06D6A0',
-    max: 12,
+    max: 8,
     apply(p) {
-      p.fireInterval = Math.max(40, p.fireInterval * 0.82);
+      p.fireInterval = Math.max(70, p.fireInterval * 0.82);
     }
   },
   {
     id: 'damage',
     name: '炽烈弹头',
-    desc: '攻击力 +30%',
+    desc: '攻击力 +40%',
     color: '#EF476F',
-    max: 15,
-    apply(p) {
-      p.damage = +(p.damage * 1.3).toFixed(2);
-    }
-  },
-  {
-    id: 'shield',
-    name: '能量护盾',
-    desc: '+1 层护盾',
-    color: '#118AB2',
     max: 8,
     apply(p) {
-      p.shield = Math.min((p.shield || 0) + 1, 8);
+      p.damage = +(p.damage * 1.40).toFixed(2);
     }
   },
   {
@@ -84,24 +74,14 @@ export const SKILLS = [
     }
   },
   {
-    id: 'bulletSize',
-    name: '弹体扩张',
-    desc: '子弹大小 +25%',
-    color: '#FF8FA3',
-    max: 5,
-    apply(p) {
-      p.bulletSize = +((p.bulletSize || 1) * 1.25).toFixed(2);
-    }
-  },
-  {
     id: 'magnet',
     name: '磁吸装置',
     desc: '吸引附近宝箱',
     color: '#80FFDB',
     max: 4,
     apply(p) {
-      // 每级 +5 unit ≈ 屏宽 1/6;满级 20 unit 覆盖大半屏
-      p.magnetRange = (p.magnetRange || 0) + 5;
+      // 每级 +8 unit;满级 32 unit 覆盖全屏
+      p.magnetRange = (p.magnetRange || 0) + 8;
     }
   },
   // 兜底：所有 skill 满级后仍可选的小幅强化（max 极高保证不会满）
@@ -131,13 +111,23 @@ export function pickSkills(levels, n = 3) {
   return chosen;
 }
 
-// 宝箱效果池
+// 宝箱效果池(带权重:heal 最常见,levelup 最稀有)
 export const BOX_REWARDS = [
-  { id: 'bomb', name: '全屏爆破', desc: '清屏所有敌人' },
-  { id: 'levelup', name: '即刻升级', desc: '立即三选一升级' },
-  { id: 'heal', name: '能量回收', desc: '回复 1 点生命' }
+  { id: 'heal', name: '能量回收', desc: '回复 1 点生命', weight: 5 },
+  { id: 'shield', name: '能量护盾', desc: '+1 层护盾抵挡伤害', weight: 3 },
+  { id: 'bomb', name: '全屏爆破', desc: '清屏所有敌人', weight: 3 },
+  { id: 'levelup', name: '即刻升级', desc: '立即三选一升级', weight: 2 },
+  { id: 'flame', name: '烈焰风暴', desc: '子弹灼烧敌人 8 秒', weight: 3 },
+  { id: 'freeze', name: '极寒冰封', desc: '全场敌人减速 6 秒', weight: 3 },
+  { id: 'star', name: '无敌金星', desc: '无敌 7 秒并撞杀敌人', weight: 2 },
 ];
 
 export function pickBoxReward() {
-  return BOX_REWARDS[Math.floor(Math.random() * BOX_REWARDS.length)];
+  const total = BOX_REWARDS.reduce((s, r) => s + r.weight, 0);
+  let pick = Math.random() * total;
+  for (const r of BOX_REWARDS) {
+    pick -= r.weight;
+    if (pick < 0) return r;
+  }
+  return BOX_REWARDS[0];
 }

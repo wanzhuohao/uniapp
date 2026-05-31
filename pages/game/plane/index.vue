@@ -63,7 +63,7 @@
         >
           <view
             class="enemy"
-            :class="{ elite: e.elite }"
+            :class="{ elite: e.elite, burning: e.burning, frozen: e.frozen }"
             :style="{ background: e.color }"
           />
           <view v-if="e.hp<e.maxHp" class="enemy-hp">
@@ -96,7 +96,7 @@
         <!-- 玩家飞机 -->
         <view
           class="player"
-          :class="{ blink: scene.player.blink }"
+          :class="{ blink: scene.player.blink, star: scene.player.star }"
           :style="{
             transform: `translate3d(${scene.player.x}px,${scene.player.y}px,0)`,
             width: (scene.player.r*2.4)+'px',
@@ -160,9 +160,6 @@
         </view>
       </view>
 
-      <view class="back-btn" @click="goBack">
-        <text class="back-txt">← 返回</text>
-      </view>
     </view>
 
     <!-- 升级三选一 -->
@@ -186,6 +183,24 @@
       </view>
     </view>
 
+    <!-- 复活 -->
+    <view v-if="showRevive" class="modal-mask">
+      <view class="over-modal">
+        <text class="over-title revive-title">💀 阵亡</text>
+        <text class="revive-desc">是否使用唯一一次复活机会？</text>
+        <text class="revive-hint">复活后回满 HP · 无敌 3 秒 · 清除周围小兵</text>
+        <view class="over-stats">
+          <view class="over-row"><text>等级</text><text>Lv {{ reviveInfo?.level }}</text></view>
+          <view class="over-row"><text>击杀</text><text>{{ reviveInfo?.kills }}</text></view>
+          <view class="over-row"><text>时长</text><text>{{ formatTime(reviveInfo?.time || 0) }}</text></view>
+        </view>
+        <view class="over-actions">
+          <view class="over-btn primary" @click="doRevive">复活继续</view>
+          <view class="over-btn" @click="giveUp">放弃</view>
+        </view>
+      </view>
+    </view>
+
     <!-- 结算 -->
     <view v-if="overInfo" class="modal-mask">
       <view class="over-modal">
@@ -195,9 +210,37 @@
           <view class="over-row"><text>击杀</text><text>{{ overInfo.kills }}</text></view>
           <view class="over-row"><text>时长</text><text>{{ formatTime(overInfo.time) }}</text></view>
         </view>
+        <!-- 提交结果 -->
+        <view v-if="submitResult" class="submit-result">
+          <text class="submit-rank">🏅 排名 第{{ submitResult.rank }}名</text>
+          <text class="submit-score">评分 {{ submitResult.score }}</text>
+        </view>
         <view class="over-actions">
           <view class="over-btn primary" @click="restart">再来一局</view>
-          <view class="over-btn" @click="goBack">返回首页</view>
+          <view v-if="!submitResult" class="over-btn" :class="{ disabled: submitting }" @click="onSubmitScore">
+            {{ submitting ? '提交中...' : '提交成绩' }}
+          </view>
+          <view v-else class="over-btn" @click="goLeaderboard">排行榜</view>
+          <view class="over-btn" @click="goHome">返回首页</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 昵称输入 -->
+    <view v-if="showNickname" class="modal-mask">
+      <view class="over-modal">
+        <text class="over-title">输入昵称</text>
+        <text class="nickname-hint">2-12 个字符，用于排行榜显示</text>
+        <input
+          v-model="nicknameInput"
+          class="nickname-input"
+          placeholder="请输入昵称"
+          maxlength="12"
+          @confirm="onNicknameConfirm"
+        />
+        <view class="over-actions">
+          <view class="over-btn primary" @click="onNicknameConfirm">确认</view>
+          <view class="over-btn" @click="showNickname = false">取消</view>
         </view>
       </view>
     </view>
@@ -213,11 +256,18 @@
 <script setup>
 import { ref, shallowRef, reactive, onMounted, onBeforeUnmount, computed, nextTick } from 'vue';
 import { createEngine } from './engine.js';
+import { submitScore, getNickname, saveNickname } from '../../utils/game/api.js';
 
 const stats = reactive({ hp: 3, maxHp: 3, shield: 0, xp: 0, xpNeed: 6, level: 1, kills: 0, time: 0 });
 const upgradeChoices = ref([]);
 const overInfo = ref(null);
+const showRevive = ref(false);
+const reviveInfo = ref(null);
 const showHint = ref(true);
+const showNickname = ref(false);
+const nicknameInput = ref('');
+const submitting = ref(false);
+const submitResult = ref(null);
 
 const scene = shallowRef({
   player: { x: 0, y: 0, r: 10, shield: 0, invuln: 0, blink: false },
@@ -278,6 +328,7 @@ function startEngine() {
     raf, caf,
     onStats: (s) => Object.assign(stats, s),
     onUpgrade: (choices) => { upgradeChoices.value = choices; },
+    onRevive: (info) => { reviveInfo.value = info; showRevive.value = true; },
     onGameOver: (info) => { overInfo.value = info; },
     onFrame: () => {
       scene.value = engine.getRenderState();
@@ -329,12 +380,70 @@ function pickUpgrade(s) {
 
 function restart() {
   overInfo.value = null;
+  submitResult.value = null;
   if (engine) engine.reset();
 }
 
-function goBack() {
+function doRevive() {
+  showRevive.value = false;
+  reviveInfo.value = null;
+  if (engine) engine.revive();
+}
+
+function giveUp() {
+  showRevive.value = false;
   if (engine) engine.stop();
-  uni.navigateBack({ delta: 1, fail: () => uni.reLaunch({ url: '/pages/index/index' }) });
+  overInfo.value = reviveInfo.value;
+  reviveInfo.value = null;
+}
+
+function goHome() {
+  if (engine) engine.stop();
+  uni.reLaunch({ url: '/pages/index/index' });
+}
+
+async function onSubmitScore() {
+  if (submitting.value) return;
+  const nick = getNickname();
+  if (!nick) {
+    nicknameInput.value = '';
+    showNickname.value = true;
+    return;
+  }
+  await doSubmit(nick);
+}
+
+function onNicknameConfirm() {
+  const name = nicknameInput.value.trim();
+  if (name.length < 2 || name.length > 12) {
+    uni.showToast({ title: '昵称 2-12 个字符', icon: 'none' });
+    return;
+  }
+  saveNickname(name);
+  showNickname.value = false;
+  doSubmit(name);
+}
+
+async function doSubmit(nick) {
+  submitting.value = true;
+  submitResult.value = null;
+  try {
+    const info = overInfo.value || reviveInfo.value;
+    const res = await submitScore({
+      nickname: nick,
+      kills: info.kills,
+      level: info.level,
+      time: info.time
+    });
+    submitResult.value = res;
+  } catch (e) {
+    uni.showToast({ title: e.message || '提交失败', icon: 'none' });
+  }
+  submitting.value = false;
+}
+
+function goLeaderboard() {
+  uni.navigateTo({ url: '/pages/game/plane/leaderboard' });
 }
 
 function onTouch(e) {
@@ -441,14 +550,8 @@ function mapKey(key) {
 .star-big {
   width: 2.5px; height: 2.5px;
   background: rgba(180,220,255,0.9);
-  box-shadow: 0 0 3px rgba(180,220,255,0.8);
 }
-.stars-far { animation: starscroll 90s linear infinite; }
-.stars-near { animation: starscroll 35s linear infinite; }
-@keyframes starscroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100%); }
-}
+/* 星空动画砍掉,持续 transform 在移动 GPU 上耗电 */
 
 /* 实体层 */
 .layer {
@@ -460,7 +563,6 @@ function mapKey(key) {
   position: absolute;
   left: 0; top: 0;
   border-radius: 50%;
-  will-change: transform, opacity;
 }
 .box {
   position: absolute;
@@ -468,7 +570,6 @@ function mapKey(key) {
   background: #FFD166;
   border: 2px solid #B7791F;
   box-sizing: border-box;
-  will-change: transform;
 }
 .box::after {
   content: '';
@@ -483,7 +584,6 @@ function mapKey(key) {
 .enemy-wrap {
   position: absolute;
   left: 0; top: 0;
-  will-change: transform;
 }
 .enemy {
   width: 100%; height: 100%;
@@ -500,14 +600,25 @@ function mapKey(key) {
   background: rgba(255,255,255,0.25);
   border-radius: 50%;
 }
+/* 精英用粗黄边 + 内层亮黄点替代持续 drop-shadow + animation */
 .enemy.elite {
-  border: 1.8px solid #FFE066;
-  filter: drop-shadow(0 0 4px rgba(255,224,102,0.8));
-  animation: elitepulse 0.6s ease-in-out infinite alternate;
+  border: 2.2px solid #FFE066;
 }
-@keyframes elitepulse {
-  from { filter: drop-shadow(0 0 2px rgba(255,224,102,0.4)); }
-  to { filter: drop-shadow(0 0 6px rgba(255,224,102,1)); }
+.enemy.elite::before {
+  background: rgba(255,224,102,0.7);
+  width: 55%; height: 55%;
+  left: 22.5%; top: 22.5%;
+}
+/* 燃烧:橙红边框 + 内发光 */
+.enemy.burning {
+  border-color: #FF6B35;
+  box-shadow: 0 0 8px 2px rgba(255,107,53,0.6), inset 0 0 6px rgba(255,107,53,0.4);
+}
+/* 冰冻:蓝白边框 + 内发光 + 半透明冰层 */
+.enemy.frozen {
+  border-color: #5EC8FF;
+  box-shadow: 0 0 8px 2px rgba(94,200,255,0.6), inset 0 0 6px rgba(94,200,255,0.4);
+  opacity: 0.8;
 }
 .enemy-hp {
   position: absolute;
@@ -524,25 +635,20 @@ function mapKey(key) {
 .p-bullet {
   position: absolute;
   left: 0; top: 0;
-  background: #FFF1A8;
+  background: #FFE066;
   border-radius: 2px;
-  box-shadow: 0 0 6px #FFE066;
-  will-change: transform;
 }
 .e-bullet {
   position: absolute;
   left: 0; top: 0;
-  background: #FF6B8A;
+  background: #FF3D5A;
   border-radius: 50%;
-  box-shadow: 0 0 8px #FF3D5A;
-  will-change: transform;
 }
 
 /* 玩家飞机 - 纯 CSS 拼装 */
 .player {
   position: absolute;
   left: 0; top: 0;
-  will-change: transform;
 }
 .player.blink { opacity: 0; }
 .player-art {
@@ -590,18 +696,15 @@ function mapKey(key) {
   width: 24%; height: 18%;
   background: #FF6B6B;
   clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-  animation: flameflicker 0.12s steps(2) infinite;
+  transform: translateX(-50%);
 }
 .flame-inner {
   width: 14%; height: 12%;
   background: #FFE066;
   clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-  animation: flameflicker 0.12s steps(2) infinite;
+  transform: translateX(-50%);
 }
-@keyframes flameflicker {
-  from { transform: translateX(-50%) scaleY(1); }
-  to { transform: translateX(-50%) scaleY(1.25); }
-}
+/* 砍掉 flameflicker / shieldpulse 持续动画,GPU 持续渲染发烫 */
 .shield-ring {
   position: absolute;
   left: 50%; top: 50%;
@@ -609,12 +712,22 @@ function mapKey(key) {
   margin-left: -65%; margin-top: -65%;
   border-radius: 50%;
   border: 2px solid #5EC8FF;
-  box-shadow: 0 0 8px rgba(94,200,255,0.6);
-  animation: shieldpulse 0.4s ease-in-out infinite alternate;
+  opacity: 0.75;
 }
-@keyframes shieldpulse {
-  from { opacity: 0.5; }
-  to { opacity: 0.9; }
+/* 无敌星:金色光环 */
+.player.star {
+  filter: drop-shadow(0 0 8px rgba(255,215,0,0.9));
+}
+.player.star::after {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 160%; height: 160%;
+  margin-left: -80%; margin-top: -80%;
+  border-radius: 50%;
+  border: 2.5px solid #FFD700;
+  box-shadow: 0 0 12px 4px rgba(255,215,0,0.5);
+  pointer-events: none;
 }
 .shield-num {
   position: absolute;
@@ -651,10 +764,9 @@ function mapKey(key) {
   display: flex;
   flex-direction: column;
   gap: 7px;
-  background: rgba(11,19,43,0.45);
+  background: rgba(11,19,43,0.78);
   padding: 10px 12px;
   border-radius: 10px;
-  backdrop-filter: blur(4px);
   border: 1px solid rgba(255,255,255,0.08);
   box-sizing: border-box;
 }
@@ -682,9 +794,8 @@ function mapKey(key) {
   border-radius: 2px;
 }
 .hp-cell.filled {
-  background: linear-gradient(180deg, #FF6B8A, #D63558);
+  background: #EF476F;
   border-color: #FF6B8A;
-  box-shadow: 0 0 4px rgba(239,71,111,0.5);
 }
 .shield-badge {
   font-size: 11px;
@@ -704,8 +815,7 @@ function mapKey(key) {
 }
 .xp-fill {
   height: 100%;
-  background: linear-gradient(90deg, #06D6A0 0%, #FFE066 100%);
-  box-shadow: 0 0 6px rgba(255,224,102,0.4);
+  background: #FFE066;
   transition: width 0.15s linear;
 }
 .hud-meta-row {
@@ -716,20 +826,6 @@ function mapKey(key) {
   color: rgba(255,255,255,0.7);
   font-size: 11px;
   letter-spacing: 0.5px;
-}
-.back-btn {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  z-index: 5;
-  background: rgba(0,0,0,0.5);
-  padding: 6px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-.back-txt {
-  color: #fff;
-  font-size: 12px;
 }
 .modal-mask {
   position: absolute;
@@ -844,6 +940,66 @@ function mapKey(key) {
   border-color: #06D6A0;
   color: #0B132B;
   font-weight: bold;
+}
+.over-btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.submit-result {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 12px;
+  background: rgba(255,215,0,0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(255,215,0,0.2);
+}
+.submit-rank {
+  display: block;
+  color: #FFD700;
+  font-size: 18px;
+  font-weight: bold;
+}
+.submit-score {
+  display: block;
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.nickname-hint {
+  display: block;
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.nickname-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+}
+.revive-title {
+  color: #FFD700 !important;
+}
+.revive-desc {
+  display: block;
+  color: rgba(255,255,255,0.9);
+  font-size: 15px;
+  text-align: center;
+  margin-top: 8px;
+}
+.revive-hint {
+  display: block;
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  text-align: center;
+  margin-top: 4px;
+  margin-bottom: 12px;
 }
 .hint {
   position: absolute;

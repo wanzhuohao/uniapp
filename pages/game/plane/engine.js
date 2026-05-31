@@ -3,11 +3,14 @@
 
 import { pickSkills, pickBoxReward } from './skills.js';
 
-const PARTICLE_CAP = 30;     // 同屏粒子上限,DOM 渲染防爆炸
-const FLOAT_TEXT_CAP = 12;
+const PARTICLE_CAP = 16;     // 同屏粒子上限,DOM 渲染防爆炸
+const FLOAT_TEXT_CAP = 10;
+const ENEMY_CAP = 40;        // 同屏敌人硬上限
+const BULLET_CAP = 80;       // 玩家子弹硬上限
+const ENEMY_BULLET_CAP = 60; // 敌弹硬上限
 
 export function createEngine(opts) {
-  const { onUpgrade, onGameOver, onStats, onFrame } = opts;
+  const { onUpgrade, onGameOver, onRevive, onStats, onFrame } = opts;
   let width = opts.width;
   let height = opts.height;
   const raf = opts.raf || ((cb) => requestAnimationFrame(cb));
@@ -30,7 +33,6 @@ export function createEngine(opts) {
     pierce: 0,
     xpRate: 1,
     invuln: 0,
-    bulletSize: 1,    // 子弹半径倍率
     magnetRange: 0,   // 磁吸范围 (单位:unit 倍数)
   };
 
@@ -57,7 +59,12 @@ export function createEngine(opts) {
   let rafId = null;
   let gameOver = false;
   let flash = 0;
+  let nextBossAt = 120000;  // 第一个 boss 在 120s 出现,之后每 75s 一个
   const skillLevels = {};
+  let burnTimer = 0;       // 全局灼烧剩余 ms
+  let freezeTimer = 0;     // 全局冰冻剩余 ms
+  let starTimer = 0;       // 无敌星剩余 ms
+  let canRevive = true;    // 是否还有复活机会
 
   const input = {
     target: null,
@@ -70,36 +77,75 @@ export function createEngine(opts) {
   function keyUp(k) { input.keys.delete(k); }
 
   function spawnEnemy() {
-    // tier 取消硬 cap,30s 升一档,无上限——5 分钟 tier 10,10 分钟 tier 20
-    const tier = Math.floor(elapsed / 30000);
+    if (enemies.length >= ENEMY_CAP) return;
+    // tier 20s 一档,无上限——3 分钟 tier 9,5 分钟 tier 15
+    const tier = Math.floor(elapsed / 20000);
     const u = unit();
-    // 体型上限 cap 8(tier*0.08),太大遮屏
-    const sizeBoost = Math.min(0.8, tier * 0.08);
+    // 前 30s 安全窗口:不刷精英 / 不开火 / 体型小
+    const safeWindow = elapsed < 30000;
+    // 体型上限 cap 拉到 1.2
+    const sizeBoost = safeWindow ? 0 : Math.min(1.2, tier * 0.1);
     const r = u * (0.7 + Math.random() * 0.3 + sizeBoost);
     const palette = ['#FF3D5A', '#FF9F1C', '#B14AED', '#2EC4B6', '#F72585'];
-    // 精英概率随 tier 平滑增长,封顶 85%
-    const eliteChance = Math.min(0.85, tier * 0.05);
+    // 安全窗口 0,正式期起步 5% 涨到 90%(原 8% 起步,1 分多太陡)
+    const eliteChance = safeWindow ? 0 : Math.min(0.9, 0.05 + tier * 0.05);
     const isElite = Math.random() < eliteChance;
-    // HP 无上限,每档 +1:tier 0→1, tier 5→6, tier 10→11; 精英再 +2
-    const hp = 1 + tier + (isElite ? 2 : 0);
-    // 速度有上限,tier>6 后不再加速避免乱飞
-    const tierForSpeed = Math.min(6, tier);
+    // HP:基础 1 + tier*1.4,tier>=12 后再叠 +2/档(后期加压)
+    let hp = Math.max(1, Math.floor(1 + tier * 1.4));
+    if (tier >= 12) hp += (tier - 11) * 2;
+    hp += (isElite ? 2 : 0);
+    // 速度封顶 tier 14(原 10),后期继续加速
+    const tierForSpeed = Math.min(14, tier);
+    // 精英 tier>=7 三弹散射,tier>=11 五弹(都推后 2 档,缓 1 分多)
+    const spread = isElite ? (tier >= 11 ? 5 : tier >= 7 ? 3 : 1) : 1;
+    // 安全窗口完全不开火;普通怪 tier>=5 才开火(原 tier>=3,推后 40s)
+    const canFire = !safeWindow && (isElite || tier >= 5);
     enemies.push({
       id: newId(),
       x: r + Math.random() * (width - r * 2),
       y: -r,
       r,
-      vy: u * (5 + Math.random() * 3 + tierForSpeed * 1.5),
+      vy: u * (5 + Math.random() * 3 + tierForSpeed * 1.3),
       vx: (Math.random() - 0.5) * u * 2,
       hp,
       maxHp: hp,
       xp: 1 + Math.floor(tier * 0.5) + (isElite ? 2 : 0),
       color: palette[Math.floor(Math.random() * palette.length)],
       elite: isElite,
+      canFire,
+      spread,
       fireTimer: -800 - Math.random() * 800,
-      // 精英开火频率随 tier 加快,封底 600ms
-      fireInterval: Math.max(600, 1800 - tier * 100) + Math.random() * 400
+      // 精英开火封底 500ms;普通封底 1500ms;基线放慢避免 1 分多突袭
+      fireInterval: isElite
+        ? Math.max(500, 2000 - tier * 80) + Math.random() * 400
+        : Math.max(1500, 4000 - tier * 120) + Math.random() * 800
     });
+  }
+
+  function spawnBoss() {
+    if (enemies.length >= ENEMY_CAP) return;
+    const tier = Math.floor(elapsed / 20000);
+    const u = unit();
+    const r = u * 2.8;
+    const hp = 25 + tier * 6;
+    enemies.push({
+      id: newId(),
+      x: width / 2,
+      y: -r,
+      r,
+      vy: u * 2,
+      vx: (Math.random() - 0.5) * u * 1.2,
+      hp, maxHp: hp,
+      xp: 12 + tier,
+      color: '#7B2CBF',
+      elite: true,
+      boss: true,
+      canFire: true,
+      spread: 5,
+      fireTimer: -1000,
+      fireInterval: Math.max(450, 1100 - tier * 40)
+    });
+    addFloatText(width / 2, height / 3, 'BOSS!', '#FF3D5A');
   }
 
   function spawnEnemyBullet(e) {
@@ -107,22 +153,32 @@ export function createEngine(opts) {
     const dx = player.x - e.x;
     const dy = player.y - e.y;
     const dist = Math.hypot(dx, dy) || 1;
-    const speed = u * 18;
-    enemyBullets.push({
-      id: newId(),
-      x: e.x,
-      y: e.y,
-      vx: (dx / dist) * speed,
-      vy: (dy / dist) * speed,
-      r: u * 0.3
-    });
+    // 精英 / boss 弹速 18,普通 13(便于躲)
+    const speed = u * (e.elite ? 18 : 13);
+    const spread = e.spread || 1;
+    const baseX = dx / dist;
+    const baseY = dy / dist;
+    for (let i = 0; i < spread; i++) {
+      if (enemyBullets.length >= ENEMY_BULLET_CAP) break;
+      const ang = spread === 1 ? 0 : (i - (spread - 1) / 2) * 0.22;
+      const cs = Math.cos(ang), sn = Math.sin(ang);
+      enemyBullets.push({
+        id: newId(),
+        x: e.x,
+        y: e.y,
+        vx: (baseX * cs - baseY * sn) * speed,
+        vy: (baseX * sn + baseY * cs) * speed,
+        r: u * 0.3
+      });
+    }
   }
 
   function spawnBullet() {
+    if (bullets.length >= BULLET_CAP) return;
     const count = player.bulletCount;
     const spread = 14;
     const u = unit();
-    const bulletR = u * 0.28 * (player.bulletSize || 1);
+    const bulletR = u * 0.28;
     for (let i = 0; i < count; i++) {
       const ang = count === 1
         ? -Math.PI / 2
@@ -181,12 +237,25 @@ export function createEngine(opts) {
   }
 
   function nuke() {
-    for (const e of enemies) {
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const e = enemies[i];
       spawnParticles(e.x, e.y, e.color, 6);
-      gainXp(e.xp);
-      kills++;
+      if (e.boss) {
+        // boss 扣 50% 最大血量,不秒杀
+        const dmg = Math.ceil(e.maxHp * 0.5);
+        e.hp -= dmg;
+        addFloatText(e.x, e.y - e.r, '-' + dmg, '#FFE066');
+        if (e.hp <= 0) {
+          gainXp(e.xp);
+          kills++;
+          enemies.splice(i, 1);
+        }
+      } else {
+        gainXp(e.xp);
+        kills++;
+        enemies.splice(i, 1);
+      }
     }
-    enemies.length = 0;
     enemyBullets.length = 0;
     flash = 200;
   }
@@ -231,6 +300,30 @@ export function createEngine(opts) {
     } else if (reward.id === 'heal') {
       player.hp = Math.min(player.maxHp, player.hp + 1);
       addFloatText(player.x, player.y - 30, '+1 HP', '#06D6A0');
+    } else if (reward.id === 'shield') {
+      player.shield = Math.min((player.shield || 0) + 1, 8);
+      addFloatText(player.x, player.y - 30, '+1 护盾', '#118AB2');
+    } else if (reward.id === 'flame') {
+      burnTimer = 8000;
+      addFloatText(player.x, player.y - 30, '🔥 烈焰风暴!', '#FF6B35');
+    } else if (reward.id === 'freeze') {
+      freezeTimer = 6000;
+      // 立即给当前所有敌人挂上冰冻
+      for (const e of enemies) {
+        if (!e.frozen) {
+          e.frozen = true;
+          e._origVy = e.vy;
+          e._origVx = e.vx;
+          e.vy *= 0.2;
+          e.vx *= 0.2;
+        }
+        e.freezeDur = 6000;
+      }
+      addFloatText(player.x, player.y - 30, '❄️ 极寒冰封!', '#5EC8FF');
+    } else if (reward.id === 'star') {
+      starTimer = 7000;
+      player.invuln = Math.max(player.invuln, 7000);
+      addFloatText(player.x, player.y - 30, '⭐ 无敌金星!', '#FFD700');
     }
     pushStats();
   }
@@ -280,11 +373,22 @@ export function createEngine(opts) {
     }
 
     spawnTimer += dt;
-    // 起步 900ms 慢一点,衰减更平缓(/100 vs 原/60),触底放宽到 120ms;约 100s 接近底
-    spawnInterval = Math.max(120, 900 - elapsed / 100);
+    // 起步 1000ms,衰减 /160 更缓,触底 120ms;约 2.5min 接近底
+    spawnInterval = Math.max(120, 1000 - elapsed / 160);
     while (spawnTimer >= spawnInterval) {
       spawnTimer -= spawnInterval;
       spawnEnemy();
+      // tier>=15 (5 分钟) 后双倍刷怪,50% 概率额外补一只
+      if (Math.floor(elapsed / 20000) >= 15 && Math.random() < 0.5) {
+        spawnEnemy();
+      }
+    }
+
+    // Boss:120s 出第一个;tier>=15 后间隔从 75s 缩到 50s
+    if (elapsed >= nextBossAt) {
+      spawnBoss();
+      const bossGap = Math.floor(elapsed / 20000) >= 15 ? 50000 : 75000;
+      nextBossAt = elapsed + bossGap;
     }
 
     for (let i = enemyBullets.length - 1; i >= 0; i--) {
@@ -314,7 +418,7 @@ export function createEngine(opts) {
         enemies.splice(i, 1);
         continue;
       }
-      if (e.elite && e.y > 0) {
+      if (e.canFire && e.y > 0) {
         e.fireTimer += dt;
         if (e.fireTimer >= e.fireInterval) {
           e.fireTimer = 0;
@@ -330,6 +434,12 @@ export function createEngine(opts) {
           e.hp -= b.damage;
           b.hits.add(e);
           spawnParticles(b.x, b.y, e.color, 3);
+          // 火焰道具激活时,子弹附加灼烧
+          if (burnTimer > 0 && !e.burning) {
+            e.burning = true;
+            e.burnDur = 3000;
+            e.burnTick = 600;
+          }
           if (b.pierce <= 0 || b.hits.size > b.pierce) {
             bullets.splice(j, 1);
           }
@@ -346,7 +456,27 @@ export function createEngine(opts) {
       }
       if (killed) continue;
       const pdx = e.x - player.x, pdy = e.y - player.y;
-      if (player.invuln <= 0 && pdx * pdx + pdy * pdy < (e.r + player.r) * (e.r + player.r)) {
+      const colliding = pdx * pdx + pdy * pdy < (e.r + player.r) * (e.r + player.r);
+      if (colliding && starTimer > 0) {
+        // 无敌星:撞杀普通怪,boss 扣血
+        if (e.boss) {
+          e.hp -= player.damage;
+          spawnParticles(e.x, e.y, '#FFD700', 4);
+          addFloatText(e.x, e.y - e.r, '-' + player.damage, '#FFD700');
+          if (e.hp <= 0) {
+            spawnParticles(e.x, e.y, e.color, 8);
+            gainXp(e.xp);
+            kills++;
+            enemies.splice(i, 1);
+          }
+        } else {
+          spawnParticles(e.x, e.y, '#FFD700', 8);
+          gainXp(e.xp);
+          kills++;
+          if (Math.random() < 0.08) spawnBox(e.x, e.y);
+          enemies.splice(i, 1);
+        }
+      } else if (colliding && player.invuln <= 0) {
         hitPlayer();
         spawnParticles(e.x, e.y, e.color, 8);
         enemies.splice(i, 1);
@@ -404,6 +534,55 @@ export function createEngine(opts) {
     }
     if (flash > 0) flash = Math.max(0, flash - dt);
 
+    // ---- 灼烧 / 冰冻 / 无敌星 效果 ----
+    if (burnTimer > 0) burnTimer = Math.max(0, burnTimer - dt);
+    if (starTimer > 0) starTimer = Math.max(0, starTimer - dt);
+    if (freezeTimer > 0) {
+      freezeTimer = Math.max(0, freezeTimer - dt);
+      // 冰冻期间新刷的怪也要减速
+      for (const e of enemies) {
+        if (!e.frozen) {
+          e.frozen = true;
+          e._origVy = e.vy;
+          e._origVx = e.vx;
+          e.vy *= 0.2;
+          e.vx *= 0.2;
+        }
+        e.freezeDur = Math.max(e.freezeDur || 0, freezeTimer);
+      }
+    }
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const e = enemies[i];
+      // 灼烧 DoT
+      if (e.burning) {
+        e.burnDur -= dt;
+        e.burnTick -= dt;
+        if (e.burnTick <= 0) {
+          e.burnTick = 600;
+          e.hp -= 1;
+          spawnParticles(e.x, e.y, '#FF6B35', 3);
+          if (e.hp <= 0) {
+            spawnParticles(e.x, e.y, e.color, 6);
+            gainXp(e.xp);
+            kills++;
+            if (Math.random() < 0.08) spawnBox(e.x, e.y);
+            enemies.splice(i, 1);
+            continue;
+          }
+        }
+        if (e.burnDur <= 0) e.burning = false;
+      }
+      // 冰冻恢复
+      if (e.frozen) {
+        e.freezeDur -= dt;
+        if (e.freezeDur <= 0) {
+          e.frozen = false;
+          e.vy = e._origVy;
+          e.vx = e._origVx;
+        }
+      }
+    }
+
     pushStats();
   }
 
@@ -417,11 +596,19 @@ export function createEngine(opts) {
     player.hp--;
     addFloatText(player.x, player.y - 30, '-1 HP', '#EF476F');
     if (player.hp <= 0) {
-      gameOver = true;
-      running = false;
-      onGameOver && onGameOver({
-        kills, level, time: Math.floor(elapsed / 1000)
-      });
+      if (canRevive) {
+        canRevive = false;
+        paused = true;
+        onRevive && onRevive({
+          kills, level, time: Math.floor(elapsed / 1000)
+        });
+      } else {
+        gameOver = true;
+        running = false;
+        onGameOver && onGameOver({
+          kills, level, time: Math.floor(elapsed / 1000)
+        });
+      }
     }
   }
 
@@ -442,9 +629,15 @@ export function createEngine(opts) {
         x: player.x, y: player.y, r: player.r,
         shield: player.shield,
         invuln: player.invuln,
+        star: starTimer > 0,
         blink: player.invuln > 0 && Math.floor(player.invuln / 80) % 2 === 0,
       },
-      enemies, bullets, enemyBullets, boxes, particles, floatTexts,
+      enemies: enemies.map(e => ({
+        ...e,
+        burning: !!e.burning,
+        frozen: !!e.frozen,
+      })),
+      bullets, enemyBullets, boxes, particles, floatTexts,
       flash, elapsed,
     };
   }
@@ -454,7 +647,7 @@ export function createEngine(opts) {
     if (!lastTs) lastTs = ts;
     let dt = ts - lastTs;
     lastTs = ts;
-    if (dt > 64) dt = 64;
+    if (dt > 50) dt = 50;
     update(dt);
     onFrame && onFrame();
     rafId = raf(loop);
@@ -490,17 +683,40 @@ export function createEngine(opts) {
       fireInterval: 320, fireTimer: 0,
       bulletCount: 1, damage: 1, shield: 0, pierce: 0,
       xpRate: 1, invuln: 0,
-      bulletSize: 1, magnetRange: 0
+      magnetRange: 0
     });
     Object.keys(skillLevels).forEach(k => delete skillLevels[k]);
     xp = 0; level = 1; xpNeed = 6; kills = 0; elapsed = 0;
-    spawnTimer = 0; spawnInterval = 900;
+    spawnTimer = 0; spawnInterval = 1000;
+    nextBossAt = 120000;
     flash = 0;
+    burnTimer = 0;
+    freezeTimer = 0;
+    starTimer = 0;
+    canRevive = true;
     start();
   }
 
   function pause() { paused = true; }
   function resume() { paused = false; }
+
+  function revive() {
+    player.hp = player.maxHp;
+    player.invuln = 3000; // 复活后无敌 3 秒
+    // 清除周围敌人和敌弹,给玩家喘息空间
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const e = enemies[i];
+      if (!e.boss) {
+        spawnParticles(e.x, e.y, e.color, 4);
+        enemies.splice(i, 1);
+      }
+    }
+    enemyBullets.length = 0;
+    flash = 300;
+    paused = false;
+    addFloatText(player.x, player.y - 30, '复活!', '#FFD700');
+    pushStats();
+  }
 
   function resize(w, h) {
     width = w;
@@ -513,7 +729,7 @@ export function createEngine(opts) {
   }
 
   return {
-    start, stop, reset, pause, resume, resize,
+    start, stop, reset, pause, resume, revive, resize,
     setTarget, clearTarget, keyDown, keyUp,
     applySkill, applyBoxReward,
     getRenderState,
