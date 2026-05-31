@@ -228,8 +228,8 @@
 
     <!-- 昵称输入 -->
     <view v-if="showNickname" class="modal-mask">
-      <view class="over-modal">
-        <text class="over-title">输入昵称</text>
+      <view class="over-modal nickname-modal">
+        <text class="over-title">✏️ 输入昵称</text>
         <text class="nickname-hint">2-12 个字符，用于排行榜显示</text>
         <!-- #ifdef H5 -->
         <view class="nickname-input-wrap" ref="nicknameWrap" />
@@ -247,7 +247,7 @@
         </view>
         <!-- #endif -->
         <view class="over-actions">
-          <view class="over-btn primary" @click="onNicknameConfirm">确认</view>
+          <view class="over-btn primary glow-btn" @click="onNicknameConfirm">确认出战</view>
           <view class="over-btn" @click="showNickname = false">取消</view>
         </view>
       </view>
@@ -300,10 +300,12 @@ watch(showNickname, (val) => {
       input.placeholder = '请输入昵称';
       input.maxLength = 12;
       input.value = nicknameInput.value || '';
+      input.autocomplete = 'off';
+      input.spellcheck = false;
       input.addEventListener('input', (e) => { nicknameInput.value = e.target.value; });
       input.addEventListener('keyup', (e) => { if (e.key === 'Enter') onNicknameConfirm(); });
       wrap.appendChild(input);
-      setTimeout(() => input.focus(), 100);
+      setTimeout(() => input.focus(), 150);
     });
   }
 });
@@ -1001,16 +1003,19 @@ function mapKey(key) {
   font-size: 12px;
   margin-top: 4px;
 }
+.nickname-modal {
+  text-align: center;
+}
 .nickname-hint {
   display: block;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.45);
   font-size: 12px;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 .nickname-input-wrap {
   width: 100%;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 .native-input {
   outline: none;
@@ -1018,17 +1023,28 @@ function mapKey(key) {
   caret-color: #FFE066;
 }
 .native-input::placeholder {
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.25);
 }
 .nickname-input {
   width: 100%;
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
-  color: #fff;
-  font-size: 15px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1.5px solid rgba(255,224,102,0.3);
+  border-radius: 10px;
+  color: #FFE066;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
   box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.native-input:focus,
+.nickname-input:focus {
+  border-color: rgba(255,224,102,0.7);
+  box-shadow: 0 0 12px 2px rgba(255,224,102,0.15), inset 0 0 8px rgba(255,224,102,0.05);
+}
+.glow-btn {
+  box-shadow: 0 0 10px rgba(6,214,160,0.3);
 }
 .revive-title {
   color: #FFD700 !important;
