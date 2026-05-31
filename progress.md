@@ -1,10 +1,182 @@
-# 统一平台 - 开发进度
+# 碑文排版 - 开发进度
 
 > 项目路径: `D:\code\uniapp`
-> 技术栈: UniApp Vue3 + Pinia + uniCloud-alipay
-> 最后更新: 2026-04-16
-> 状态: **已上线**，累计 100+ commit
+> 技术栈: UniApp Vue3 + uniCloud-alipay（仅 3 个订单云函数 + order 集合）
+> 最后更新: 2026-05-29
+> 状态: **已上线**
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
+> 品牌: **老万石雕**
+
+## 2026-05-29 飞机肉鸽 难度曲线拉长 + 两个新道具
+
+### 难度曲线
+- `tier` 取消硬 cap,从 `min(3, floor(elapsed/20000))` 改 `floor(elapsed/30000)`,30s 升一档无上限
+- `spawnInterval` 起步 800→900ms,衰减系数 /60→/100(更平缓),触底 220→120ms;约 100s 接近底
+- enemy HP 公式 `1 + tier + (elite?2:0)`,**完全无上限**,每档 +1:tier 5 时 HP 6, tier 10 时 HP 11,精英再 +2
+- 精英概率 `min(0.85, tier*0.05)` 平滑增长,封顶 85%(原 60s 后 70% 就锁死)
+- 敌人体型 `sizeBoost = min(0.8, tier*0.08)` 加 cap 防止遮屏
+- 敌人速度 `tierForSpeed = min(6, tier)` cap 防止后期飞太快
+- 精英开火频率随 tier 加快,封底 600ms(原恒定 ~1800ms)
+
+### 子弹大小道具(skills.js bulletSize, max 5)
+- player 加 `bulletSize` 字段(默认 1)
+- skill 每级 ×1.25;满级 1.25^5 ≈ 3.05 倍
+- `spawnBullet` 子弹 r 乘 bulletSize(视觉+碰撞同时变大)
+
+### 吸铁石道具(skills.js magnet, max 4)
+- player 加 `magnetRange` 字段(默认 0,单位:unit 倍数)
+- skill 每级 +5 unit(≈60px);满级 20 unit(≈250px)覆盖大半屏
+- `boxes` update 加磁吸逻辑:范围内宝箱朝玩家飞,距离反比加速(blend = 1 - d/range);默认下落 50px/s,满级磁吸内速度达 150+ px/s
+
+### 自测
+- engine smoke test 5 分钟:fresh HP 30s=1 / 60s=2 / 90s=5 / 150s=7 / 300s=12,持续无封顶;aliveEnemies 同步从 10 涨到 30+;elite 数从 0 涨到 13+
+- 子弹大小升级 3 次:r 从 3.50 → 6.83 (≈1.95x,符合 1.25^3=1.95)
+- 磁吸满级:远段 50px/s(默认),进入 250px 范围后 154px/s(3x 加速,符合预期)
+
+---
+
+## 2026-05-29 飞机肉鸽小游戏 canvas → DOM 渲染改造
+
+### 背景
+`pages/game/plane/` 原 canvas 2D 实现在手机上"尺寸/位置错位"——按 [[reference_uniapp_h5_canvas_wrapper]] 修齐 querySelector + DPR cap + raf fallback 之后,真机仍偶发飘。换 DOM 渲染绕开所有 canvas 坐标系折腾。
+
+### 改动
+- `engine.js`：删除整个 draw()（150 行），新增 `getRenderState()` 返回所有实体快照 + `onFrame` 回调；每实体加自增 id；粒子上限 cap 30、飘字 cap 12 防 DOM 暴涨
+- `index.vue`：去掉 `<canvas>` + `initCanvas` + `applyResize` 全套；改为绝对定位 view 层级（背景渐变 + 18+10 颗星空 + 粒子 + 宝箱 + 敌人 + 子弹 + 敌弹 + 玩家 + 飘字 + 闪屏）；每实体 `transform: translate3d` 走 GPU；玩家飞机改 CSS clip-path 拼装（机身六边形 + 双翼 polygon + 驾驶舱圆 + 双层尾焰 flicker 动画 + 护盾 ring）；敌人六边形用 clip-path，HP 条放外层 wrap 避免被剪裁；触控基准统一用 `.game-area` 的 `getBoundingClientRect`
+
+### 自测
+- engine smoke test（驱动 30s/1875 帧）：推进到 Lv3 / 21 击杀 / 1 宝箱、onUpgrade 触发 3 次、粒子/飘字 cap 守住
+- `@vue/compiler-sfc` parse + scriptSetup + template 全部编译通过（修了一处 `// #ifdef` 两支 const raf 重复声明的 lint 报错,改 let + 分支赋值）
+
+### 待验证
+- HBuilderX 运行 H5 真机/模拟器看实际渲染效果（PC 模拟器和真机表现可能不同）
+- 极端尖峰（多精英怪同屏 + 全屏爆破触发大量粒子）下 DOM 节点数是否稳定 ≤150
+
+### 关联经验
+- [[feedback_uniapp_canvas_to_dom]] — 何时该放弃 canvas 改 DOM
+- [[reference_uniapp_ifdef_const_dup]] — uniapp #ifdef 两支同名 const 离线 lint 报重复
+
+---
+
+## 2026-04-22 首页主卡箭头修正
+
+`pages/index/index.vue` 主卡右下角 `.tool-arrow` 原本是 `入 ──→`（"入"字 + 箭头线），手机窄屏下"入"字与 `.tool-desc` 末行重叠。去掉"入"字，只保留 `──→`，同步删掉 `.tool-arrow-txt` CSS 规则。
+
+## 2026-04-21 UI 整体中式化重构（老万石雕品牌）
+
+### 目标
+原 Element Plus 默认样式缺乏品牌识别度。围绕"老万石雕"品牌，建立一套中式工具书 / 文书气质的视觉语言，避免 AI 生成的通用感。
+
+### 设计系统（App.vue）
+- **色板 CSS 变量**：`--paper-*`（6 级米色宣纸）、`--ink-gold-*`（4 级金棕）、`--ink-vermilion-*`（3 级朱砂）、`--ink-*`（5 级墨色）+ 透明色阶 `--gold-a10/15/25/35/60`
+- **共用图元**：`--paper-bg`（径向宣纸渐变）、`--paper-noise-url`（SVG noise 噪点 data URI）、`--brush-line-url`（毛笔横画 data URI）、`--shadow-paper/seal`
+- **字体**：引入 **霞鹜文楷 Screen**（Web Font 通过 `registry.npmmirror.com` CDN 加载）作 `--font-display`；英文 `--font-en` 用 Georgia
+- **旧变量映射**：`--color-primary` 等保留并映射到新变量，不破坏 Element Plus
+
+### Element Plus 全局中式化
+全部在 App.vue `:root` 级别写 `!important` 规则，覆盖：button / input / select / textarea / radio / radio-button / checkbox / switch / dropdown-menu / pagination / dialog / message，外加 `::selection`、滚动条、`:focus-visible`、`prefers-reduced-motion`。
+
+### 品牌元素
+- **品牌名**："工具箱" → "老万石雕"（印章字"器" → "万"）
+- **favicon.svg**：朱砂"万"字方印（SVG，零加载成本）
+- **各页 title 后缀**：`pages.json` / `index.html` 统一为 "· 老万石雕"
+
+### 页面改造（全部用宣纸渐变 + 噪点背景）
+- **首页** `pages/index/index.vue`
+  - 品牌带：110rpx 楷体主标 + Georgia 拼音副标 + 座右铭"一凿一刻，传世可期"
+  - 右上角 96rpx 朱砂"万"字方印（-8° 旋转 + 晕染光环）
+  - 分隔线 + "匠"字小方印
+  - 章节标"壹 · 工坊器用"（向左突出 -16rpx + 毛笔横画）
+  - 工具网格 `3fr 2fr` 不对称：主卡片跨列+书脊双线，副列两张"敬请期待"
+  - 墨竹角饰 SVG（右下角 opacity 0.18）
+  - 页脚落款"石上春秋 · 字字千年"
+  - **入场仪式 2.3s**：墨滴扩散 → 标题 clip-path 左→右墨染 → 副标/座右铭 fade → 朱砂印砸下+晕染 → 分隔线 → 章节标 → 毛笔画线 → 主卡 → 副卡 → 页脚 → 墨竹
+- **列表页** `pages/stele/list.vue`
+  - 页头楷体标题"碑文记录"+ 英文副标 + 毛笔横画（限宽 280px）
+  - 桌面表格：米白底 + 金色表头 + 朱砂描边 tag；**hover 最左 td 出现 3px 朱砂竖线**（朱批感）
+  - 移动端卡片：**左侧 48×48 朱砂方印**（双/父/母一字）+ 考妣称谓分栏 + 虚线分割 + 日期
+  - 空态：SVG "未立"碑 + "尚无碑文"楷体
+  - Loading："墨"字旋转 + 金色环
+- **下单页** `pages/stele/index.vue`
+  - 步骤条 1/2/3 → **壹/貳/叄 朱砂方印**，当前步骤 -3° 倾斜+脉冲阴影；hover 印章抖动
+  - 步骤间虚线连接
+  - 底部**毛玻璃抽屉式操作栏**，按钮楷体+大字距
+  - draft-notice 改朱砂"稿"字方印引导
+  - 名单组左侧 3rpx 金色书脊
+- **详情页** `pages/stele/detail.vue`
+  - 顶栏压缩至 40px 高度（原 70px）
+  - section-title 下 72px 毛笔短画装饰
+- **帮助页** `pages/stele/help.vue`
+  - 改造成**线装卷轴**：上下金色卷轴杆 + 圆形轴头 + 顶部"说"字朱砂小印
+  - 6 章节用 壹/貳/叄/肆/伍/陸 朱砂方印编号 + 毛笔横画延伸线
+  - 警告框改"注"字方印式
+- **3D 预览页** `pages/stele/preview.vue`
+  - 工具栏米白+楷体；空态改"观"字大方印
+- **WordPreview** 组件
+  - 字体栈前置 LXGW WenKai Screen
+  - 最终保持简洁**无外框**（尝试过卷轴装饰+落款，被用户撤销）
+
+### 印章式 Toast（`utils/common/toast.js`）
+- H5 环境走自定义 DOM toast，非 H5 回退 uni.showToast
+- **成功**："成"字金印（盖章动画 rotate -18° → +4° → -3°）
+- **失败**："误"字朱砂印
+- **info**："告"字金印
+- **loading**：金色旋转环 + 反向旋转的"墨"字（视觉保持正向）
+- 每个 toast 带上下虚线装饰
+
+### 风险 / 待验证
+- **html2canvas 导出 PNG 字体兼容性未实测**：霞鹜文楷是 Web Font，跨 iframe 截图可能 fallback 到系统 STKaiti。需要实际点"保存图片"测一次
+- `backdrop-filter: blur` 在 Safari 15.4 以下不支持（底栏失色但不崩）
+
+### 新增/修改文件清单（代码层，不含 docs）
+```
+新增：static/favicon.svg
+修改：App.vue、index.html、pages.json
+      pages/index/index.vue
+      pages/stele/{detail,help,index,list,preview}.vue
+      components/stele/WordPreview.vue
+      utils/common/toast.js
+      utils/stele/word-preview.css
+```
+
+---
+
+## 2026-04-20 精简为纯碑文项目
+
+### 背景
+面试模块、相册、用户系统全部不再需要；语文模块早已迁到 uniapp-aliyun 纯前端版，残留代码仅作历史参考。本次彻底清理。
+
+### 删除范围
+- **页面目录**：`pages/study/`（8）、`pages/interview/`（6）、`pages/stele/photo.vue`
+- **组件/工具**：`components/study/`、`components/common/{UserSwitcher,TopBar,TrendChart}.vue`、`utils/study/`、`utils/interview/`、`utils/common/storage.js`、`composables/interview/`、`composables/common/{useAuth,useRecentUsers}.js`、`store/game.js`（+ 整个 store/）、`scripts/{rebuild-questions.py,seed-questions.js}`
+- **云函数（12）**：`seed-questions`、`migrate-unit`、`generate-question`、`review-answer`、`exam-summary`、`album-{create,delete,list,update}`、`photo-{insert,delete,list}`
+- **数据库 schema（10）**：`questions`、`wrong_records`、`practice_logs`、`user_stats`、`exam_sessions`、`interview_{questions,records,settings}`、`albums`、`photos`
+- **依赖（5）**：`hanzi-writer`、`hanzi-writer-data`、`cnchar`、`cnchar-order`、`cnchar-radical`
+- **阿里云控制台**：用户手动删除上述云函数和集合（现仅剩 order-* 三函数 + order 集合）
+
+### 修改
+- `pages.json`：21 条路由 → 6 条（只留碑文相关）
+- `App.vue`：清掉所有 useAuth/useGameStore/浮动主题按钮/dark-mode 样式，400+ 行 → 33 行
+- `pages/index/index.vue`：删语文卡和用户切换，简化为只有碑文入口
+- `pages/stele/list.vue`：删"相册"按钮及 `goToPhoto`
+- `components/common/TopBar.vue`：兜底跳转从 `/pages/study/index` 改为 `/pages/index/index`（随后整个文件被删）
+- `uniCloud-alipay/database/db_index.md`、`docs/project-overview.md`：更新描述
+
+### docs 整理
+- 迁至 `uniapp-aliyun/docs/`（语文模块专属设计，6 份）：dictation-design、dark-mode-design、smart-review(plan+design)、hanzi-question-component(plan+design)
+- 删：unified-platform(plan+design)、user-switcher(plan+design)，共 4 份（全部过时）
+- 保留：toast-wrapper(plan+design)（通用组件，碑文也在用）
+
+### 收尾修复与清理（当日稍后）
+- `fix(stele): list 删除订单补错误分支校验`（`7f8e1df`）—— `order-delete` 失败不再误报"已移除"
+- `fix(stele): preview 重渲染时 cancelAnimationFrame`（`1ac4801`）—— `renderThreeStele` 二次调用防御 double-animate；`onBeforeUnmount` 其它资源释放此前已完整
+- `chore: 清理精简后残留的死代码`（`16ae072`）—— 删 `utils/common/{cloudDb,speech,theme}.js`、`static/data/{pinyin,strokes}.json`、`scripts/` 空目录；`main.js` 去掉 `createPinia()` 注册；`package.json` 删 `pinia` 依赖（项目零 store）
+
+### 保留云资源
+- 云函数：`order-delete`、`order-query`、`order-update`
+- 集合：`order`
+
+---
 
 ## 2026-04-16 题库单元整理 + 课程多选 + 移除数学模块
 

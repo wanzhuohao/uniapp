@@ -1,8 +1,9 @@
-# 统一平台 - 线上自测清单
+# 碑文排版 - 线上自测清单
 
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
 > 生成时间: 2026-04-10
-> 对应本次修复: P0 batch 1/2 + P1 batch 3 + P2 batch
+
+> **2026-04-20 注**：下方绝大多数条目（首次访问/学习/面试/用户切换/错题本）已随语文+面试+用户系统删除失效，仅保留 git 历史参考。现阶段项目只剩碑文模块，后续若需回归测试请围绕 `pages/stele/{index,list,detail,preview,help}` 重写清单。
 
 ---
 
