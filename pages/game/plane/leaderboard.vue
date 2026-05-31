@@ -54,7 +54,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getLeaderboard, getNickname } from '../../utils/game/api.js';
+import { getLeaderboard, getNickname } from '../api.js';
 
 const list = ref([]);
 const loading = ref(true);

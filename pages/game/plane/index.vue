@@ -256,7 +256,7 @@
 <script setup>
 import { ref, shallowRef, reactive, onMounted, onBeforeUnmount, computed, nextTick } from 'vue';
 import { createEngine } from './engine.js';
-import { submitScore, getNickname, saveNickname } from '../../utils/game/api.js';
+import { submitScore, getNickname, saveNickname } from '../api.js';
 
 const stats = reactive({ hp: 3, maxHp: 3, shield: 0, xp: 0, xpNeed: 6, level: 1, kills: 0, time: 0 });
 const upgradeChoices = ref([]);
