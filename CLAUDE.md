@@ -17,6 +17,7 @@
 ```
 uniapp/
 ├── pages/
+│   ├── index/          # 首页
 │   └── stele/          # 碑文业务（index/list/detail/preview/help）
 ├── components/
 │   └── stele/WordPreview.vue
