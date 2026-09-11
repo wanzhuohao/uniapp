@@ -485,6 +485,8 @@ const sections = [
   .help-table th, .help-table td { padding: 8px 10px; font-size: 13px; }
   .scroll-rod { height: 16px; }
   .scroll-rod::before, .scroll-rod::after { width: 24px; height: 24px; }
+  .scroll-rod::before { left: -2px; }
+  .scroll-rod::after { right: -2px; }
   .rod-seal { width: 26px; height: 26px; font-size: 14px; }
 }
 </style>

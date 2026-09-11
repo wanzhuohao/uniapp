@@ -38,6 +38,8 @@ let threeCamera: PerspectiveCamera | null = null;
 let threeAnimateId: number | null = null;
 let controls: OrbitControls | null = null;
 let resizeHandler: (() => void) | null = null;
+let resizeObserver: ResizeObserver | null = null;
+let visibilityHandler: (() => void) | null = null;
 
 // ==================== Canvas 纹理绘制（方案 B：区域边界限制） ====================
 
@@ -294,16 +296,41 @@ function renderThreeStele(preview: any) {
     threeRenderer.setSize(container.offsetWidth, container.offsetHeight);
   };
   window.addEventListener('resize', resizeHandler);
+
+  // ResizeObserver: 容器尺寸变化时同步渲染器（如从后台恢复、横竖屏切换）
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(() => {
+      if (resizeHandler) resizeHandler();
+    });
+    resizeObserver.observe(container);
+  }
+
+  // visibilitychange: 从后台恢复后重设渲染器尺寸并触发一帧重绘
+  visibilityHandler = () => {
+    if (document.visibilityState === 'visible') {
+      if (resizeHandler) resizeHandler();
+      if (threeAnimateId === null && threeScene && threeCamera && threeRenderer) {
+        const animate = () => {
+          controls?.update();
+          threeRenderer!.render(threeScene!, threeCamera!);
+          threeAnimateId = requestAnimationFrame(animate);
+        };
+        animate();
+      }
+    }
+  };
+  document.addEventListener('visibilitychange', visibilityHandler);
 }
 
-onMounted(() => {
+onMounted(async () => {
   hintTimer = window.setTimeout(() => { showHint.value = false; }, 4000);
   try {
     const preview = localStorage.getItem('stele-3d-preview');
     if (preview) {
       const data = JSON.parse(preview);
       hasData.value = true;
-      nextTick(() => renderThreeStele(data));
+      await nextTick();
+      renderThreeStele(data);
     }
   } catch (e: any) {
     hasData.value = false;
@@ -329,6 +356,8 @@ onBeforeUnmount(() => {
   if (controls) { controls.dispose(); controls = null; }
   if (threeRenderer) { threeRenderer.dispose(); threeRenderer = null; }
   if (resizeHandler) { window.removeEventListener('resize', resizeHandler); resizeHandler = null; }
+  if (resizeObserver) { resizeObserver.disconnect(); resizeObserver = null; }
+  if (visibilityHandler) { document.removeEventListener('visibilitychange', visibilityHandler); visibilityHandler = null; }
 });
 </script>
 

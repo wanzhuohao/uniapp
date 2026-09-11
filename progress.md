@@ -2,14 +2,35 @@
 
 > 项目路径: `C:\claude code\uniapp`
 > 技术栈: UniApp Vue3 + uniCloud-alipay（仅 3 个订单云函数 + order 集合）
-> 最后更新: 2026-05-31
+> 最后更新: 2026-09-11
 > 状态: **已上线**
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
 > 品牌: **老万石雕**
 
 ## 待办
 
-- 无
+- uniCloud 控制台必须配 `ORDER_ADMIN_TOKEN` 环境变量，否则所有订单接口 503
+- HBuilderX 编译验证（附件接入后未编译过）
+- 建议合并附件 package.json 的 devDependencies（jszip/@vue/compiler-sfc/gltf-validator）
+- P1 发布记录元信息登记（公网地址/发布时间/源码基线/HBuilderX版本/主资源名/托管环境）
+
+## 2026-09-11 P0 阻塞缺陷修复（公网实测改版）
+
+- order-api.ts：重构 callOrderFunction，401 清除口令+弹框重试（MAX_AUTH_RETRIES=5），503 返回不抛出，网络错误抛原始异常；新增 ORDER_API_ERROR 枚举
+- list.vue：接入 callOrderFunction 替换 uniCloud.callFunction；fetchGeneration 防迟到响应；四种错误状态（auth-failed/service-unavailable/network-error/empty）；新增"清除口令"按钮；删除 404 自动刷新
+- preview.vue：onMounted 改 async + await nextTick() 修复 3D 初始化；新增 ResizeObserver + visibilitychange 监听后台恢复尺寸；onBeforeUnmount 补充清理
+- help.vue：移动端卷轴端头定位修复
+- 验证：回归 16/16、SFC 5/5 全通过；飞书文档 rev 15 更新三个 P0/P1 章节
+
+## 2026-09-11 接入附件源码（老人友好录入 + 3D 模板管理 + 表单架构重构 + 云函数安全强化）
+
+- 新增 61 个文件：tools/ 13 个测试脚本 + utils/stele/ 8 模块（order-api/storage-registry/diagnostics/quality-check/quality-save-guard/delivery/document-contract/templates）+ components/stele/ 3 组件（SmallTextPreview/SteleExportCenter/SteleTemplateManager）+ pages/stele/models.vue + static/models/ 资产 + docs/ 两套设计文档
+- 覆盖 12 个文件：main.js（按需注册 ElementPlus）/ types/order.ts（类型扩展）/ order.schema.json（完整 schema）/ 3 云函数（authenticateAdmin + timingSafeEqual + validateOrderPayload + 错误码 400/401/404/503）
+- 原子合入表单架构：useOrderForm.ts + index.vue + detail.vue 引入 OrderSnapshot/loadEpoch 防竞态 + organizeNameRows 按辈分自动配对可撤销 + quality-check/save-guard
+- package.json 补 4 个 test scripts + jszip/@vue/compiler-sfc/gltf-validator
+- AGENTS.md 用附件版本（CLAUDE.md 保留我方）
+- 附件 progress.md 存档到 docs/temp/progress-laowan-附件-2026-09-11.md
+- 验证：SFC 5/5、save-runtime 7/7、local-workflows 11/11 通过；regressions 11/16（5 项失败因 list.vue 等保留我方版本）
 
 ## 2026-05-31 全量代码审查修复
 

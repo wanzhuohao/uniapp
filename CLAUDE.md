@@ -58,3 +58,8 @@ npm install
 ## 线上地址
 
 https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
+
+## 飞书设计文档
+
+- 老万石雕碑文 H5：当前功能完整复刻详细设计
+  https://scnb08iioxm7.feishu.cn/docx/QKzkdpTDGoipNExM3qlcIuhmnAr

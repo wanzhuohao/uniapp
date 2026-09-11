@@ -18,6 +18,7 @@
         </el-input>
         <div class="toolbar-btns">
           <el-button type="primary" @click="onAdd">新增</el-button>
+          <el-button @click="onClearToken">清除口令</el-button>
           <el-button @click="goToHelp">帮助</el-button>
         </div>
       </div>
@@ -30,6 +31,15 @@
         <span class="ink-ring"></span>
       </div>
       <span class="loading-text">展卷中</span>
+    </div>
+
+    <!-- 非正常状态：口令失败/服务不可用/网络错误 -->
+    <div v-else-if="status === 'auth-failed' || status === 'service-unavailable' || status === 'network-error'" class="status-banner" :class="'status-' + status">
+      <div class="status-icon">{{ status === 'auth-failed' ? '验' : status === 'service-unavailable' ? '缺' : '断' }}</div>
+      <div class="status-body">
+        <div class="status-title">{{ statusMessage || (status === 'auth-failed' ? '需要验证' : status === 'service-unavailable' ? '服务不可用' : '网络异常') }}</div>
+        <el-button v-if="status === 'auth-failed' || status === 'network-error'" size="small" type="primary" @click="onClearToken" style="margin-top: 12px;">重新验证</el-button>
+      </div>
     </div>
 
     <!-- 桌面：表格 -->
@@ -87,8 +97,17 @@
       </el-table>
     </div>
 
+    <!-- 手机：非正常状态 -->
+    <div v-if="!loading && (status === 'auth-failed' || status === 'service-unavailable' || status === 'network-error')" class="status-banner status-banner-mobile" :class="'status-' + status">
+      <div class="status-icon">{{ status === 'auth-failed' ? '验' : status === 'service-unavailable' ? '缺' : '断' }}</div>
+      <div class="status-body">
+        <div class="status-title">{{ statusMessage || (status === 'auth-failed' ? '需要验证' : status === 'service-unavailable' ? '服务不可用' : '网络异常') }}</div>
+        <el-button v-if="status === 'auth-failed' || status === 'network-error'" size="small" type="primary" @click="onClearToken" style="margin-top: 12px;">重新验证</el-button>
+      </div>
+    </div>
+
     <!-- 手机：卡片列表 -->
-    <div v-if="!loading" class="card-list">
+    <div v-if="!loading && status !== 'auth-failed' && status !== 'service-unavailable' && status !== 'network-error'" class="card-list">
       <div v-if="list.length === 0" class="empty-state empty-state-mobile">
         <svg class="empty-illust" viewBox="0 0 80 110" xmlns="http://www.w3.org/2000/svg">
           <rect x="14" y="8" width="52" height="94" rx="4" ry="4" fill="none" stroke="#96700A" stroke-width="1.5" opacity="0.4"/>
@@ -166,6 +185,12 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import type { OrderItem } from '../../types/order';
 import { toast } from '../../utils/common/toast.js';
+import { callOrderFunction, clearOrderAdminToken, isOrderApiError, isOrderAdminPromptCancelled, ORDER_API_ERROR } from '../../utils/stele/order-api';
+
+/** 列表状态：loading | auth-failed | service-unavailable | network-error | empty | ready */
+type ListStatus = 'loading' | 'auth-failed' | 'service-unavailable' | 'network-error' | 'empty' | 'ready';
+const status = ref<ListStatus>('loading');
+const statusMessage = ref('');
 
 const keyword = ref('');
 const pageNo = ref(1);
@@ -173,31 +198,51 @@ const pageSize = ref(10);
 const total = ref(0);
 const list = ref<OrderItem[]>([]);
 const loading = ref(false);
+let fetchGeneration = 0;
 
 const fetchList = async () => {
   loading.value = true;
+  status.value = 'loading';
+  const requestGeneration = ++fetchGeneration;
   try {
-    const res = await uniCloud.callFunction({
-      name: 'order-query',
-      data: {
-        pageNo: pageNo.value,
-        pageSize: pageSize.value,
-        keyword: keyword.value
-      }
+    const res = await callOrderFunction('order-query', {
+      pageNo: pageNo.value,
+      pageSize: pageSize.value,
+      keyword: keyword.value
     });
+    if (requestGeneration !== fetchGeneration) return;
     const result = res?.result;
     if (!result || result.code !== 0) {
-      toast.error(result?.msg || '获取列表失败');
+      if (result?.code === 503) {
+        status.value = 'service-unavailable';
+        statusMessage.value = '云函数未配置管理员口令，请联系管理员';
+      } else {
+        toast.error(result?.msg || '获取列表失败');
+        status.value = 'network-error';
+        statusMessage.value = '获取列表失败';
+      }
       list.value = [];
       total.value = 0;
       return;
     }
     list.value = result.data || [];
     total.value = result.total || 0;
+    status.value = list.value.length === 0 ? 'empty' : 'ready';
   } catch (e) {
+    if (requestGeneration !== fetchGeneration) return;
+    if (isOrderAdminPromptCancelled(e)) return;
     toast.error('获取列表失败');
+    list.value = [];
+    total.value = 0;
+    if (isOrderApiError(e, ORDER_API_ERROR.AUTH_TOO_MANY_RETRIES)) {
+      status.value = 'auth-failed';
+      statusMessage.value = '口令连续错误次数过多，请确认口令后重试';
+    } else {
+      status.value = 'network-error';
+      statusMessage.value = '网络请求失败，请检查网络后重试';
+    }
   } finally {
-    loading.value = false;
+    if (requestGeneration === fetchGeneration) loading.value = false;
   }
 };
 
@@ -320,8 +365,13 @@ const onDelete = (row: OrderItem) => {
     success: async (res) => {
       if (!res.confirm) return;
       try {
-        const delRes = await uniCloud.callFunction({ name: 'order-delete', data: { id: row._id } });
+        const delRes = await callOrderFunction('order-delete', { id: row._id });
         const delResult = delRes?.result;
+        if (delResult?.code === 404) {
+          toast.error('记录不存在或已移除');
+          fetchList();
+          return;
+        }
         if (!delResult || delResult.code !== 0) {
           toast.error(delResult?.msg || '移除失败');
           return;
@@ -330,10 +380,19 @@ const onDelete = (row: OrderItem) => {
         if (list.value.length <= 1 && pageNo.value > 1) pageNo.value--;
         fetchList();
       } catch (e) {
+        if (isOrderAdminPromptCancelled(e)) return;
         toast.error('移除失败');
       }
     }
   });
+};
+
+/** 清除口令：仅删除 stele-order-admin-token，不影响草稿、模板、3D 预览等 */
+const onClearToken = () => {
+  clearOrderAdminToken();
+  toast.success('口令已清除');
+  pageNo.value = 1;
+  fetchList();
 };
 
 /** 时间展示 */
@@ -549,6 +608,45 @@ onBeforeUnmount(cleanupMouseListeners);
   font-family: var(--font-display);
 }
 .empty-state-mobile { padding: 40px 20px; }
+
+/* 口令失败/服务不可用/网络错误 状态横幅 */
+.status-banner {
+  background: var(--paper-white);
+  border-radius: 8px;
+  padding: 48px 24px;
+  text-align: center;
+  border: 1px dashed var(--gold-a35);
+  box-shadow: var(--shadow-paper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: reveal 0.7s ease 0.2s both;
+}
+.status-banner-mobile { padding: 36px 20px; }
+.status-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+}
+.status-auth-failed .status-icon { background: #A13732; }
+.status-service-unavailable .status-icon { background: #9C7518; }
+.status-network-error .status-icon { background: #6B5B4A; }
+.status-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--ink-gold);
+  letter-spacing: 3px;
+  font-weight: 500;
+  max-width: 320px;
+}
 .table-wrap {
   display: block; flex: 0 0 auto; min-height: 0;
   animation: reveal 0.7s ease 0.2s both;
