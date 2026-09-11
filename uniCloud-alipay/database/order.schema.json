@@ -1,1 +1,23 @@
-{"bsonType":"object","required":[],"permission":{"read":false,"create":false,"update":false,"delete":false},"properties":{"_id":{"description":"ID，系统自动生成"},"big":{"description":"big"},"title":{"description":"title"},"small":{"description":"small"},"birth":{"description":"birth"},"date":{"description":"date"},"user":{"description":"user"},"time":{"description":"time"},"info":{"description":"info"}}}
+{
+  "bsonType": "object",
+  "required": ["big", "title", "small", "birth", "date", "user", "info"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": { "bsonType": "string", "description": "ID，系统自动生成" },
+    "big": { "bsonType": "string", "maxLength": 20000, "description": "碑文大字" },
+    "title": { "bsonType": "string", "maxLength": 200, "description": "碑文横批" },
+    "small": { "bsonType": "string", "maxLength": 20000, "description": "碑文小字" },
+    "birth": { "bsonType": "string", "maxLength": 20000, "description": "生卒信息展示文案" },
+    "date": { "bsonType": "string", "maxLength": 20000, "description": "立碑日期展示文案" },
+    "user": { "bsonType": "string", "minLength": 1, "maxLength": 100, "description": "客户标识" },
+    "time": { "description": "创建时间戳" },
+    "updateTime": { "description": "更新时间戳" },
+    "info": { "bsonType": "object", "description": "碑文结构化表单" },
+    "remark": { "bsonType": "string", "maxLength": 2000, "description": "订单备注" }
+  }
+}

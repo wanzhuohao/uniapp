@@ -1,3 +1,6 @@
+export type PageLoadState = 'loading' | 'ready' | 'error';
+export type SaveFeedback = { state: 'idle' | 'success' | 'error'; message: string };
+
 export interface ParentDate {
   year: string;
   month: string;
@@ -59,4 +62,60 @@ export interface OrderItem {
   date: string;
   info: Omit<OrderForm, 'user' | 'remark'>;
   remark: string;
+}
+
+export interface SteleDocument {
+  title: string;
+  big: string;
+  small: string;
+  birth: string;
+  date: string;
+}
+
+export interface DeliveryDto {
+  schemaVersion: 1;
+  generatedAt: string;
+  document: SteleDocument;
+}
+
+export interface ConfirmationDto {
+  schemaVersion: 1;
+  generatedAt: string;
+  confirmationVersion: 'v1';
+  orderRef: string;
+  document: SteleDocument;
+}
+
+export interface SteleTemplateData {
+  selected: string;
+  father: ParentInfo;
+  mother: ParentInfo;
+  bigTitle: string;
+  dateQingming: boolean;
+  dateShowLunar: boolean;
+  libei: string[];
+  names: string[][][];
+}
+
+export interface SteleTemplate {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  data: SteleTemplateData;
+}
+
+export type QualityLevel = 'blocker' | 'warning';
+
+export interface QualityIssue {
+  code: string;
+  field: string;
+  message: string;
+  level: QualityLevel;
+}
+
+export interface QualityResult {
+  blockers: QualityIssue[];
+  warnings: QualityIssue[];
+  metrics: { validNames: number; nonEmptyRows: number };
 }

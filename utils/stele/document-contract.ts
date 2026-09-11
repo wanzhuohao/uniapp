@@ -1,0 +1,55 @@
+import type { ConfirmationDto, DeliveryDto, SteleDocument } from '../../types/order';
+
+export const DOCUMENT_FIELDS = Object.freeze(['title', 'big', 'small', 'birth', 'date'] as const);
+const FIELD_LABELS: Record<(typeof DOCUMENT_FIELDS)[number], string> = {
+  title: '横批', big: '大字', small: '小字', birth: '生卒', date: '立碑日期',
+};
+
+export interface DocumentValidationFailure {
+  ok: false;
+  field: (typeof DOCUMENT_FIELDS)[number];
+  code: 'DOCUMENT_FIELD_TYPE_INVALID';
+  action: string;
+}
+
+export interface DocumentValidationSuccess { ok: true; document: Readonly<SteleDocument> }
+
+export function validateRawDocument(raw: unknown): DocumentValidationSuccess | DocumentValidationFailure {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return { ok: false, field: 'title', code: 'DOCUMENT_FIELD_TYPE_INVALID', action: '请刷新预览并确认横批、大字、小字、生卒和立碑日期均为文本' };
+  }
+  const source = raw as Record<string, unknown>;
+  for (const field of DOCUMENT_FIELDS) {
+    if (typeof source[field] !== 'string') {
+      return { ok: false, field, code: 'DOCUMENT_FIELD_TYPE_INVALID', action: `请把“${FIELD_LABELS[field]}”修正为文本后重新生成预览` };
+    }
+  }
+  return {
+    ok: true,
+    document: Object.freeze({ title: source.title, big: source.big, small: source.small, birth: source.birth, date: source.date } as SteleDocument),
+  };
+}
+
+function validIso(clock: () => Date): string {
+  const value = clock().toISOString();
+  if (Number.isNaN(Date.parse(value))) throw new Error('FILE_GENERATION_FAILED');
+  return value;
+}
+
+export function buildDeliveryDto(document: Readonly<SteleDocument>, clock: () => Date = () => new Date()): Readonly<DeliveryDto> {
+  const verified = validateRawDocument(document);
+  if (!verified.ok) throw new Error(`${verified.field}:${verified.action}`);
+  return Object.freeze({ schemaVersion: 1, generatedAt: validIso(clock), document: verified.document });
+}
+
+export function buildOrderRef(orderId: unknown): string {
+  if (orderId === undefined || orderId === null) return 'UNSAVED';
+  const normalized = String(orderId).replace(/[^A-Za-z0-9]/g, '');
+  return normalized ? normalized.slice(-6) : 'UNSAVED';
+}
+
+export function buildConfirmationDto(document: Readonly<SteleDocument>, orderId: unknown, clock: () => Date = () => new Date()): Readonly<ConfirmationDto> {
+  const verified = validateRawDocument(document);
+  if (!verified.ok) throw new Error(`${verified.field}:${verified.action}`);
+  return Object.freeze({ schemaVersion: 1, generatedAt: validIso(clock), confirmationVersion: 'v1', orderRef: buildOrderRef(orderId), document: verified.document });
+}

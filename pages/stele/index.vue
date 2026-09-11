@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="step-content">
+    <div :class="['step-content', { 'editing-names': currentStep === 2 }]">
       <!-- 草稿提示（非阻断横幅）-->
       <div v-if="draftNoticeVisible" class="draft-notice">
         <span class="draft-notice-text">检测到上次未保存的草稿</span>
@@ -28,6 +28,7 @@
           <el-button size="small" @click="dismissDraftNotice">关闭</el-button>
         </div>
       </div>
+      <SteleTemplateManager :form="form" @apply="onApplyTemplate" />
 
       <!-- 步骤1：父母信息 + 横批与立碑日期（合并） -->
       <div v-show="currentStep === 1" class="step-panel">
@@ -62,7 +63,7 @@
             </el-form-item>
           </template>
           <el-form-item label="立碑日期">
-            <el-radio-group v-model="form.dateQingming" class="full-width">
+            <el-radio-group :model-value="form.dateQingming" class="full-width" @change="value => setNormalErectDateMode(Boolean(value))">
               <el-radio :value="true">清明节</el-radio>
               <el-radio :value="false">自定义</el-radio>
             </el-radio-group>
@@ -82,7 +83,15 @@
       </div>
 
       <!-- 步骤2：名单 -->
-      <div v-show="currentStep === 2" class="step-panel">
+      <div v-show="currentStep === 2" class="step-panel names-editing-panel">
+        <SmallTextPreview v-if="currentStep === 2" :small="previewData.small" :reserve-space="false" />
+        <div class="names-organize-toolbar">
+          <div class="names-organize-actions">
+            <el-button type="primary" @click="onOrganizeNames">自动规整</el-button>
+            <el-button :disabled="!canUndoNamesOrganize" @click="onUndoNamesOrganize">撤销整理</el-button>
+          </div>
+          <p>可在同一排随意录入，按辈分分排、夫妻按同类录入顺序匹配，空白姓名也占位；再拖动调整。自定义称谓保留在末排。</p>
+        </div>
         <el-form label-position="top" size="large">
           <div v-for="(row, rowIdx) in form.names" :key="rowIdx" class="names-group">
             <div class="group-header">
@@ -155,6 +164,7 @@
               <button type="button" class="toolbar-btn" @click="onExportImage" :disabled="exporting">
                 {{ exporting ? '导出中...' : '保存图片' }}
               </button>
+              <SteleExportCenter :document="previewData" :order-id="editId" />
             </div>
           </div>
         </div>
@@ -165,7 +175,7 @@
       <div class="footer-actions">
         <el-button v-if="currentStep > 1" @click="currentStep--">上一步</el-button>
         <el-button v-if="currentStep < 3" type="primary" @click="onNext">下一步</el-button>
-        <el-button v-if="currentStep === 3" type="primary" @click="onSubmit" :loading="submitting">提交</el-button>
+        <el-button v-if="currentStep === 3" type="primary" @click="requestSave()" :loading="submitting">提交</el-button>
       </div>
     </div>
 
@@ -180,21 +190,32 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed, onMounted } from 'vue';
+import { computed, onMounted, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import draggable from 'vuedraggable';
-import { appellationOptions, parseFlexibleDate, arrToDisplay, toStorageDate } from '../../utils/stele/stele-utils';
+import { appellationOptions } from '../../utils/stele/stele-utils';
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
-import type { PreviewData } from '../../types/order';
+import SteleExportCenter from '../../components/stele/SteleExportCenter.vue';
+import SteleTemplateManager from '../../components/stele/SteleTemplateManager.vue';
+import SmallTextPreview from '../../components/stele/SmallTextPreview.vue';
+import type { PageLoadState, SaveFeedback, PreviewData, SteleTemplateData } from '../../types/order';
 import { toast } from '../../utils/common/toast.js';
+import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
+import { checkSteleQuality } from '../../utils/stele/quality-check';
+import { getSaveFailureMessage, runQualitySaveGuard } from '../../utils/stele/quality-save-guard';
+import { recordDiagnosticError } from '../../utils/common/diagnostics';
+import { getExportFailureMessage } from '../../utils/stele/delivery';
 
 const {
   form, currentYear,
   fatherBirth, fatherDeath, motherBirth, motherDeath,
   libeiDate, qingmingYear, lastCustomLibei,
   addCol, removeCol, addGroup, removeGroup,
-  syncDatesToForm, validateWarnings, buildPreview, fetchAndFill, buildSavePayload, doSave,
+  organizeNames, undoNamesOrganize, canUndoNamesOrganize,
+  syncDatesToForm, buildPreview, fetchOrderSnapshot, commitOrderSnapshot, buildSavePayload, doSave,
   saveDraft, loadDraft, clearDraft,
+  applyTemplateData, setNormalErectDateMode,
 } = useOrderForm();
 
 const stepLabels = ['基本信息', '名单', '预览'];
@@ -202,27 +223,49 @@ const editId = ref(getUrlParam('id'));
 const fromList = ref(!!getUrlParam('id') || !!getUrlParam('copyFrom') || !!getUrlParam('from'));
 const currentStep = ref(1);
 const submitting = ref(false);
-const savedBig = ref('');
 const showPhoneDialog = ref(false);
 const phoneInput = ref('');
 const previewTheme = ref<'dark' | 'light'>('dark');
 const previewRef = ref<InstanceType<typeof WordPreview> | null>(null);
 const exporting = ref(false);
+const loadState = ref<PageLoadState>('loading');
+const saveFeedback = reactive<SaveFeedback>({ state: 'idle', message: '' });
+let loadEpoch = 0;
+
+onBeforeUnmount(() => { loadEpoch++; });
 
 
 async function onExportImage() {
   if (!previewRef.value) return;
   exporting.value = true;
-  const fatherName = form.father?.name || '';
-  const motherName = form.mother?.name || '';
-  const filename = (fatherName || motherName) ? `${fatherName}${motherName}_碑文.png` : '碑文预览.png';
-  const ok = await previewRef.value.exportImage(filename);
-  if (!ok) toast.error('导出失败');
-  exporting.value = false;
+  try {
+    const fatherName = form.father?.name || '';
+    const motherName = form.mother?.name || '';
+    const filename = (fatherName || motherName) ? `${fatherName}${motherName}_碑文.png` : '碑文预览.png';
+    await previewRef.value.exportImage(filename);
+  } catch (error: any) {
+    const code = error?.message === 'DOWNLOAD_UNAVAILABLE' ? 'DOWNLOAD_UNAVAILABLE' : 'IMAGE_CAPTURE_FAILED';
+    recordDiagnosticError(code, 'export');
+    toast.error(getExportFailureMessage(code));
+  } finally {
+    exporting.value = false;
+  }
 }
 
 // 预览数据：响应式计算
 const previewData = computed<PreviewData>(() => buildPreview());
+
+function onOrganizeNames() {
+  if (!organizeNames()) { toast.info('当前名单已按顺序规整'); return; }
+  saveDraft();
+  toast.success('已规整，可拖动调整配对和顺序');
+}
+
+function onUndoNamesOrganize() {
+  if (!undoNamesOrganize()) return;
+  saveDraft();
+  toast.info('已恢复整理前的顺序');
+}
 
 function copyPreviewField(field: keyof PreviewData) {
   const text = previewData.value[field] || '';
@@ -257,7 +300,7 @@ function goStep(step: number) { currentStep.value = step; }
 
 function goTo3D() {
   syncDatesToForm();
-  localStorage.setItem('stele-3d-preview', JSON.stringify(buildPreview()));
+  localStorage.setItem(STELE_STORAGE_KEYS.preview3d, JSON.stringify(buildPreview()));
   uni.navigateTo({ url: '/pages/stele/preview' });
 }
 
@@ -265,32 +308,6 @@ watch(currentStep, (step) => {
   if (step === 3) syncDatesToForm();
   saveDraft();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// 清明节/自定义切换
-watch(() => form.dateQingming, (val) => {
-  if (val) {
-    const hasInForm = form.libei[1] || form.libei[2];
-    if (hasInForm) {
-      lastCustomLibei.value = [form.libei[0] || '', form.libei[1] || '', form.libei[2] || ''];
-      qingmingYear.value = form.libei[0] || String(currentYear);
-    } else {
-      const parsed = toStorageDate(parseFlexibleDate(libeiDate.value || ''));
-      if (parsed[0] || parsed[1] || parsed[2]) lastCustomLibei.value = parsed;
-      qingmingYear.value = parsed[0] || form.libei[0] || String(currentYear);
-    }
-    form.dateShowLunar = false;
-  } else {
-    if (lastCustomLibei.value[0] || lastCustomLibei.value[1] || lastCustomLibei.value[2]) {
-      form.libei[0] = lastCustomLibei.value[0] || form.libei[0] || String(currentYear);
-      form.libei[1] = lastCustomLibei.value[1];
-      form.libei[2] = lastCustomLibei.value[2];
-      libeiDate.value = arrToDisplay(form.libei);
-    } else {
-      libeiDate.value = arrToDisplay(form.libei);
-    }
-    form.dateShowLunar = true;
-  }
 });
 
 // 草稿提示（非阻断）
@@ -312,65 +329,96 @@ function dismissDraftNotice() {
 
 // 数据回显
 onMounted(async () => {
+  const epoch = ++loadEpoch;
   const copyFrom = getUrlParam('copyFrom');
   if (copyFrom) {
-    await fetchAndFill(copyFrom);
+    const snapshot = await fetchOrderSnapshot(copyFrom);
+    if (epoch !== loadEpoch) return;
+    if (!snapshot) { loadState.value = 'error'; return; }
+    commitOrderSnapshot(snapshot);
     form.user = '';
+    loadState.value = 'ready';
     currentStep.value = 1;
     toast.info('已复制，请修改后保存', 2000);
   } else if (editId.value) {
-    const saved = await fetchAndFill(editId.value);
-    if (typeof saved === 'object' && saved.big) savedBig.value = saved.big;
+    const snapshot = await fetchOrderSnapshot(editId.value);
+    if (epoch !== loadEpoch) return;
+    if (!snapshot) { loadState.value = 'error'; return; }
+    commitOrderSnapshot(snapshot);
+    loadState.value = 'ready';
     currentStep.value = 3;
   } else {
+    loadState.value = 'ready';
     // 新建模式：显示顶部横幅，不阻断用户
-    if (localStorage.getItem('stele-draft')) {
+    if (localStorage.getItem(STELE_STORAGE_KEYS.draft)) {
       draftNoticeVisible.value = true;
     }
   }
 });
 
-// 保存逻辑
-function onSubmit() {
-  if (submitting.value) return;
-  syncDatesToForm();
-  const warnings = validateWarnings();
-  if (warnings.length) {
-    uni.showModal({ title: '排版提醒', content: warnings.join('\n'), showCancel: false });
-  }
-  if (!form.user && !editId.value) {
-    const d = new Date();
-    phoneInput.value = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
-    showPhoneDialog.value = true;
-    return;
-  }
-  const payload = buildSavePayload(editId.value || undefined);
-  if (savedBig.value) payload.big = savedBig.value;
-  submitting.value = true;
-  doSave(payload).then((newId) => {
-    clearDraft();
-    if (newId) editId.value = newId;
-    toast.success('提交成功');
-  }).catch(() => {
-    toast.error('保存失败');
-  }).finally(() => { submitting.value = false; });
+function confirmWarnings(warnings: ReturnType<typeof checkSteleQuality>['warnings']): Promise<boolean> {
+  return ElMessageBox.confirm(warnings.map(item => `• ${item.message}`).join('\n'), '发现质检提醒', {
+    confirmButtonText: '仍要保存', cancelButtonText: '返回修改', type: 'warning',
+  }).then(() => true).catch(() => false);
 }
 
-function confirmPhoneAndSubmit() {
+function onApplyTemplate(data: SteleTemplateData) {
+  applyTemplateData(data);
+  saveDraft();
+}
+
+// 保存逻辑
+async function requestSave() {
+  if (loadState.value !== 'ready') {
+    const message = '订单内容尚未加载完成，不能保存。';
+    saveFeedback.state = 'error'; saveFeedback.message = message; toast.error(message); return;
+  }
+  if (submitting.value) return;
+  await performSubmit();
+}
+
+async function performSubmit() {
+  if (submitting.value) return;
+  syncDatesToForm();
+  submitting.value = true;
+  saveFeedback.state = 'idle'; saveFeedback.message = '';
+  try {
+    const quality = checkSteleQuality(form);
+    const outcome = await runQualitySaveGuard(quality, confirmWarnings, async () => {
+      if (!form.user) {
+        const d = new Date();
+        phoneInput.value = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+        showPhoneDialog.value = true;
+        return undefined;
+      }
+      const payload = buildSavePayload(editId.value || undefined);
+      const newId = await doSave(payload);
+      clearDraft();
+      if (newId) editId.value = newId;
+      toast.success('提交成功');
+      saveFeedback.state = 'success'; saveFeedback.message = '碑文已经保存成功。';
+      return newId;
+    });
+    if (outcome.status === 'QUALITY_BLOCKED') {
+      recordDiagnosticError('QUALITY_BLOCKED', 'quality');
+      uni.showModal({ title: '请先修正必填项', content: quality.blockers.map(item => `• ${item.message}`).join('\n'), showCancel: false });
+    }
+  } catch (error) {
+    saveDraft();
+    const message = getSaveFailureMessage(error);
+    saveFeedback.state = 'error'; saveFeedback.message = message;
+    toast.error(message);
+  } finally { submitting.value = false; }
+}
+
+async function confirmPhoneAndSubmit() {
+  if (submitting.value) return;
   const phone = (phoneInput.value || '').trim();
   if (!phone) { toast.error('请输入客户标识'); return; }
   form.user = phone;
   showPhoneDialog.value = false;
-  const payload = buildSavePayload(editId.value || undefined);
-  if (savedBig.value) payload.big = savedBig.value;
-  submitting.value = true;
-  doSave(payload).then((newId) => {
-    clearDraft();
-    if (newId) editId.value = newId;
-    toast.success('提交成功');
-  }).catch(() => {
-    toast.error('保存失败');
-  }).finally(() => { submitting.value = false; });
+  phoneInput.value = '';
+  await requestSave();
 }
 </script>
 
@@ -550,6 +598,29 @@ function confirmPhoneAndSubmit() {
 }
 .step-panel {
   width: 100%;
+}
+.names-editing-panel {
+  box-sizing: border-box;
+  padding-right: 392px;
+}
+.names-organize-toolbar { margin-bottom: 16px; }
+.names-organize-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.names-organize-actions :deep(.el-button) { margin-left: 0; }
+.names-organize-toolbar p { margin: 8px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.6; }
+@media (max-width: 900px) {
+  .names-editing-panel { padding-right: 0; }
+}
+@media (max-width: 520px) {
+  .step-content.editing-names { padding: 12px; }
+  .names-editing-panel .names-group { padding: 10px 8px; }
+  .names-editing-panel .names-row { gap: 4px; padding: 8px 4px; }
+  .names-editing-panel .drag-handle { min-width: 24px; }
+  .names-editing-panel .names-row-fields { gap: 4px; }
+  .names-editing-panel .names-row-fields .names-select { flex-basis: 38%; min-width: 64px; }
+  .names-editing-panel .names-select :deep(.el-select__wrapper) { padding: 8px 4px; gap: 4px; }
+  .names-editing-panel .names-input :deep(.el-input__wrapper) { padding: 1px 8px; }
+  .names-editing-panel .names-row-btns { gap: 4px; }
+  .names-editing-panel .names-row-btns :deep(.el-button) { margin-left: 0; padding: 8px; }
 }
 .draft-notice {
   display: flex;

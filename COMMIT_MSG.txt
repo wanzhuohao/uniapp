@@ -1,0 +1,9 @@
+feat: 接入附件源码 - 老人友好录入 + 3D 模板管理 + 表单架构重构 + 云函数安全强化
+
+- 新增 61 个文件：tools/ 13 个测试脚本 + utils/stele/ 8 模块 + components/stele/ 3 组件 + pages/stele/models.vue + static/models/ 资产 + docs/ 两套设计文档
+- 覆盖 12 个文件：main.js（按需注册 ElementPlus）/ types/order.ts（类型扩展）/ order.schema.json（完整 schema）/ 3 云函数（authenticateAdmin + timingSafeEqual + validateOrderPayload）
+- 原子合入表单架构：useOrderForm.ts + index.vue + detail.vue 引入 OrderSnapshot/loadEpoch 防竞态 + organizeNameRows + quality-check/save-guard
+- package.json 补 4 个 test scripts + jszip/@vue/compiler-sfc/gltf-validator
+- 附件 progress.md 存档到 docs/temp/
+- 验证：SFC 5/5、save-runtime 7/7、local-workflows 11/11 通过；regressions 11/16（5 项失败因我方 list.vue 等保留未覆盖）
+- 待办：uniCloud 控制台必须配 ORDER_ADMIN_TOKEN 环境变量

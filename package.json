@@ -1,8 +1,19 @@
 {
+  "scripts": {
+    "test:stele-sfc": "node tools/test-stele-sfc.mjs",
+    "test:stele-save-runtime": "node --experimental-strip-types tools/test-stele-save-runtime.mjs",
+    "test:stele-local-workflows": "node --experimental-strip-types tools/test-stele-local-workflows.mjs",
+    "test:stele-regressions": "node --experimental-strip-types tools/test-stele-regressions.mjs"
+  },
   "dependencies": {
     "element-plus": "^2.13.6",
     "html2canvas": "^1.4.1",
-    "three": "^0.183.2",
+    "jszip": "3.10.1",
+    "three": "0.183.2",
     "vuedraggable": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "3.5.32",
+    "gltf-validator": "2.0.0-dev.3.10"
   }
 }

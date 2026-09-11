@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "stele-publish-report-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "reportSchema", "policyVersion", "policySha256", "parameterVersion", "releaseId", "createdAt", "toolVersions", "summary", "templates", "failures"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "reportSchema": { "const": "stele-publish-report-v1" },
+    "policyVersion": { "const": "stele-model-policy-v1" },
+    "policySha256": { "$ref": "#/$defs/sha256" },
+    "parameterVersion": { "type": "string", "pattern": "^stele-parametric-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "releaseId": { "type": "string", "pattern": "^classic-v1-[a-f0-9]{12}$" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "toolVersions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node", "generator", "validator", "gltfValidator"],
+      "properties": {
+        "node": { "type": "string" },
+        "generator": { "const": "stele-generator-v1" },
+        "validator": { "const": "stele-validator-v1" },
+        "gltfValidator": { "const": "2.0.0-dev.3.10" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileCount", "failureCount", "targetBeforeSha256", "targetAfterSha256", "assetSetSha256"],
+      "properties": {
+        "fileCount": { "type": "integer", "minimum": 0 },
+        "failureCount": { "type": "integer", "minimum": 0 },
+        "targetBeforeSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "targetAfterSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "assetSetSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/template" }
+    },
+    "failures": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/failure" }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "z", "unit"],
+      "properties": {
+        "x": { "type": "number", "exclusiveMinimum": 0 },
+        "y": { "type": "number", "exclusiveMinimum": 0 },
+        "z": { "type": "number", "exclusiveMinimum": 0 },
+        "unit": { "const": "millimeter" }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "format", "bytes", "sha256"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^stele-template-([a-z0-9]+(?:-[a-z0-9]+)*)\\.(glb|stl)$" },
+        "format": { "enum": ["glb", "stl"] },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["boundsMismatchCount", "boundaryEdgeCount", "degenerateTriangleCount", "duplicateTriangleCount", "externalUriCount", "extraConnectedShellCount", "fileNameMismatchCount", "geometryMismatchCount", "imageCount", "invalidStlHeaderCount", "invalidStlLengthCount", "nonFiniteCoordinateCount", "nonManifoldEdgeCount", "nonZeroAttributeByteCount", "nonZeroGapByteCount", "orientationConflictCount", "overlappingRangeCount", "pairCountMismatchCount", "selfIntersectionPairCount", "trailingByteCount", "unknownChunkCount", "unknownExtensionCount", "unknownJsonKeyCount", "unknownJsonStringCount", "unreachableBufferViewCount", "unreachableObjectCount"],
+      "properties": {
+        "boundsMismatchCount": { "$ref": "#/$defs/count" },
+        "boundaryEdgeCount": { "$ref": "#/$defs/count" },
+        "degenerateTriangleCount": { "$ref": "#/$defs/count" },
+        "duplicateTriangleCount": { "$ref": "#/$defs/count" },
+        "externalUriCount": { "$ref": "#/$defs/count" },
+        "extraConnectedShellCount": { "$ref": "#/$defs/count" },
+        "fileNameMismatchCount": { "$ref": "#/$defs/count" },
+        "geometryMismatchCount": { "$ref": "#/$defs/count" },
+        "imageCount": { "$ref": "#/$defs/count" },
+        "invalidStlHeaderCount": { "$ref": "#/$defs/count" },
+        "invalidStlLengthCount": { "$ref": "#/$defs/count" },
+        "nonFiniteCoordinateCount": { "$ref": "#/$defs/count" },
+        "nonManifoldEdgeCount": { "$ref": "#/$defs/count" },
+        "nonZeroAttributeByteCount": { "$ref": "#/$defs/count" },
+        "nonZeroGapByteCount": { "$ref": "#/$defs/count" },
+        "orientationConflictCount": { "$ref": "#/$defs/count" },
+        "overlappingRangeCount": { "$ref": "#/$defs/count" },
+        "pairCountMismatchCount": { "$ref": "#/$defs/count" },
+        "selfIntersectionPairCount": { "$ref": "#/$defs/count" },
+        "trailingByteCount": { "$ref": "#/$defs/count" },
+        "unknownChunkCount": { "$ref": "#/$defs/count" },
+        "unknownExtensionCount": { "$ref": "#/$defs/count" },
+        "unknownJsonKeyCount": { "$ref": "#/$defs/count" },
+        "unknownJsonStringCount": { "$ref": "#/$defs/count" },
+        "unreachableBufferViewCount": { "$ref": "#/$defs/count" },
+        "unreachableObjectCount": { "$ref": "#/$defs/count" }
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "parameterVersion", "geometrySha256", "boundsMm", "files", "checks"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^stele-template-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "parameterVersion": { "type": "string", "pattern": "^stele-parametric-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "geometrySha256": { "$ref": "#/$defs/sha256" },
+        "boundsMm": { "$ref": "#/$defs/bounds" },
+        "files": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/file" } },
+        "checks": { "$ref": "#/$defs/checks" }
+      }
+    },
+    "count": { "type": "integer", "minimum": 0 },
+    "failure": {
+      "oneOf": [
+        { "$ref": "#/$defs/failureInvalidArgument" },
+        { "$ref": "#/$defs/failureInput" },
+        { "$ref": "#/$defs/failureFileName" },
+        { "$ref": "#/$defs/failureGlbContainer" },
+        { "$ref": "#/$defs/failureGlbJson" },
+        { "$ref": "#/$defs/failureGlbBinary" },
+        { "$ref": "#/$defs/failureStl" },
+        { "$ref": "#/$defs/failureTopology" },
+        { "$ref": "#/$defs/failureGeometry" },
+        { "$ref": "#/$defs/failureStageCopy" },
+        { "$ref": "#/$defs/failureStageVerify" },
+        { "$ref": "#/$defs/failureReport" },
+        { "$ref": "#/$defs/failureSwitch" },
+        { "$ref": "#/$defs/failureRecovery" },
+        { "$ref": "#/$defs/failureBuildGuard" }
+      ]
+    },
+    "failureBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileName", "code", "message"],
+      "properties": { "fileName": { "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^stele-template-([a-z0-9]+(?:-[a-z0-9]+)*)\\.(glb|stl)$" }] }, "code": {}, "message": {} }
+    },
+    "failureInvalidArgument": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "INVALID_ARGUMENT" }, "message": { "const": "命令参数无效" } } }] },
+    "failureInput": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "INPUT_SET_INVALID" }, "message": { "const": "输入批次不完整" } } }] },
+    "failureFileName": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "FILE_NAME_INVALID" }, "message": { "const": "发布文件名不合法" } } }] },
+    "failureGlbContainer": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "GLB_CONTAINER_INVALID" }, "message": { "const": "GLB 容器校验失败" } } }] },
+    "failureGlbJson": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "GLB_JSON_INVALID" }, "message": { "const": "GLB JSON 白名单校验失败" } } }] },
+    "failureGlbBinary": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "GLB_BINARY_INVALID" }, "message": { "const": "GLB 二进制布局校验失败" } } }] },
+    "failureStl": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "STL_CONTAINER_INVALID" }, "message": { "const": "STL 容器校验失败" } } }] },
+    "failureTopology": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "MESH_TOPOLOGY_INVALID" }, "message": { "const": "网格拓扑校验失败" } } }] },
+    "failureGeometry": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "GEOMETRY_MISMATCH" }, "message": { "const": "GLB 与 STL 几何不一致" } } }] },
+    "failureStageCopy": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "STAGING_COPY_FAILED" }, "message": { "const": "暂存复制失败，旧发布集合未变" } } }] },
+    "failureStageVerify": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "STAGING_VERIFY_FAILED" }, "message": { "const": "暂存回读失败，旧发布集合未变" } } }] },
+    "failureReport": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "REPORT_WRITE_FAILED" }, "message": { "const": "发布报告写入失败，旧发布集合未变" } } }] },
+    "failureSwitch": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "TARGET_SWITCH_FAILED" }, "message": { "const": "版本目录发布失败，旧发布集合未变" } } }] },
+    "failureRecovery": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "TRANSACTION_RECOVERY_FAILED" }, "message": { "const": "发布事务无法安全恢复，请人工检查" } } }] },
+    "failureBuildGuard": { "allOf": [{ "$ref": "#/$defs/failureBase" }, { "properties": { "code": { "const": "BUILD_GUARD_FAILED" }, "message": { "const": "发现未提交发布事务，禁止构建" } } }] }
+  }
+}

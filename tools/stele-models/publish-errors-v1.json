@@ -1,0 +1,17 @@
+{
+  "INVALID_ARGUMENT": "命令参数无效",
+  "INPUT_SET_INVALID": "输入批次不完整",
+  "FILE_NAME_INVALID": "发布文件名不合法",
+  "GLB_CONTAINER_INVALID": "GLB 容器校验失败",
+  "GLB_JSON_INVALID": "GLB JSON 白名单校验失败",
+  "GLB_BINARY_INVALID": "GLB 二进制布局校验失败",
+  "STL_CONTAINER_INVALID": "STL 容器校验失败",
+  "MESH_TOPOLOGY_INVALID": "网格拓扑校验失败",
+  "GEOMETRY_MISMATCH": "GLB 与 STL 几何不一致",
+  "STAGING_COPY_FAILED": "暂存复制失败，旧发布集合未变",
+  "STAGING_VERIFY_FAILED": "暂存回读失败，旧发布集合未变",
+  "REPORT_WRITE_FAILED": "发布报告写入失败，旧发布集合未变",
+  "TARGET_SWITCH_FAILED": "版本目录发布失败，旧发布集合未变",
+  "TRANSACTION_RECOVERY_FAILED": "发布事务无法安全恢复，请人工检查",
+  "BUILD_GUARD_FAILED": "发现未提交发布事务，禁止构建"
+}

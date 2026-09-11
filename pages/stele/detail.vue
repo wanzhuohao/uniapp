@@ -19,6 +19,7 @@
               <el-button size="small" @click="dismissDraftNotice">关闭</el-button>
             </div>
           </div>
+          <SteleTemplateManager :form="form" @apply="onApplyTemplate" />
           <el-form :model="form" label-width="90px" size="default">
             <!-- 1. 父母信息 -->
             <el-form-item label="类型">
@@ -53,7 +54,7 @@
             <!-- 2. 立碑日期 -->
             <el-form-item label="立碑日期">
               <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
-                <el-radio-group v-model="form.dateQingming">
+                <el-radio-group :model-value="form.dateQingming" @change="value => setNormalErectDateMode(Boolean(value))">
                   <el-radio :value="true">清明节</el-radio>
                   <el-radio :value="false">自定义</el-radio>
                 </el-radio-group>
@@ -71,6 +72,11 @@
             <!-- 4. 名单 -->
             <el-form-item label="名单">
               <div class="names-list">
+              <div class="names-organize-toolbar">
+                <el-button type="primary" @click="onOrganizeNames">自动规整</el-button>
+                <el-button :disabled="!canUndoNamesOrganize" @click="onUndoNamesOrganize">撤销整理</el-button>
+                <p>按辈分分排，夫妻按同类录入顺序匹配，空白姓名也占位；整理后可拖动调整。自定义称谓保留在末排。</p>
+              </div>
               <div v-for="(row, rowIdx) in form.names" :key="rowIdx" class="names-group">
                 <div class="group-header">
                   <span>第{{ rowIdx + 1 }}排</span>
@@ -129,7 +135,8 @@
               <el-button @click="onPreview">刷新预览</el-button>
               <el-button @click="goTo3D">3D预览</el-button>
               <el-button @click="onCopyImage" :loading="exporting">复制图片</el-button>
-              <el-button type="primary" @click="onSave" :loading="saving">提交</el-button>
+              <SteleExportCenter :document="previewData" :order-id="idRef" />
+              <el-button type="primary" @click="requestSave()" :loading="saving">提交</el-button>
             </div>
           </div>
 
@@ -163,6 +170,7 @@
       </el-splitter-panel>
     </el-splitter>
 
+
     <!-- 手机号输入弹窗 -->
     <el-dialog
       v-model="phoneDialogVisible"
@@ -190,20 +198,28 @@
 
 <script lang="ts" setup>
 import { ref, reactive, watch, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import draggable from 'vuedraggable';
-import { appellationOptions, parseFlexibleDate, arrToDisplay, toStorageDate } from '../../utils/stele/stele-utils';
+import { appellationOptions } from '../../utils/stele/stele-utils';
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
-import type { PreviewData, SavePayload } from '../../types/order';
+import SteleExportCenter from '../../components/stele/SteleExportCenter.vue';
+import SteleTemplateManager from '../../components/stele/SteleTemplateManager.vue';
+import type { PageLoadState, SaveFeedback, PreviewData, SteleTemplateData } from '../../types/order';
+import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
+import { checkSteleQuality } from '../../utils/stele/quality-check';
+import { getSaveFailureMessage, runQualitySaveGuard } from '../../utils/stele/quality-save-guard';
+import { recordDiagnosticError } from '../../utils/common/diagnostics';
 
 const {
   form, currentYear,
   fatherBirth, fatherDeath, motherBirth, motherDeath,
   libeiDate, qingmingYear, lastCustomLibei,
   addCol, removeCol, addGroup, removeGroup,
-  syncDatesToForm, validateWarnings, buildPreview, fetchAndFill, buildSavePayload, doSave,
+  organizeNames, undoNamesOrganize, canUndoNamesOrganize,
+  syncDatesToForm, buildPreview, fetchOrderSnapshot, commitOrderSnapshot, buildSavePayload, doSave,
   saveDraft, loadDraft, clearDraft,
+  applyTemplateData, setNormalErectDateMode,
 } = useOrderForm();
 
 const saving = ref(false);
@@ -215,6 +231,11 @@ const splitterLayout = ref<'horizontal' | 'vertical'>(
 );
 const previewRef = ref<InstanceType<typeof WordPreview> | null>(null);
 const exporting = ref(false);
+const loadState = ref<PageLoadState>('loading');
+const saveFeedback = reactive<SaveFeedback>({ state: 'idle', message: '' });
+let loadEpoch = 0;
+
+onBeforeUnmount(() => { loadEpoch++; });
 
 // 预览区拖拽调整大小
 const BASE_W = 400;
@@ -235,6 +256,8 @@ function cleanupResize() {
   if (resizeMouseUp) document.removeEventListener('mouseup', resizeMouseUp);
   resizeMouseMove = null;
   resizeMouseUp = null;
+  document.body.style.cursor = '';
+  document.body.style.userSelect = '';
 }
 
 function onResizeStart(e: MouseEvent) {
@@ -290,12 +313,22 @@ function refreshPreview() {
 
 // 草稿提示（非阻断，展示在编辑区顶部）
 const draftNoticeVisible = ref(false);
+const hasUnsavedChanges = ref(false);
+let trackingChanges = false;
+
+function markFormChanged() {
+  if (trackingChanges) hasUnsavedChanges.value = true;
+}
+
+watch(form, markFormChanged, { deep: true });
+watch([fatherBirth, fatherDeath, motherBirth, motherDeath, libeiDate, qingmingYear], markFormChanged);
 
 async function applyDraft() {
   const ok = loadDraft();
   if (ok) {
     await nextTick();
     refreshPreview();
+    hasUnsavedChanges.value = true;
     ElMessage.success('已恢复草稿');
   } else {
     clearDraft();
@@ -310,36 +343,48 @@ function dismissDraftNotice() {
 
 // 数据回显
 onMounted(async () => {
+  const epoch = ++loadEpoch;
   const copyFrom = getUrlParam('copyFrom');
   if (copyFrom) {
-    const saved = await fetchAndFill(copyFrom);
-    if (typeof saved === 'object') previewData.value = saved;
+    const snapshot = await fetchOrderSnapshot(copyFrom);
+    if (epoch !== loadEpoch) return;
+    if (!snapshot) { loadState.value = 'error'; return; }
+    commitOrderSnapshot(snapshot);
+    if (snapshot.preview) previewData.value = snapshot.preview;
     else refreshPreview();
     form.user = '';
+    loadState.value = 'ready';
     ElMessage.success('已复制，请修改后保存为新记录');
   } else {
     idRef.value = getUrlParam('id');
     if (idRef.value) {
-      const saved = await fetchAndFill(idRef.value);
-      if (typeof saved === 'object') previewData.value = saved;
+      const snapshot = await fetchOrderSnapshot(idRef.value);
+      if (epoch !== loadEpoch) return;
+      if (!snapshot) { loadState.value = 'error'; return; }
+      commitOrderSnapshot(snapshot);
+      if (snapshot.preview) previewData.value = snapshot.preview;
       else refreshPreview();
     } else {
+      loadState.value = 'ready';
       // 新建模式：不弹 modal 阻断，只在编辑区顶部显示提示
-      if (localStorage.getItem('stele-draft')) {
+      if (localStorage.getItem(STELE_STORAGE_KEYS.draft)) {
         draftNoticeVisible.value = true;
       }
     }
+    if (idRef.value) loadState.value = 'ready';
   }
+  await nextTick();
+  hasUnsavedChanges.value = false;
+  trackingChanges = true;
 });
 
 // 手机号弹窗
 const phoneDialogVisible = ref(false);
 const phoneForm = reactive({ phone: '' });
-let pendingPayload: SavePayload | null = null;
 
 const onPreview = () => {
   refreshPreview();
-  saveDraft();
+  if (hasUnsavedChanges.value) saveDraft();
 };
 
 const copyField = (field: keyof PreviewData) => {
@@ -352,32 +397,79 @@ const copyField = (field: keyof PreviewData) => {
   });
 };
 
-const onSave = async () => {
+function confirmWarnings(warnings: ReturnType<typeof checkSteleQuality>['warnings']): Promise<boolean> {
+  return ElMessageBox.confirm(warnings.map(item => `• ${item.message}`).join('\n'), '发现质检提醒', {
+    confirmButtonText: '仍要保存', cancelButtonText: '返回修改', type: 'warning',
+  }).then(() => true).catch(() => false);
+}
+
+function onApplyTemplate(data: SteleTemplateData) {
+  applyTemplateData(data);
+  refreshPreview();
+  saveDraft();
+  hasUnsavedChanges.value = true;
+}
+
+function onOrganizeNames() {
+  if (!organizeNames()) { ElMessage.info('当前名单已按顺序规整'); return; }
+  refreshPreview();
+  saveDraft();
+  hasUnsavedChanges.value = true;
+  ElMessage.success('已规整，可拖动调整配对和顺序');
+}
+
+function onUndoNamesOrganize() {
+  if (!undoNamesOrganize()) return;
+  refreshPreview();
+  saveDraft();
+  hasUnsavedChanges.value = true;
+  ElMessage.info('已恢复整理前的顺序');
+}
+
+async function requestSave() {
+  if (loadState.value !== 'ready') {
+    const message = '订单内容尚未加载完成，不能保存。';
+    saveFeedback.state = 'error'; saveFeedback.message = message; ElMessage.error(message); return;
+  }
   if (saving.value) return;
+  await performSave();
+}
+
+const performSave = async () => {
+  if (saving.value) return;
+  saving.value = true;
+  saveFeedback.state = 'idle'; saveFeedback.message = '';
   try {
     refreshPreview();
-    const warnings = validateWarnings();
-    if (warnings.length) {
-      ElMessage.warning(warnings.join('；'));
+    const quality = checkSteleQuality(form);
+    const outcome = await runQualitySaveGuard(quality, confirmWarnings, async () => {
+      if (!form.user) {
+        const d = new Date();
+        phoneForm.phone = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+        phoneDialogVisible.value = true;
+        return undefined;
+      }
+      const payload = buildSavePayload(idRef.value || undefined);
+      const newId = await doSave(payload);
+      clearDraft();
+      await nextTick();
+      hasUnsavedChanges.value = false;
+      ElMessage.success('保存成功');
+      saveFeedback.state = 'success'; saveFeedback.message = '碑文已经保存成功。';
+      if (newId) idRef.value = newId;
+      justSaved.value = true;
+      setTimeout(() => { justSaved.value = false; }, 3000);
+      return newId;
+    });
+    if (outcome.status === 'QUALITY_BLOCKED') {
+      recordDiagnosticError('QUALITY_BLOCKED', 'quality');
+      await ElMessageBox.alert(quality.blockers.map(item => `• ${item.message}`).join('\n'), '请先修正必填项', { confirmButtonText: '返回修改' });
     }
-    const payload = buildSavePayload(idRef.value || undefined);
-    if (!form.user) {
-      const d = new Date();
-      phoneForm.phone = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
-      phoneDialogVisible.value = true;
-      pendingPayload = payload;
-      return;
-    }
-    saving.value = true;
-    const newId = await doSave(payload);
-    clearDraft();
-    ElMessage.success('保存成功');
-    if (newId) idRef.value = newId;
-    justSaved.value = true;
-    setTimeout(() => { justSaved.value = false; }, 3000);
   } catch (e) {
     saveDraft();
-    ElMessage.error('保存失败，已自动保存草稿');
+    const message = getSaveFailureMessage(e);
+    saveFeedback.state = 'error'; saveFeedback.message = message;
+    ElMessage.error(message);
   } finally {
     saving.value = false;
   }
@@ -386,63 +478,28 @@ const onSave = async () => {
 const handlePhoneConfirm = async () => {
   if (saving.value) return;
   if (!phoneForm.phone) { ElMessage.warning('请输入客户标识'); return; }
-  try {
-    phoneDialogVisible.value = false;
-    if (pendingPayload) {
-      pendingPayload.user = phoneForm.phone;
-      saving.value = true;
-      const newId = await doSave(pendingPayload);
-      clearDraft();
-      ElMessage.success('保存成功');
-      if (newId) idRef.value = newId;
-      justSaved.value = true;
-      setTimeout(() => { justSaved.value = false; }, 3000);
-      form.user = phoneForm.phone;
-      pendingPayload = null;
-    }
-    phoneForm.phone = '';
-  } catch (e) {
-    saveDraft();
-    ElMessage.error('保存失败，已自动保存草稿');
-  } finally {
-    saving.value = false;
-  }
+  form.user = phoneForm.phone.trim();
+  phoneForm.phone = '';
+  phoneDialogVisible.value = false;
+  await requestSave();
 };
 
 const onBack = () => {
-  saveDraft();
+  if (hasUnsavedChanges.value) saveDraft();
   uni.redirectTo({ url: '/pages/stele/list' });
 };
 
 const goTo3D = () => {
   syncDatesToForm();
-  localStorage.setItem('stele-3d-preview', JSON.stringify(buildPreview()));
+  localStorage.setItem(STELE_STORAGE_KEYS.preview3d, JSON.stringify(buildPreview()));
   uni.navigateTo({ url: '/pages/stele/preview' });
 };
 
-// 清明节/自定义切换
-watch(() => form.dateQingming, (val) => {
-  if (val) {
-    if (form.libei[1] || form.libei[2]) {
-      lastCustomLibei.value = [form.libei[0] || '', form.libei[1] || '', form.libei[2] || ''];
-    }
-    qingmingYear.value = form.libei[0] || String(currentYear);
-    form.dateShowLunar = false;
-  } else {
-    if (lastCustomLibei.value[0] || lastCustomLibei.value[1] || lastCustomLibei.value[2]) {
-      form.libei[0] = lastCustomLibei.value[0] || form.libei[0] || String(currentYear);
-      form.libei[1] = lastCustomLibei.value[1];
-      form.libei[2] = lastCustomLibei.value[2];
-      libeiDate.value = arrToDisplay(form.libei);
-    } else {
-      libeiDate.value = arrToDisplay(form.libei);
-    }
-    form.dateShowLunar = true;
-  }
-});
 </script>
 
 <style scoped>
+.names-organize-toolbar { margin-bottom: 16px; }
+.names-organize-toolbar p { margin: 8px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.6; }
 /* 碑文预览：本页变量（PC 大屏），横批与大字同字号 */
 .beibei-word-preview {
   --beibei-title-size: 36px;

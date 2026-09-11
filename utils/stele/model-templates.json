@@ -1,0 +1,24 @@
+[
+  {
+    "id": "stele-template-classic-v1",
+    "name": "经典圆拱碑型",
+    "description": "无字圆拱碑身与一体式底座，适合作为通用展示和小型打印样件。",
+    "sourceKind": "parametric-generic",
+    "sourceNotice": "参数化通用设计，非真实石碑或照片复刻",
+    "parameterVersion": "stele-parametric-classic-v1",
+    "releaseId": "classic-v1-9b5d9060bd06",
+    "glbUrl": "/static/models/stele/releases/classic-v1-9b5d9060bd06/stele-template-classic-v1.glb",
+    "stlUrl": "/static/models/stele/releases/classic-v1-9b5d9060bd06/stele-template-classic-v1.stl",
+    "boundsMm": {
+      "x": 140,
+      "y": 26,
+      "z": 160
+    },
+    "triangleCount": 132,
+    "geometrySha256": "c01194239cabd72ac659b6d919e5340b7eb498d3a66bf1373fad0b402c9cbcaa",
+    "sha256": {
+      "glb": "aa0a390b3f893d883ce33d878e283f45dc5bc29fd5e82fd0fd356de6a8a4f6bd",
+      "stl": "409a716fcd8be4bb2b2d179abac594829552d01870414f1ee9292159b4e9030d"
+    }
+  }
+]

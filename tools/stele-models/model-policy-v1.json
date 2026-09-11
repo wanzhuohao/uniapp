@@ -1,0 +1,99 @@
+{
+  "policyVersion": "stele-model-policy-v1",
+  "fileNamePattern": "^stele-template-([a-z0-9]+(?:-[a-z0-9]+)*)\\.(glb|stl)$",
+  "requiredFormats": ["glb", "stl"],
+  "glb": {
+    "magic": 1179937895,
+    "version": 2,
+    "chunkOrder": ["JSON", "BIN"],
+    "chunkCount": { "JSON": 1, "BIN": 1 },
+    "json": {
+      "topLevelKeys": ["accessors", "asset", "bufferViews", "buffers", "materials", "meshes", "nodes", "scene", "scenes"],
+      "arrayLengths": { "accessors": 2, "bufferViews": 2, "buffers": 1, "materials": 1, "meshes": 1, "nodes": 1, "scenes": 1 },
+      "allowedKeysByPointer": {
+        "": ["accessors", "asset", "bufferViews", "buffers", "materials", "meshes", "nodes", "scene", "scenes"],
+        "/accessors/*": ["bufferView", "componentType", "count", "max", "min", "type"],
+        "/asset": ["version"],
+        "/bufferViews/*": ["buffer", "byteLength", "byteOffset", "target"],
+        "/buffers/*": ["byteLength"],
+        "/materials/*": ["pbrMetallicRoughness"],
+        "/materials/*/pbrMetallicRoughness": ["baseColorFactor", "metallicFactor", "roughnessFactor"],
+        "/meshes/*": ["primitives"],
+        "/meshes/*/primitives/*": ["attributes", "material", "mode"],
+        "/meshes/*/primitives/*/attributes": ["NORMAL", "POSITION"],
+        "/nodes/*": ["mesh"],
+        "/scenes/*": ["nodes"]
+      },
+      "allowedStringsByPointer": {
+        "/accessors/*/type": ["VEC3"],
+        "/asset/version": ["2.0"]
+      },
+      "extensionsAllowed": [],
+      "namePolicy": "forbidden",
+      "imagesAllowed": false,
+      "texturesAllowed": false,
+      "samplersAllowed": false,
+      "indexedGeometryAllowed": false
+    },
+    "componentType": 5126,
+    "primitiveMode": 4,
+    "bufferViewTarget": 34962,
+    "padding": { "jsonByte": 32, "binByte": 0 }
+  },
+  "stl": {
+    "format": "binary",
+    "headerPolicy": "zero-or-template-id",
+    "attributeByteCount": 0,
+    "exactLengthFormula": "84+50*triangleCount",
+    "units": "millimeter",
+    "axes": "X-width,Y-depth,Z-height"
+  },
+  "geometry": {
+    "physicalAxes": "X-width,Y-depth,Z-height",
+    "physicalUnit": "millimeter",
+    "gltfTransform": "physical(X,Y,Z)mm->gltf(X,Z,-Y)m",
+    "quantizationMicrometers": 1,
+    "triangleCanonicalization": "sort-vertices-lexicographically-then-sort-triangles-lexicographically",
+    "lineFormat": "x,y,z|x,y,z|x,y,z",
+    "digest": "sha256-utf8-lines",
+    "requiredConnectedComponents": 1,
+    "maxTriangles": 2000
+  },
+  "checks": [
+    "boundsMismatchCount",
+    "boundaryEdgeCount",
+    "degenerateTriangleCount",
+    "duplicateTriangleCount",
+    "externalUriCount",
+    "extraConnectedShellCount",
+    "fileNameMismatchCount",
+    "geometryMismatchCount",
+    "imageCount",
+    "invalidStlHeaderCount",
+    "invalidStlLengthCount",
+    "nonFiniteCoordinateCount",
+    "nonManifoldEdgeCount",
+    "nonZeroAttributeByteCount",
+    "nonZeroGapByteCount",
+    "orientationConflictCount",
+    "overlappingRangeCount",
+    "pairCountMismatchCount",
+    "selfIntersectionPairCount",
+    "trailingByteCount",
+    "unknownChunkCount",
+    "unknownExtensionCount",
+    "unknownJsonKeyCount",
+    "unknownJsonStringCount",
+    "unreachableBufferViewCount",
+    "unreachableObjectCount"
+  ],
+  "publishing": {
+    "releaseDirectoryPattern": "^classic-v1-[a-f0-9]{12}$",
+    "releaseDirectoryImmutable": true,
+    "replaceExistingRelease": false,
+    "reportFileName": "publish-report.json",
+    "transactionDirectory": ".stele-publish",
+    "transactionOutsideStatic": true,
+    "buildFailsOnUncommittedTransaction": true
+  }
+}

@@ -1,11 +1,19 @@
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import {
   appellationOptions, titleToSpouse,
   parseFlexibleDate, arrToDisplay, toStorageDate,
   generateBig, generateSmall, generateDate, generateBirth,
 } from '../../utils/stele/stele-utils';
+import { callOrderFunction } from '../../utils/stele/order-api';
 import type { OrderForm, PreviewData, SavePayload, ParentInfo } from '../../types/order';
+import type { SteleTemplateData } from '../../types/order';
+import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
+
+export interface OrderSnapshot {
+  form: OrderForm;
+  preview?: PreviewData;
+}
 
 /** 从 URL 中获取指定参数 */
 export function getUrlParam(key: string): string {
@@ -93,6 +101,40 @@ function safeNames(raw: unknown, fallback: string[][][] = [[['', '']]]): string[
   );
 }
 
+/** 按现有称谓顺序分辈，同类按录入顺序配对；只重排，不增删或改写人员。 */
+export function organizeNameRows(names: string[][][]): string[][][] {
+  const normalizeTitle = (title: string) => title.trim().replace(/重/g, '曾');
+  const knownTitles = new Set(appellationOptions.map(normalizeTitle));
+  const familyOrder = [...new Set(appellationOptions.map(title => normalizeTitle(title).slice(0, -1)))];
+  const byTitle = new Map<string, string[][]>();
+  const other: string[][] = [];
+  for (const row of names) {
+    for (const person of row) {
+      const copy = [...person];
+      const title = normalizeTitle(person[0] || '');
+      if (!knownTitles.has(title)) { other.push(copy); continue; }
+      if (!byTitle.has(title)) byTitle.set(title, []);
+      byTitle.get(title)!.push(copy);
+    }
+  }
+  const rows: string[][][] = [];
+  for (const family of familyOrder) {
+    const row: string[][] = [];
+    for (const suffix of ['子', '女']) {
+      const title = family + suffix;
+      const children = byTitle.get(title) || [];
+      const spouses = byTitle.get(titleToSpouse(title)) || [];
+      for (let index = 0; index < Math.max(children.length, spouses.length); index++) {
+        if (children[index]) row.push(children[index]);
+        if (spouses[index]) row.push(spouses[index]);
+      }
+    }
+    if (row.length) rows.push(row);
+  }
+  if (other.length) rows.push(other);
+  return rows.length ? rows : names.map(row => row.map(person => [...person]));
+}
+
 /**
  * 核心 composable：订单表单管理
  * 封装 form 初始化、数据回显、日期同步、名单操作、预览生成、保存
@@ -110,6 +152,30 @@ export function useOrderForm() {
   const lastCustomLibei = ref<[string, string, string]>(['', '', '']);
 
   // --- 名单操作 ---
+  const namesBeforeOrganize = ref<string[][][] | null>(null);
+  const organizedNamesSnapshot = ref('');
+  const canUndoNamesOrganize = computed(() => namesBeforeOrganize.value !== null
+    && JSON.stringify(form.names) === organizedNamesSnapshot.value);
+
+  function organizeNames(): boolean {
+    const next = organizeNameRows(form.names);
+    const nextSnapshot = JSON.stringify(next);
+    if (nextSnapshot === JSON.stringify(form.names)) return false;
+    namesBeforeOrganize.value = form.names.map(row => row.map(person => [...person]));
+    form.names = next;
+    organizedNamesSnapshot.value = nextSnapshot;
+    return true;
+  }
+
+  function undoNamesOrganize(): boolean {
+    // 后续已经编辑或拖动时不回退旧快照，避免丢失人工修改。
+    if (!canUndoNamesOrganize.value || !namesBeforeOrganize.value) return false;
+    form.names = namesBeforeOrganize.value;
+    namesBeforeOrganize.value = null;
+    organizedNamesSnapshot.value = '';
+    return true;
+  }
+
   function addCol(rowIdx: number, colIdx?: number) {
     const insertIdx = typeof colIdx === 'number' ? colIdx + 1 : form.names[rowIdx].length;
     const prevTitle = form.names[rowIdx][insertIdx - 1]?.[0] || '';
@@ -183,24 +249,38 @@ export function useOrderForm() {
   // --- 日期同步 ---
   /** 将日期输入框的值同步到 form 对象中 */
   function syncDatesToForm() {
-    if (fatherBirth.value) {
-      const arr = toStorageDate(parseFlexibleDate(fatherBirth.value));
-      form.father.birth.year = arr[0]; form.father.birth.month = arr[1]; form.father.birth.day = arr[2];
-    }
-    if (fatherDeath.value) {
-      const arr = toStorageDate(parseFlexibleDate(fatherDeath.value));
-      form.father.death.year = arr[0]; form.father.death.month = arr[1]; form.father.death.day = arr[2];
-    }
-    if (motherBirth.value) {
-      const arr = toStorageDate(parseFlexibleDate(motherBirth.value));
-      form.mother.birth.year = arr[0]; form.mother.birth.month = arr[1]; form.mother.birth.day = arr[2];
-    }
-    if (motherDeath.value) {
-      const arr = toStorageDate(parseFlexibleDate(motherDeath.value));
-      form.mother.death.year = arr[0]; form.mother.death.month = arr[1]; form.mother.death.day = arr[2];
-    }
+    const syncParentDate = (input: string, target: { year: string; month: string; day: string }) => {
+      const arr = toStorageDate(parseFlexibleDate(input || ''));
+      target.year = arr[0]; target.month = arr[1]; target.day = arr[2];
+    };
+    syncParentDate(fatherBirth.value, form.father.birth);
+    syncParentDate(fatherDeath.value, form.father.death);
+    syncParentDate(motherBirth.value, form.mother.birth);
+    syncParentDate(motherDeath.value, form.mother.death);
     form.libei = toStorageDate(parseFlexibleDate(libeiDate.value || ''));
     if (form.dateQingming) form.libei = [qingmingYear.value, '', ''];
+  }
+
+  /** 普通模式也通过命令切换，避免页面 watcher 延迟改写日期状态。 */
+  function setNormalErectDateMode(qingming: boolean) {
+    if (qingming === form.dateQingming) return;
+    if (qingming) {
+      const parsed = toStorageDate(parseFlexibleDate(libeiDate.value || ''));
+      if (parsed.some(Boolean)) lastCustomLibei.value = parsed;
+      form.dateQingming = true;
+      form.dateShowLunar = false;
+      qingmingYear.value = parsed[0] || form.libei[0] || String(currentYear);
+      form.libei = [qingmingYear.value, '', ''];
+      libeiDate.value = '';
+      return;
+    }
+    form.dateQingming = false;
+    form.dateShowLunar = true;
+    const restored = lastCustomLibei.value.some(Boolean)
+      ? [...lastCustomLibei.value]
+      : [form.libei[0] || String(currentYear), '', ''];
+    form.libei = restored;
+    libeiDate.value = arrToDisplay(restored);
   }
 
   // --- 预览生成 ---
@@ -215,15 +295,16 @@ export function useOrderForm() {
   }
 
   // --- 数据回显 ---
-  /** 返回 false 表示失败，返回 PreviewData 表示数据库有已保存的预览文案 */
-  async function fetchAndFill(orderId: string): Promise<false | PreviewData | true> {
+  /** 只读取并构造快照，不修改当前表单；页面按 loadEpoch 决定是否提交。 */
+  async function fetchOrderSnapshot(orderId: string): Promise<false | OrderSnapshot> {
     if (!orderId) return false;
     try {
-      const res = await uniCloud.callFunction({
-        name: 'order-query',
-        data: { id: orderId }
-      });
-      const result = res.result as { data?: any[] };
+      const res = await callOrderFunction('order-query', { id: orderId });
+      const result = res.result as { code?: number; data?: any[]; msg?: string };
+      if (result?.code !== 0) {
+        ElMessage.error(result?.msg || '获取详情失败');
+        return false;
+      }
       if (!result?.data?.length) {
         ElMessage.error('获取详情失败：无数据');
         return false;
@@ -234,105 +315,92 @@ export function useOrderForm() {
       if (!detailData) return false;
 
       const info = detailData.info || {};
-      form.selected = typeof info.selected !== 'undefined' ? String(info.selected) : '0';
-      const fatherInfo = safeParentInfo(info.father);
-      form.father.name = fatherInfo.name;
-      form.father.birth.year = fatherInfo.birth.year;
-      form.father.birth.month = fatherInfo.birth.month;
-      form.father.birth.day = fatherInfo.birth.day;
-      form.father.death.year = fatherInfo.death.year;
-      form.father.death.month = fatherInfo.death.month;
-      form.father.death.day = fatherInfo.death.day;
-      const motherInfo = safeParentInfo(info.mother);
-      form.mother.name = motherInfo.name;
-      form.mother.birth.year = motherInfo.birth.year;
-      form.mother.birth.month = motherInfo.birth.month;
-      form.mother.birth.day = motherInfo.birth.day;
-      form.mother.death.year = motherInfo.death.year;
-      form.mother.death.month = motherInfo.death.month;
-      form.mother.death.day = motherInfo.death.day;
-      form.bigTitle = info.bigTitle ?? '永垂千古';
-      form.dateQingming = !!info.dateQingming;
-      form.dateShowLunar = !!info.dateShowLunar;
+      const next = createDefaultForm();
+      next.selected = typeof info.selected !== 'undefined' ? String(info.selected) : '0';
+      next.father = safeParentInfo(info.father);
+      next.mother = safeParentInfo(info.mother);
+      next.bigTitle = info.bigTitle ?? '永垂千古';
+      next.dateQingming = !!info.dateQingming;
+      next.dateShowLunar = !!info.dateShowLunar;
 
       const rawLibei = Array.isArray(info.libei) && info.libei.length === 3
         ? (info.libei as any[]).map((x: any) => x == null ? '' : String(x)).slice(0, 3) as [string, string, string]
         : [String(currentYear), '', ''];
-      form.libei = toStorageDate(rawLibei);
-
-      form.names = safeNames(info.names);
-      form.user = detailData.user || '';
-      form.remark = detailData.remark || '';
+      next.libei = toStorageDate(rawLibei);
+      next.names = safeNames(info.names);
+      next.user = detailData.user || '';
+      next.remark = detailData.remark || '';
 
       // 日期补零
-      normalizeParentDates(form.father);
-      normalizeParentDates(form.mother);
-
-      // 同步到日期输入框
-      fatherBirth.value = arrToDisplay([form.father.birth.year, form.father.birth.month, form.father.birth.day]);
-      fatherDeath.value = arrToDisplay([form.father.death.year, form.father.death.month, form.father.death.day]);
-      motherBirth.value = arrToDisplay([form.mother.birth.year, form.mother.birth.month, form.mother.birth.day]);
-      motherDeath.value = arrToDisplay([form.mother.death.year, form.mother.death.month, form.mother.death.day]);
-
-      if (form.dateQingming) {
-        qingmingYear.value = form.libei[0] ?? String(currentYear);
-      } else {
-        libeiDate.value = arrToDisplay(form.libei);
-        lastCustomLibei.value = [form.libei[0] ?? '', form.libei[1] ?? '', form.libei[2] ?? ''];
-      }
+      normalizeParentDates(next.father);
+      normalizeParentDates(next.mother);
 
       // 如果数据库有已保存的预览文案，返回它
       if (detailData.big || detailData.title || detailData.small) {
-        return {
+        return { form: next, preview: {
           title: detailData.title || '',
           big: detailData.big || '',
           small: detailData.small || '',
           date: detailData.date || '',
           birth: detailData.birth || '',
-        };
+        } };
       }
-      return true;
+      return { form: next };
     } catch (e) {
       ElMessage.error('获取详情失败');
       return false;
     }
   }
 
-  // --- 碑文校验（返回警告列表，不阻止保存） ---
-  function validateWarnings(): string[] {
-    const warnings: string[] = [];
-    const sel = form.selected;
-    // 父亲生卒日期逻辑检查
-    if (sel === '0' || sel === '1') {
-      const fb = form.father.birth;
-      const fd = form.father.death;
-      if (fb.year && fd.year) {
-        const birthNum = Number(fb.year) * 10000 + Number(fb.month || 0) * 100 + Number(fb.day || 0);
-        const deathNum = Number(fd.year) * 10000 + Number(fd.month || 0) * 100 + Number(fd.day || 0);
-        if (birthNum > deathNum) warnings.push('父亲出生日期晚于去世日期，请检查');
-      }
+  function commitOrderSnapshot(snapshot: OrderSnapshot): void {
+    const next = snapshot.form;
+    form.selected = next.selected;
+    form.father = safeParentInfo(next.father);
+    form.mother = safeParentInfo(next.mother);
+    form.bigTitle = next.bigTitle;
+    form.dateQingming = next.dateQingming;
+    form.dateShowLunar = next.dateShowLunar;
+    form.libei = toStorageDate(next.libei as [string, string, string]);
+    form.names = safeNames(next.names);
+    form.user = next.user;
+    form.remark = next.remark;
+    fatherBirth.value = arrToDisplay([form.father.birth.year, form.father.birth.month, form.father.birth.day]);
+    fatherDeath.value = arrToDisplay([form.father.death.year, form.father.death.month, form.father.death.day]);
+    motherBirth.value = arrToDisplay([form.mother.birth.year, form.mother.birth.month, form.mother.birth.day]);
+    motherDeath.value = arrToDisplay([form.mother.death.year, form.mother.death.month, form.mother.death.day]);
+    if (form.dateQingming) {
+      qingmingYear.value = form.libei[0] || String(currentYear);
+      libeiDate.value = '';
+    } else {
+      libeiDate.value = arrToDisplay(form.libei);
+      qingmingYear.value = form.libei[0] || String(currentYear);
+      lastCustomLibei.value = [form.libei[0] || '', form.libei[1] || '', form.libei[2] || ''];
     }
-    // 母亲生卒日期逻辑检查
-    if (sel === '0' || sel === '2') {
-      const mb = form.mother.birth;
-      const md = form.mother.death;
-      if (mb.year && md.year) {
-        const birthNum = Number(mb.year) * 10000 + Number(mb.month || 0) * 100 + Number(mb.day || 0);
-        const deathNum = Number(md.year) * 10000 + Number(md.month || 0) * 100 + Number(md.day || 0);
-        if (birthNum > deathNum) warnings.push('母亲出生日期晚于去世日期，请检查');
-      }
-    }
-    // 名单排版提醒
-    let totalNames = 0;
-    for (let r = 0; r < form.names.length; r++) {
-      const rowCount = form.names[r].filter(([, name]) => name?.trim()).length;
-      totalNames += rowCount;
-      if (rowCount > 8) warnings.push(`第${r + 1}排有 ${rowCount} 人，碑面空间有限请注意排版`);
-    }
-    if (form.names.length > 8) warnings.push(`名单共 ${form.names.length} 排，碑面空间有限请注意排版`);
-    if (totalNames > 50) warnings.push(`名单共 ${totalNames} 人，碑面空间有限请注意排版`);
+  }
 
-    return warnings;
+  /** 兼容旧调用；新页面应优先使用快照 API。 */
+  async function fetchAndFill(orderId: string): Promise<false | PreviewData | true> {
+    const snapshot = await fetchOrderSnapshot(orderId);
+    if (!snapshot) return false;
+    commitOrderSnapshot(snapshot);
+    return snapshot.preview || true;
+  }
+
+  function applyTemplateData(data: SteleTemplateData): void {
+    form.selected = data.selected;
+    Object.assign(form.father, safeParentInfo(data.father));
+    Object.assign(form.mother, safeParentInfo(data.mother));
+    form.bigTitle = data.bigTitle;
+    form.dateQingming = data.dateQingming;
+    form.dateShowLunar = data.dateShowLunar;
+    form.libei = toStorageDate(data.libei);
+    form.names = safeNames(data.names);
+    fatherBirth.value = arrToDisplay([form.father.birth.year, form.father.birth.month, form.father.birth.day]);
+    fatherDeath.value = arrToDisplay([form.father.death.year, form.father.death.month, form.father.death.day]);
+    motherBirth.value = arrToDisplay([form.mother.birth.year, form.mother.birth.month, form.mother.birth.day]);
+    motherDeath.value = arrToDisplay([form.mother.death.year, form.mother.death.month, form.mother.death.day]);
+    libeiDate.value = arrToDisplay(form.libei);
+    qingmingYear.value = form.libei[0] || String(currentYear);
   }
 
   // --- 构建保存 payload ---
@@ -365,10 +433,7 @@ export function useOrderForm() {
 
   /** 执行保存云函数调用 */
   async function doSave(payload: SavePayload): Promise<string | undefined> {
-    const res = await uniCloud.callFunction({
-      name: 'order-update',
-      data: payload,
-    });
+    const res = await callOrderFunction('order-update', payload as unknown as Record<string, unknown>);
     if (res.result?.code !== 0) {
       throw new Error(res.result?.msg || '保存失败');
     }
@@ -376,7 +441,7 @@ export function useOrderForm() {
   }
 
   // --- 草稿自动保存 ---
-  const DRAFT_KEY = 'stele-draft';
+  const DRAFT_KEY = STELE_STORAGE_KEYS.draft;
 
   function saveDraft() {
     try {
@@ -421,16 +486,17 @@ export function useOrderForm() {
     libeiDate, qingmingYear, lastCustomLibei,
     // 名单操作
     addCol, removeCol, addGroup, removeGroup, padSpouse,
+    organizeNames, undoNamesOrganize, canUndoNamesOrganize,
     // 日期
-    syncDatesToForm,
-    // 校验
-    validateWarnings,
+    syncDatesToForm, setNormalErectDateMode,
+    // 模板
+    applyTemplateData,
     // 草稿
     saveDraft, loadDraft, clearDraft,
     // 预览
     buildPreview,
     // 数据回显
-    fetchAndFill,
+    fetchAndFill, fetchOrderSnapshot, commitOrderSnapshot,
     // 保存
     buildSavePayload, doSave,
   };

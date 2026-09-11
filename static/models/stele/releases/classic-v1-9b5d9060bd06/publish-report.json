@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "reportSchema": "stele-publish-report-v1",
+  "policyVersion": "stele-model-policy-v1",
+  "policySha256": "954bb2c749216ef276b83fa42b3ce78667183c1680e5a285d0a5a74f8d637abd",
+  "parameterVersion": "stele-parametric-classic-v1",
+  "releaseId": "classic-v1-9b5d9060bd06",
+  "createdAt": "2026-09-03T07:39:04.798Z",
+  "toolVersions": {
+    "node": "v24.20.0",
+    "generator": "stele-generator-v1",
+    "validator": "stele-validator-v1",
+    "gltfValidator": "2.0.0-dev.3.10"
+  },
+  "summary": {
+    "fileCount": 2,
+    "failureCount": 0,
+    "targetBeforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "targetAfterSha256": "7ea4286af4c6c765aa15ca31de35b6448de86fa0c61f9a908f82b9e3a8d3dbc7",
+    "assetSetSha256": "37280f42be3f67161e68d0a22c82106245563005318da23bb0e90fbc6debb642"
+  },
+  "templates": [
+    {
+      "id": "stele-template-classic-v1",
+      "parameterVersion": "stele-parametric-classic-v1",
+      "geometrySha256": "c01194239cabd72ac659b6d919e5340b7eb498d3a66bf1373fad0b402c9cbcaa",
+      "boundsMm": {
+        "x": 140,
+        "y": 26,
+        "z": 160,
+        "unit": "millimeter"
+      },
+      "files": [
+        {
+          "name": "stele-template-classic-v1.glb",
+          "format": "glb",
+          "bytes": 10188,
+          "sha256": "aa0a390b3f893d883ce33d878e283f45dc5bc29fd5e82fd0fd356de6a8a4f6bd"
+        },
+        {
+          "name": "stele-template-classic-v1.stl",
+          "format": "stl",
+          "bytes": 6684,
+          "sha256": "409a716fcd8be4bb2b2d179abac594829552d01870414f1ee9292159b4e9030d"
+        }
+      ],
+      "checks": {
+        "boundsMismatchCount": 0,
+        "boundaryEdgeCount": 0,
+        "degenerateTriangleCount": 0,
+        "duplicateTriangleCount": 0,
+        "externalUriCount": 0,
+        "extraConnectedShellCount": 0,
+        "fileNameMismatchCount": 0,
+        "geometryMismatchCount": 0,
+        "imageCount": 0,
+        "invalidStlHeaderCount": 0,
+        "invalidStlLengthCount": 0,
+        "nonFiniteCoordinateCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "nonZeroAttributeByteCount": 0,
+        "nonZeroGapByteCount": 0,
+        "orientationConflictCount": 0,
+        "overlappingRangeCount": 0,
+        "pairCountMismatchCount": 0,
+        "selfIntersectionPairCount": 0,
+        "trailingByteCount": 0,
+        "unknownChunkCount": 0,
+        "unknownExtensionCount": 0,
+        "unknownJsonKeyCount": 0,
+        "unknownJsonStringCount": 0,
+        "unreachableBufferViewCount": 0,
+        "unreachableObjectCount": 0
+      }
+    }
+  ],
+  "failures": []
+}
