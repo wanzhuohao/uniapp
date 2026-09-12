@@ -1,9 +1,8 @@
 {
   "pages": [
-    { "path": "pages/index/index", "style": { "navigationBarTitleText": "老万石雕", "navigationStyle": "custom" } },
+    { "path": "pages/stele/list", "style": { "navigationBarTitleText": "碑文记录 · 老万石雕", "navigationStyle": "custom" } },
 
     { "path": "pages/stele/index", "style": { "navigationBarTitleText": "碑文下单 · 老万石雕", "navigationStyle": "custom" } },
-    { "path": "pages/stele/list", "style": { "navigationBarTitleText": "碑文记录 · 老万石雕", "navigationStyle": "custom" } },
     { "path": "pages/stele/detail", "style": { "navigationBarTitleText": "编辑碑文 · 老万石雕", "navigationStyle": "custom" } },
     { "path": "pages/stele/preview", "style": { "navigationBarTitleText": "3D 预览 · 老万石雕", "navigationStyle": "custom" } },
     { "path": "pages/stele/models", "style": { "navigationBarTitleText": "3D 碑型范本 · 老万石雕", "navigationStyle": "custom" } },
