@@ -8,3 +8,8 @@ unpackage/
 
 # 临时文件
 COMMIT_MSG.txt
+
+# stele 源码快照/说明附件（外部工具落盘，非项目源码）
+/callout-content.xml
+/stele-source-snapshot.zip
+/stele-source-snapshot-fixed.zip
