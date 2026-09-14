@@ -61,6 +61,25 @@ const signatureDate = computed(() => {
   return `${y}·${m}·${d}`;
 });
 
+/** 导出预览为 PNG 图片，filename 为下载文件名 */
+async function exportImage(filename: string): Promise<boolean> {
+  const el = wordAreaRef.value;
+  if (!el) return false;
+  try {
+    const canvas = await html2canvas(el, {
+      backgroundColor: props.theme === 'dark' ? '#1a1a18' : '#ffffff',
+      scale: 2,
+    });
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** 复制预览图片到剪切板 */
 async function copyImage(): Promise<boolean> {
   const el = wordAreaRef.value;
@@ -79,7 +98,7 @@ async function copyImage(): Promise<boolean> {
   }
 }
 
-defineExpose({ copyImage });
+defineExpose({ exportImage, copyImage });
 </script>
 
 <style>

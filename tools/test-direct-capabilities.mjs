@@ -63,10 +63,9 @@ await check('C03 下载能力建立失败不产生 Blob URL，主预览复用同
   assert.throws(()=>delivery.downloadBlob(new Blob(['file']), '失败.png', env),/DOWNLOAD_UNAVAILABLE/);
   assert.deepEqual(actions,[]);
   const preview=read('components/stele/WordPreview.vue');
-  assert.match(preview,/html2canvas/);
-  assert.match(preview,/navigator\.clipboard\.write/);
-  assert.match(preview,/canvas\.toBlob/);
-  assert.doesNotMatch(preview,/downloadImage\(blob,\s*filename\)/);
+  assert.match(preview,/import\s*\{\s*capturePng,\s*downloadBlob\s*\}/);
+  assert.match(preview,/capturePng\(el/); assert.match(preview,/downloadBlob\(blob,\s*filename\)/);
+  assert.doesNotMatch(preview,/canvas\.toDataURL/);
 });
 
 await check('C03 PF01-PF03 下载、截图和压缩失败统一为可判定错误', async () => {
@@ -93,8 +92,8 @@ await check('C03 PF01-PF03 下载、截图和压缩失败统一为可判定错�
 
   assert.equal(delivery.getExportFailureMessage('DOWNLOAD_UNAVAILABLE'),'浏览器下载能力不可用，请允许下载或更换最新版 Chrome 后重试');
   assert.equal(delivery.getExportFailureMessage('IMAGE_CAPTURE_FAILED'),'图片生成失败，请缩短内容后重试');
-  const detail=read('pages/stele/detail.vue');
-  assert.match(detail,/copyImage/);
+  const index=read('pages/stele/index.vue');
+  assert.match(index,/getExportFailureMessage\(code\)/);
 });
 
 await check('C03 清理异常不覆盖下载阶段原始异常', () => {
