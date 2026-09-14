@@ -2,7 +2,7 @@
 
 > 项目路径: `C:\claude code\uniapp`
 > 技术栈: UniApp Vue3 + uniCloud-alipay（仅 3 个订单云函数 + order 集合）
-> 最后更新: 2026-09-11
+> 最后更新: 2026-09-12
 > 状态: **已上线**
 > 域名: https://env-00jxhanvoaj1-static.normal.cloudstatic.cn/
 > 品牌: **老万石雕**
@@ -13,6 +13,13 @@
 - HBuilderX 编译验证（附件接入后未编译过）
 - 建议合并附件 package.json 的 devDependencies（jszip/@vue/compiler-sfc/gltf-validator）
 - P1 发布记录元信息登记（公网地址/发布时间/源码基线/HBuilderX版本/主资源名/托管环境）
+
+## 2026-09-12 首页精简 + 飞书附件修复
+
+- 移除旧首页 pages/index/index.vue（596 行），pages.json 改为直接进入记录列表页
+- .gitignore 加入 stele 源码快照附件（临时文件不入库）
+- 飞书文档：源码附件 ZIP 中文文件名乱码已修复，重新打包为 UTF-8 编码并设置语言编码标志，上传新附件替换旧附件
+- 飞书文档 rev 29：P1 章节状态更新，"附件中文文件名乱码"标记为已修复
 
 ## 2026-09-11 P0 阻塞缺陷修复（公网实测改版）
 
