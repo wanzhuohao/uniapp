@@ -101,7 +101,10 @@ function safeNames(raw: unknown, fallback: string[][][] = [[['', '']]]): string[
   );
 }
 
-/** 按现有称谓顺序分辈，同类按录入顺序配对；只重排，不增删或改写人员。 */
+/**
+ * 按现有称谓顺序分辈，子女（子/女）归到同排、配偶（媳/婿）归到下一排分工；
+ * 只重排，不增删或改写人员。
+ */
 export function organizeNameRows(names: string[][][]): string[][][] {
   const normalizeTitle = (title: string) => title.trim().replace(/重/g, '曾');
   const knownTitles = new Set(appellationOptions.map(normalizeTitle));
@@ -119,17 +122,20 @@ export function organizeNameRows(names: string[][][]): string[][][] {
   }
   const rows: string[][][] = [];
   for (const family of familyOrder) {
-    const row: string[][] = [];
+    const childrenRow: string[][] = [];
+    const spouseRow: string[][] = [];
     for (const suffix of ['子', '女']) {
       const title = family + suffix;
       const children = byTitle.get(title) || [];
       const spouses = byTitle.get(titleToSpouse(title)) || [];
+      // 子女（子/女）放同一排；配偶（媳/婿）放另一排。同列位置对齐原录入顺序，配偶空项占位保持。
       for (let index = 0; index < Math.max(children.length, spouses.length); index++) {
-        if (children[index]) row.push(children[index]);
-        if (spouses[index]) row.push(spouses[index]);
+        if (children[index]) childrenRow.push(children[index]);
+        if (spouses[index]) spouseRow.push(spouses[index]);
       }
     }
-    if (row.length) rows.push(row);
+    if (childrenRow.length) rows.push(childrenRow);
+    if (spouseRow.length) rows.push(spouseRow);
   }
   if (other.length) rows.push(other);
   return rows.length ? rows : names.map(row => row.map(person => [...person]));

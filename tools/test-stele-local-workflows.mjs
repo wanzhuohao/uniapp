@@ -222,16 +222,18 @@ await test('小字预览随姓名、增删和顺序实时变化，预览不修�
   assert.deepEqual(clone(order.form.names), before.names)
 })
 
-await test('夫妻对应排保持分排，整理后同排、撤销后预览与保存恢复原分排', () => {
+await test('夫妻对应排保持分排，整理后仍分排、撤销后预览与保存恢复原分排', () => {
   const order = useOrderForm()
-  order.form.names = [[['子', '甲'], ['女', '乙']], [['媳', '丙'], ['婿', '丁']]]
+  order.form.names = [[['子', '甲'], ['媳', '丙']], [['女', '乙'], ['婿', '丁']]]
   const before = clone(order.form)
   const preview = computed(() => order.buildPreview().small)
   const originalPreview = preview.value
-  assert.equal(originalPreview, '女子\n乙甲\n婿媳\n丁丙')
+  assert.equal(originalPreview, '媳子\n丙甲\n婿女\n丁乙')
   assert.deepEqual(clone(order.form), before)
   assert.equal(order.organizeNames(), true)
-  assert.equal(preview.value, '婿女媳子\n丁乙丙甲')
+  // 整理后：子、女同排（子女）；媳、婿同排（配偶），夫妻不在一排
+  assert.deepEqual(order.form.names, [[['子', '甲'], ['女', '乙']], [['媳', '丙'], ['婿', '丁']]])
+  assert.equal(preview.value, '女子\n乙甲\n婿媳\n丁丙')
   assert.equal(order.undoNamesOrganize(), true)
   assert.deepEqual(clone(order.form.names), before.names)
   assert.equal(preview.value, originalPreview)
@@ -241,7 +243,7 @@ await test('夫妻对应排保持分排，整理后同排、撤销后预览与�
   assert.equal(order.buildPreview().small.split('\n').length, 4)
 })
 
-await test('五排夫妻名单整理成三排再撤销，浮窗和保存恢复五排且保留空白姓名', () => {
+await test('五排子女/配偶分排名单整理幂等，撤销恢复保留空白姓名', () => {
   const order = useOrderForm()
   const titles = [
     ['子', '子', '子', '女', '女', '女'],
@@ -254,18 +256,19 @@ await test('五排夫妻名单整理成三排再撤销，浮窗和保存恢复�
   const before = clone(order.form.names)
   const preview = computed(() => order.buildPreview().small)
   const beforePreview = preview.value
-  assert.equal(order.organizeNames(), true)
-  assert.deepEqual(order.form.names.map(row => row.length), [12, 8, 4])
-  assert.notEqual(preview.value, beforePreview)
+  // 输入已是子女排+配偶排结构，整理为幂等
+  assert.equal(order.organizeNames(), false)
+  assert.deepEqual(order.form.names.map(row => row.length), [6, 6, 4, 4, 4])
+  assert.equal(preview.value, beforePreview)
   assert.equal(order.buildSavePayload().small, preview.value)
-  assert.equal(order.undoNamesOrganize(), true)
+  assert.deepEqual(clone(order.buildSavePayload().info.names), before)
   assert.deepEqual(clone(order.form.names), before)
   assert.equal(preview.value, beforePreview)
   assert.equal(order.buildSavePayload().small, beforePreview)
   assert.deepEqual(clone(order.buildSavePayload().info.names), before)
 })
 
-await test('单排乱序名单按现有辈分归组，同类夫妻按录入顺序配对', () => {
+await test('单排乱序名单按现有辈分归组，子女与配偶分列两排', () => {
   const input = [[
     ['孙媳', '孙媳甲'], ['媳', '媳甲'], ['子', '子甲'], ['女', '女甲'],
     ['玄孙女', '玄甲'], ['子', '子乙'], ['孙子', '孙甲'], ['婿', '婿甲'],
@@ -275,10 +278,13 @@ await test('单排乱序名单按现有辈分归组，同类夫妻按录入顺�
   const before = clone(input)
   const result = organizeNameRows(input)
   assert.deepEqual(result, [
-    [['子', '子甲'], ['媳', '媳甲'], ['子', '子乙'], ['媳', '媳乙'], ['女', '女甲'], ['婿', '婿甲']],
-    [['孙子', '孙甲'], ['孙媳', '孙媳甲']],
+    [['子', '子甲'], ['子', '子乙'], ['女', '女甲']],
+    [['媳', '媳甲'], ['媳', '媳乙'], ['婿', '婿甲']],
+    [['孙子', '孙甲']],
+    [['孙媳', '孙媳甲']],
     [['外孙女', '外甲']],
-    [['重孙子', '曾甲'], ['曾孙媳', '曾媳甲']],
+    [['重孙子', '曾甲']],
+    [['曾孙媳', '曾媳甲']],
     [['外重孙子', '外曾甲']],
     [['曾外孙女', '曾外甲']],
     [['玄孙女', '玄甲']],
@@ -296,7 +302,8 @@ await test('人数不齐、空项、重名和自定义称谓全部保留，不�
   ]
   const result = organizeNameRows(input)
   assert.deepEqual(result, [
-    [['子', '甲'], ['媳', '乙'], ['子', '甲'], ['媳', '丙'], ['媳', '丁']],
+    [['子', '甲'], ['子', '甲']],
+    [['媳', '乙'], ['媳', '丙'], ['媳', '丁']],
     [['孙女', '']],
     [['长子', '甲'], ['', '未填称谓'], ['', '']],
   ])
@@ -305,16 +312,16 @@ await test('人数不齐、空项、重名和自定义称谓全部保留，不�
   assert.deepEqual(organizeNameRows([[['子', '']]]), [[['子', '']]])
 })
 
-await test('空白姓名按原顺序占据夫妻配对位置，不让后面人员前移', () => {
+await test('空白姓名按原顺序占据子女/配偶排内位置，不让后面人员前移', () => {
   const input = [[
     ['媳', ''], ['媳', '妻乙'], ['子', '夫甲'], ['子', '夫乙'],
     ['女', ''], ['婿', '婿甲'], ['女', '女乙'], ['婿', '婿乙'],
   ]]
   const result = organizeNameRows(input)
-  assert.deepEqual(result, [[
-    ['子', '夫甲'], ['媳', ''], ['子', '夫乙'], ['媳', '妻乙'],
-    ['女', ''], ['婿', '婿甲'], ['女', '女乙'], ['婿', '婿乙'],
-  ]])
+  assert.deepEqual(result, [
+    [['子', '夫甲'], ['子', '夫乙'], ['女', ''], ['女', '女乙']],
+    [['媳', ''], ['媳', '妻乙'], ['婿', '婿甲'], ['婿', '婿乙']],
+  ])
   assert.equal(result.flat().length, input.flat().length)
   assert.deepEqual(organizeNameRows(result), result)
 })
@@ -331,7 +338,7 @@ await test('规整与撤销同步预览和保存，重复规整不覆盖撤销�
   assert.notEqual(preview.value, beforePreview)
   assert.equal(order.buildSavePayload().small, preview.value)
   assert.deepEqual(clone(order.buildSavePayload().info.names), [
-    [['子', '子甲'], ['媳', '媳甲']], [['孙子', '孙甲']],
+    [['子', '子甲']], [['媳', '媳甲']], [['孙子', '孙甲']],
   ])
   assert.equal(order.undoNamesOrganize(), true)
   assert.deepEqual(clone(order.form.names), before)
