@@ -12,11 +12,9 @@ async function check(name, run) {
 
 const contract = await import('../utils/stele/document-contract.ts');
 const delivery = await import('../utils/stele/delivery.ts');
-const templates = await import('../utils/stele/templates.ts');
 const quality = await import('../utils/stele/quality-check.ts');
 const guard = await import('../utils/stele/quality-save-guard.ts');
 const diagnostics = await import('../utils/common/diagnostics.ts');
-const fixtures = await import('./fixtures/direct-capabilities-fixtures.mjs');
 
 const validDocument = { title:'永垂千古', big:'先考之墓', small:'孝子 张三', birth:'生于一九五〇年', date:'二〇二六年清明立' };
 const baseForm = () => ({ selected:'0', father:{name:'父亲',birth:{year:'1950',month:'1',day:'1'},death:{year:'2020',month:'1',day:'1'}}, mother:{name:'母亲',birth:{year:'1952',month:'2',day:'2'},death:{year:'2022',month:'2',day:'2'}}, bigTitle:'永垂千古', dateQingming:true,dateShowLunar:false,libei:['2026','',''],names:[[['子','张三']]],user:'SENSITIVE_USER_SENTINEL',remark:'SENSITIVE_REMARK_SENTINEL' });
@@ -125,18 +123,6 @@ await check('C04 保存门禁调用次数为 0/0/1', async () => {
   await guard.runQualitySaveGuard({blockers:[],warnings:[{code:'x'}],metrics:{}},async()=>true,save); assert.equal(calls,1);
 });
 
-await check('C08 模板白名单、深拷贝与 30 个上限', () => {
-  const first = templates.addTemplate([], ' 常用 ', baseForm(), { idFactory:()=> 't1', clock:()=>new Date('2026-08-29T00:00:00Z') });
-  assert.equal(JSON.stringify(first).includes('SENSITIVE_USER_SENTINEL'),false); assert.equal(JSON.stringify(first).includes('SENSITIVE_REMARK_SENTINEL'),false);
-  const applied=templates.applyTemplate(first[0]); applied.names[0][0][1]='已改'; assert.equal(first[0].data.names[0][0][1],'张三');
-  const thirty=Array.from({length:30},(_,i)=>({...first[0],id:`t${i}`,name:`模板${i}`})); assert.throws(()=>templates.addTemplate(thirty,'第31个',baseForm()),/TEMPLATE_LIMIT_REACHED/);
-  assert.throws(()=>templates.sanitizeAndCloneTemplates([{...first[0],unexpected:true}]),/TEMPLATE_INVALID/);
-  assert.throws(()=>templates.sanitizeAndCloneTemplates([{...first[0],data:{...first[0].data,unexpected:true}}]),/TEMPLATE_INVALID/);
-  const longTuple=structuredClone(first[0]); longTuple.data.names[0][0].push('多余'); assert.throws(()=>templates.sanitizeAndCloneTemplates([longTuple]),/TEMPLATE_INVALID/);
-  const looseIso=structuredClone(first[0]); looseIso.createdAt='2026-08-29'; assert.throws(()=>templates.sanitizeAndCloneTemplates([looseIso]),/TEMPLATE_INVALID/);
-  let loadErrors=0; assert.deepEqual(templates.loadTemplates({getItem:()=>JSON.stringify({schemaVersion:1,templates:[],unexpected:true}),setItem:()=>{}},()=>loadErrors++),[]); assert.equal(loadErrors,1);
-});
-
 await check('C05 Element Plus 按需与 JSZip 懒加载', () => {
   const main=read('main.js'); assert.doesNotMatch(main,/app\.use\(ElementPlus\)/); assert.match(main,/ElButton/); assert.doesNotMatch(main,/element-plus\/dist\/index\.css/);
   for (const component of ['button','checkbox','dialog','dropdown','dropdown-item','dropdown-menu','form','form-item','input','option','pagination','radio','radio-button','radio-group','select','splitter','splitter-panel','switch','table','table-column','message','message-box']) assert.ok(main.includes(`element-plus/es/components/${component}/style/css`),`缺少 ${component} 样式`);
@@ -144,15 +130,13 @@ await check('C05 Element Plus 按需与 JSZip 懒加载', () => {
 });
 
 await check('C06 诊断最小化、排序与 query 清除', () => {
-  const map=new Map([['stele-draft','SENSITIVE_INFO_SENTINEL'],['stele-templates-v1','{}']]);
+  const map=new Map([['stele-draft','SENSITIVE_INFO_SENTINEL'],['stele-3d-preview','{}']]);
   const storage={getItem:key=>map.has(key)?map.get(key):null,setItem:(key,value)=>map.set(key,value)};
   const report=diagnostics.buildDiagnosticReport({appVersion:'1.0.0',storage,clock:()=>new Date('2026-08-29T00:00:00Z'),env:{navigator:{userAgent:'ua',language:'zh-CN',onLine:true},innerWidth:390,innerHeight:844,location:{hash:'#/pages/stele/help?token=SENSITIVE_TOKEN_SENTINEL'}}});
   const pagesReport=diagnostics.buildDiagnosticReport({appVersion:'1.0.0',storage,clock:()=>new Date('2026-08-29T00:00:00Z'),env:{navigator:{userAgent:'ua',language:'zh-CN',onLine:true},innerWidth:390,innerHeight:844,getCurrentPages:()=>[{route:'pages/stele/index?token=SENSITIVE_TOKEN_SENTINEL#part'}],location:{hash:''}}});
   assert.equal(report.route,'/pages/stele/help'); assert.deepEqual(report.storage.map(item=>item.key),[...report.storage.map(item=>item.key)].sort());
   assert.equal(pagesReport.route,'/pages/stele/index'); const output=JSON.stringify([report,pagesReport]); assert.equal(output.includes('SENSITIVE_INFO_SENTINEL'),false); assert.equal(output.includes('SENSITIVE_TOKEN_SENTINEL'),false);
 });
-
-await check('C08 模板写失败不展示成功且压力夹具为 9×9×64',()=>{const manager=read('components/stele/SteleTemplateManager.vue');assert.match(manager,/persist\(addTemplate[\s\S]*ElMessage\.success\('模板已保存到本机'\)/);assert.match(manager,/persist\(renameTemplate[\s\S]*ElMessage\.success\('模板已重命名'\)/);assert.match(manager,/persist\(deleteTemplate[\s\S]*ElMessage\.success\('模板已删除'\)/);assert.match(manager,/showStorageFailure/);const data=fixtures.createStelePerformanceFixtures().form.names;assert.equal(data.length,9);assert.ok(data.every(row=>row.length===9));assert.ok(data.flat(2).every(value=>value.length===64))});
 
 await check('C04 新建和编辑页面都接入同一保存门禁', () => {
   for (const page of ['pages/stele/index.vue','pages/stele/detail.vue']) assert.match(read(page),/runQualitySaveGuard/);

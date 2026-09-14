@@ -7,7 +7,6 @@ import {
 } from '../../utils/stele/stele-utils';
 import { callOrderFunction } from '../../utils/stele/order-api';
 import type { OrderForm, PreviewData, SavePayload, ParentInfo } from '../../types/order';
-import type { SteleTemplateData } from '../../types/order';
 import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
 
 export interface OrderSnapshot {
@@ -392,23 +391,6 @@ export function useOrderForm() {
     return snapshot.preview || true;
   }
 
-  function applyTemplateData(data: SteleTemplateData): void {
-    form.selected = data.selected;
-    Object.assign(form.father, safeParentInfo(data.father));
-    Object.assign(form.mother, safeParentInfo(data.mother));
-    form.bigTitle = data.bigTitle;
-    form.dateQingming = data.dateQingming;
-    form.dateShowLunar = data.dateShowLunar;
-    form.libei = toStorageDate(data.libei);
-    form.names = safeNames(data.names);
-    fatherBirth.value = arrToDisplay([form.father.birth.year, form.father.birth.month, form.father.birth.day]);
-    fatherDeath.value = arrToDisplay([form.father.death.year, form.father.death.month, form.father.death.day]);
-    motherBirth.value = arrToDisplay([form.mother.birth.year, form.mother.birth.month, form.mother.birth.day]);
-    motherDeath.value = arrToDisplay([form.mother.death.year, form.mother.death.month, form.mother.death.day]);
-    libeiDate.value = arrToDisplay(form.libei);
-    qingmingYear.value = form.libei[0] || String(currentYear);
-  }
-
   // --- 构建保存 payload ---
   function buildSavePayload(editId?: string): SavePayload {
     syncDatesToForm();
@@ -495,8 +477,6 @@ export function useOrderForm() {
     organizeNames, undoNamesOrganize, canUndoNamesOrganize,
     // 日期
     syncDatesToForm, setNormalErectDateMode,
-    // 模板
-    applyTemplateData,
     // 草稿
     saveDraft, loadDraft, clearDraft,
     // 预览

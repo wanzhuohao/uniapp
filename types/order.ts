@@ -72,25 +72,6 @@ export interface SteleDocument {
   date: string;
 }
 
-export interface SteleTemplateData {
-  selected: string;
-  father: ParentInfo;
-  mother: ParentInfo;
-  bigTitle: string;
-  dateQingming: boolean;
-  dateShowLunar: boolean;
-  libei: string[];
-  names: string[][][];
-}
-
-export interface SteleTemplate {
-  id: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  data: SteleTemplateData;
-}
-
 export type QualityLevel = 'blocker' | 'warning';
 
 export interface QualityIssue {

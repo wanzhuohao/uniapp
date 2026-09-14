@@ -14,6 +14,14 @@
 - 建议合并附件 package.json 的 devDependencies（jszip/@vue/compiler-sfc/gltf-validator）
 - P1 发布记录元信息登记（公网地址/发布时间/源码基线/HBuilderX版本/主资源名/托管环境）
 
+## 2026-09-14 收工：删除本地排版模板 + 小字自动排版夫妻分排 + 测试修复
+
+- 用户确认「本地模板」功能无用（排版默认值足够）→ 彻底删除：`SteleTemplateManager.vue` 组件 + `templates.ts` 模块 + `types/order.ts` 两个接口 + `useOrderForm.ts` 的 `applyTemplateData` + 两页面挂载/import/`onApplyTemplate` + `storageRegistry` 的 `templates` 键 + `perf-direct-capabilities`/`test-direct-capabilities`/`test-stele-local-workflows`/`test-stele-sfc` 里所有模板相关断言
+- 小字自动排版 `organizeNameRows` 修复：夫妻不在一排，子女（子+女）归一排，配偶（媳+婿）归另一排
+- 修复 `test-stele-sfc.mjs` 路径假设（tools/→项目根）、`test-stele-model-page.mjs` 首页不存在断言、`test-direct-capabilities` 过时 WordPreview 捕获断言、`preview.vue` 存储 key 字面量改用 `STELE_STORAGE_KEYS`
+- 验证：12 个测试脚本全部通过（含 25 订单云函数、16 回归、10 工作流、4 SFC、11 模型页、7 保存链路等）
+- 编译验证待 HBuilderX
+
 ## 2026-09-14 收工：删除"客户确认长图"和"交付包 ZIP"导出（保留单图/复制导出）
 
 - 用户确认"客户确认长图"（长图导出）与"交付包 ZIP"导出均无用，删除；保留 `WordPreview` 的单图导出/复制图片功能（已够用）

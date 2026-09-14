@@ -28,7 +28,6 @@
           <el-button size="small" @click="dismissDraftNotice">关闭</el-button>
         </div>
       </div>
-      <SteleTemplateManager :form="form" @apply="onApplyTemplate" />
 
       <!-- 步骤1：父母信息 + 横批与立碑日期（合并） -->
       <div v-show="currentStep === 1" class="step-panel">
@@ -195,9 +194,8 @@ import draggable from 'vuedraggable';
 import { appellationOptions } from '../../utils/stele/stele-utils';
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
-import SteleTemplateManager from '../../components/stele/SteleTemplateManager.vue';
 import SmallTextPreview from '../../components/stele/SmallTextPreview.vue';
-import type { PageLoadState, SaveFeedback, PreviewData, SteleTemplateData } from '../../types/order';
+import type { PageLoadState, SaveFeedback, PreviewData } from '../../types/order';
 import { toast } from '../../utils/common/toast.js';
 import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
 import { checkSteleQuality } from '../../utils/stele/quality-check';
@@ -213,7 +211,7 @@ const {
   organizeNames, undoNamesOrganize, canUndoNamesOrganize,
   syncDatesToForm, buildPreview, fetchOrderSnapshot, commitOrderSnapshot, buildSavePayload, doSave,
   saveDraft, loadDraft, clearDraft,
-  applyTemplateData, setNormalErectDateMode,
+  setNormalErectDateMode,
 } = useOrderForm();
 
 const stepLabels = ['基本信息', '名单', '预览'];
@@ -358,11 +356,6 @@ function confirmWarnings(warnings: ReturnType<typeof checkSteleQuality>['warning
   return ElMessageBox.confirm(warnings.map(item => `• ${item.message}`).join('\n'), '发现质检提醒', {
     confirmButtonText: '仍要保存', cancelButtonText: '返回修改', type: 'warning',
   }).then(() => true).catch(() => false);
-}
-
-function onApplyTemplate(data: SteleTemplateData) {
-  applyTemplateData(data);
-  saveDraft();
 }
 
 // 保存逻辑

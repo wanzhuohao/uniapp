@@ -6,7 +6,6 @@ import { parse, compileScript, compileTemplate, compileStyle } from '@vue/compil
 const files = [
   'components/stele/SmallTextPreview.vue',
   'components/stele/WordPreview.vue',
-  'components/stele/SteleTemplateManager.vue',
   'pages/stele/index.vue',
   'pages/stele/detail.vue',
 ]

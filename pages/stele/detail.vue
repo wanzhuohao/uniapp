@@ -19,7 +19,6 @@
               <el-button size="small" @click="dismissDraftNotice">关闭</el-button>
             </div>
           </div>
-          <SteleTemplateManager :form="form" @apply="onApplyTemplate" />
           <el-form :model="form" label-width="90px" size="default">
             <!-- 1. 父母信息 -->
             <el-form-item label="类型">
@@ -202,8 +201,7 @@ import draggable from 'vuedraggable';
 import { appellationOptions } from '../../utils/stele/stele-utils';
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
-import SteleTemplateManager from '../../components/stele/SteleTemplateManager.vue';
-import type { PageLoadState, SaveFeedback, PreviewData, SteleTemplateData } from '../../types/order';
+import type { PageLoadState, SaveFeedback, PreviewData } from '../../types/order';
 import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
 import { checkSteleQuality } from '../../utils/stele/quality-check';
 import { getSaveFailureMessage, runQualitySaveGuard } from '../../utils/stele/quality-save-guard';
@@ -217,7 +215,7 @@ const {
   organizeNames, undoNamesOrganize, canUndoNamesOrganize,
   syncDatesToForm, buildPreview, fetchOrderSnapshot, commitOrderSnapshot, buildSavePayload, doSave,
   saveDraft, loadDraft, clearDraft,
-  applyTemplateData, setNormalErectDateMode,
+  setNormalErectDateMode,
 } = useOrderForm();
 
 const saving = ref(false);
@@ -399,13 +397,6 @@ function confirmWarnings(warnings: ReturnType<typeof checkSteleQuality>['warning
   return ElMessageBox.confirm(warnings.map(item => `• ${item.message}`).join('\n'), '发现质检提醒', {
     confirmButtonText: '仍要保存', cancelButtonText: '返回修改', type: 'warning',
   }).then(() => true).catch(() => false);
-}
-
-function onApplyTemplate(data: SteleTemplateData) {
-  applyTemplateData(data);
-  refreshPreview();
-  saveDraft();
-  hasUnsavedChanges.value = true;
 }
 
 function onOrganizeNames() {

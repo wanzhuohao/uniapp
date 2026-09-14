@@ -1,10 +1,9 @@
 import { performance } from 'node:perf_hooks';
-import { sanitizeAndCloneTemplates } from '../utils/stele/templates.ts';
 import { checkSteleQuality } from '../utils/stele/quality-check.ts';
 import { createStelePerformanceFixtures } from './fixtures/direct-capabilities-fixtures.mjs';
 
 const fixtures = createStelePerformanceFixtures();
-if (fixtures.templates.length !== 30 || fixtures.form.names.length !== 9 || !fixtures.form.names.every(row => row.length === 9) || !fixtures.form.names.flat(2).every(value => value.length === 64)) throw new Error('碑文端压力夹具必须为 30 模板、9×9 名单、每字段 64 字');
+if (fixtures.form.names.length !== 9 || !fixtures.form.names.every(row => row.length === 9) || !fixtures.form.names.flat(2).every(value => value.length === 64)) throw new Error('碑文端压力夹具必须为 9×9 名单、每字段 64 字');
 
 function measure(name, operation) {
   for (let index = 0; index < 2; index++) operation();
@@ -20,7 +19,6 @@ function measure(name, operation) {
 }
 
 const results = [
-  measure('sanitizeAndCloneTemplates', () => sanitizeAndCloneTemplates(fixtures.templates)),
   measure('checkSteleQuality', () => checkSteleQuality(fixtures.form)),
 ];
 

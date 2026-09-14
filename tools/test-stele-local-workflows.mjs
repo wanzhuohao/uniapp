@@ -2,9 +2,6 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { registerHooks } from 'node:module'
 import { computed, ref } from 'vue'
-import {
-  addTemplate, applyTemplate, deleteTemplate, loadTemplates, saveTemplates,
-} from '../utils/stele/templates.ts'
 import { STELE_STORAGE_KEYS } from '../utils/stele/storage-registry.ts'
 
 registerHooks({
@@ -157,35 +154,6 @@ await test('详情页只回填最后一次加载快照，过期响应不覆盖�
   assert.equal(loadState.value, 'ready')
   assert.equal(order.form.father.name, '父-new')
   assert.equal(previewData.value.title, '预览-new')
-})
-
-await test('模板保存和直接应用仍保留客户标识、备注及完整日期', () => {
-  const storage = createStorage()
-  const source = useOrderForm()
-  source.commitOrderSnapshot(createSnapshot('template'))
-  const before = clone(source.form)
-  const templates = addTemplate([], '模板', source.form, {
-    idFactory: () => 'template-id',
-    clock: () => new Date('2026-09-08T00:00:00.000Z'),
-  })
-  saveTemplates(templates, storage)
-  const stored = storage.getItem(STELE_STORAGE_KEYS.templates)
-  assert.equal(stored.includes('客户-template'), false)
-  assert.equal(stored.includes('备注-template'), false)
-
-  const loaded = loadTemplates(storage)
-  const target = useOrderForm()
-  target.form.user = '保留客户'
-  target.form.remark = '保留备注'
-  target.applyTemplateData(applyTemplate(loaded[0]))
-  assert.equal(target.form.father.name, '父-template')
-  assert.equal(target.fatherBirth.value, '1940-1-2')
-  assert.equal(target.libeiDate.value, '2026-9-7')
-  assert.equal(target.form.user, '保留客户')
-  assert.equal(target.form.remark, '保留备注')
-  assert.deepEqual(clone(source.form), before)
-  saveTemplates(deleteTemplate(loaded, 'template-id'), storage)
-  assert.equal(loadTemplates(storage).length, 0)
 })
 
 await test('切换清明和自定义日期不会丢失原输入，也不依赖 watcher 时序', () => {
