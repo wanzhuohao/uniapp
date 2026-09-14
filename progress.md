@@ -14,6 +14,14 @@
 - 建议合并附件 package.json 的 devDependencies（jszip/@vue/compiler-sfc/gltf-validator）
 - P1 发布记录元信息登记（公网地址/发布时间/源码基线/HBuilderX版本/主资源名/托管环境）
 
+## 2026-09-14 收工：删除未使用的"客户确认长图"导出功能
+
+- 用户确认"客户确认长图"（长图导出）无用，保留"交付包"ZIP 导出（已够用）
+- `components/stele/SteleExportCenter.vue`：删除"客户确认长图"按钮、确认对话框、`openConfirmation`/`confirmImage`/`confirmationVisible`/`confirmationDto` 及 `.confirmation-capture` 样式，保留交付包(ZIP)功能
+- `types/order.ts`：删除 `ConfirmationDto` 接口
+- `utils/stele/document-contract.ts`：删除 `buildConfirmationDto`；保留 `buildOrderRef`（test-direct-capabilities 仍断言）
+- 验证：grep 确认源码无 `ConfirmationDto`/`buildConfirmationDto`/长图残留；测试 `buildOrderRef` 断言未破坏；编译验证待 HBuilderX
+
 ## 2026-09-12 首页精简 + 飞书附件修复
 
 - 移除旧首页 pages/index/index.vue（596 行），pages.json 改为直接进入记录列表页

@@ -78,14 +78,6 @@ export interface DeliveryDto {
   document: SteleDocument;
 }
 
-export interface ConfirmationDto {
-  schemaVersion: 1;
-  generatedAt: string;
-  confirmationVersion: 'v1';
-  orderRef: string;
-  document: SteleDocument;
-}
-
 export interface SteleTemplateData {
   selected: string;
   father: ParentInfo;

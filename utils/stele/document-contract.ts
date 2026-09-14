@@ -1,4 +1,4 @@
-import type { ConfirmationDto, DeliveryDto, SteleDocument } from '../../types/order';
+import type { DeliveryDto, SteleDocument } from '../../types/order';
 
 export const DOCUMENT_FIELDS = Object.freeze(['title', 'big', 'small', 'birth', 'date'] as const);
 const FIELD_LABELS: Record<(typeof DOCUMENT_FIELDS)[number], string> = {
@@ -46,10 +46,4 @@ export function buildOrderRef(orderId: unknown): string {
   if (orderId === undefined || orderId === null) return 'UNSAVED';
   const normalized = String(orderId).replace(/[^A-Za-z0-9]/g, '');
   return normalized ? normalized.slice(-6) : 'UNSAVED';
-}
-
-export function buildConfirmationDto(document: Readonly<SteleDocument>, orderId: unknown, clock: () => Date = () => new Date()): Readonly<ConfirmationDto> {
-  const verified = validateRawDocument(document);
-  if (!verified.ok) throw new Error(`${verified.field}:${verified.action}`);
-  return Object.freeze({ schemaVersion: 1, generatedAt: validIso(clock), confirmationVersion: 'v1', orderRef: buildOrderRef(orderId), document: verified.document });
 }
