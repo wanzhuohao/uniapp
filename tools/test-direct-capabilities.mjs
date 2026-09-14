@@ -31,21 +31,10 @@ await check('C03 五字段非法原始类型全部在投影前阻断', () => {
 await check('C03/C10 DTO 精确投影并保留合法正文', () => {
   const raw = { ...validDocument, user:'SENSITIVE_USER_SENTINEL', remark:'SENSITIVE_REMARK_SENTINEL', info:'SENSITIVE_INFO_SENTINEL', token:'SENSITIVE_TOKEN_SENTINEL' };
   const verified = contract.validateRawDocument(raw); assert.equal(verified.ok, true);
-  const dto = contract.buildDeliveryDto(verified.document, () => new Date('2026-08-29T00:00:00.000Z'));
-  assert.deepEqual(Object.keys(dto), ['schemaVersion','generatedAt','document']);
-  const output = JSON.stringify(dto); for (const sentinel of ['SENSITIVE_USER_SENTINEL','SENSITIVE_REMARK_SENTINEL','SENSITIVE_INFO_SENTINEL','SENSITIVE_TOKEN_SENTINEL']) assert.equal(output.includes(sentinel), false);
+  const output = JSON.stringify(verified.document); for (const sentinel of ['SENSITIVE_USER_SENTINEL','SENSITIVE_REMARK_SENTINEL','SENSITIVE_INFO_SENTINEL','SENSITIVE_TOKEN_SENTINEL']) assert.equal(output.includes(sentinel), false);
   const legal = { ...validDocument, title:'联系电话 13800000000，token 为正文' };
-  assert.equal(contract.buildDeliveryDto(contract.validateRawDocument(legal).document).document.title, legal.title);
+  assert.equal(contract.validateRawDocument(legal).document.title, legal.title);
   assert.equal(contract.buildOrderRef('ABC-12_3456'), '123456'); assert.equal(contract.buildOrderRef('A-1'), 'A1'); assert.equal(contract.buildOrderRef('!!!'), 'UNSAVED');
-});
-
-await check('C03 ZIP 仅含三个固定文件且 TXT 顺序固定', async () => {
-  const dto = contract.buildDeliveryDto(validDocument, () => new Date('2026-08-29T00:00:00.000Z'));
-  const blob = await delivery.buildDeliveryZip(dto, new Blob(['png'], { type:'image/png' }));
-  const { default: JSZip } = await import('jszip'); const zip = await JSZip.loadAsync(await blob.arrayBuffer());
-  assert.deepEqual(Object.keys(zip.files), [...delivery.DELIVERY_FILES]);
-  const txt = await zip.file('刻字内容.txt').async('string');
-  assert.ok(txt.indexOf('横批：') < txt.indexOf('大字：') && txt.indexOf('大字：') < txt.indexOf('小字：') && txt.indexOf('小字：') < txt.indexOf('生卒：') && txt.indexOf('生卒：') < txt.indexOf('立碑日期：'));
 });
 
 await check('C03 下载链接挂载后点击且延迟释放 Blob URL', () => {
@@ -101,21 +90,8 @@ await check('C03 PF01-PF03 下载、截图和压缩失败统一为可判定错�
   await assert.rejects(delivery.capturePng({nodeType:1},async()=>{throw new Error('RENDER_FAILED')}),/IMAGE_CAPTURE_FAILED/);
   await assert.rejects(delivery.capturePng({nodeType:1},async()=>({toBlob:callback=>callback(null)})),/IMAGE_CAPTURE_FAILED/);
 
-  const dto=contract.buildDeliveryDto(validDocument,()=>new Date('2026-08-29T00:00:00.000Z'));
-  const before=structuredClone(dto); const png=new Blob(['png'],{type:'image/png'});
-  const loaders=[
-    async()=>{throw new Error('IMPORT_FAILED')},
-    async()=>({default:class{files={};file(){throw new Error('FILE_FAILED')}generateAsync(){return new Blob()}}}),
-    async()=>({default:class{files={};file(name){this.files[name]={}}generateAsync(){throw new Error('GENERATE_FAILED')}}})
-  ];
-  for (const loader of loaders) await assert.rejects(delivery.buildDeliveryZip(dto,png,loader),/ZIP_GENERATION_FAILED/);
-  assert.deepEqual(dto,before);
   assert.equal(delivery.getExportFailureMessage('DOWNLOAD_UNAVAILABLE'),'浏览器下载能力不可用，请允许下载或更换最新版 Chrome 后重试');
   assert.equal(delivery.getExportFailureMessage('IMAGE_CAPTURE_FAILED'),'图片生成失败，请缩短内容后重试');
-  assert.equal(delivery.getExportFailureMessage('ZIP_GENERATION_FAILED'),'压缩包生成失败，请重试');
-  const center=read('components/stele/SteleExportCenter.vue');
-  assert.match(center,/DOWNLOAD_UNAVAILABLE/); assert.match(center,/IMAGE_CAPTURE_FAILED/); assert.match(center,/ZIP_GENERATION_FAILED/);
-  assert.match(center,/getExportFailureMessage\(code\)/);
   const index=read('pages/stele/index.vue');
   assert.match(index,/getExportFailureMessage\(code\)/);
 });
@@ -162,7 +138,7 @@ await check('C08 模板白名单、深拷贝与 30 个上限', () => {
 await check('C05 Element Plus 按需与 JSZip 懒加载', () => {
   const main=read('main.js'); assert.doesNotMatch(main,/app\.use\(ElementPlus\)/); assert.match(main,/ElButton/); assert.doesNotMatch(main,/element-plus\/dist\/index\.css/);
   for (const component of ['button','checkbox','dialog','dropdown','dropdown-item','dropdown-menu','form','form-item','input','option','pagination','radio','radio-button','radio-group','select','splitter','splitter-panel','switch','table','table-column','message','message-box']) assert.ok(main.includes(`element-plus/es/components/${component}/style/css`),`缺少 ${component} 样式`);
-  const pkg=JSON.parse(read('package.json')); assert.equal(pkg.dependencies.jszip,'3.10.1'); assert.match(read('utils/stele/delivery.ts'),/import\(\s*['"]jszip['"]\s*\)/);
+  const pkg=JSON.parse(read('package.json')); assert.equal(pkg.dependencies.jszip,'3.10.1');
 });
 
 await check('C06 诊断最小化、排序与 query 清除', () => {
@@ -180,6 +156,5 @@ await check('C04 新建和编辑页面都接入同一保存门禁', () => {
   for (const page of ['pages/stele/index.vue','pages/stele/detail.vue']) assert.match(read(page),/runQualitySaveGuard/);
 });
 
-if (!existsSync(resolve(root,'components/stele/SteleExportCenter.vue'))) failures.push('缺少 SteleExportCenter.vue');
 if (failures.length) { console.error(`\n碑文端能力：${failures.length} 项失败`); process.exitCode=1; }
 else console.log('\n碑文端能力 GREEN');

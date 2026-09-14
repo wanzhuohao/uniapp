@@ -1,4 +1,4 @@
-import type { DeliveryDto, SteleDocument } from '../../types/order';
+import type { SteleDocument } from '../../types/order';
 
 export const DOCUMENT_FIELDS = Object.freeze(['title', 'big', 'small', 'birth', 'date'] as const);
 const FIELD_LABELS: Record<(typeof DOCUMENT_FIELDS)[number], string> = {
@@ -28,18 +28,6 @@ export function validateRawDocument(raw: unknown): DocumentValidationSuccess | D
     ok: true,
     document: Object.freeze({ title: source.title, big: source.big, small: source.small, birth: source.birth, date: source.date } as SteleDocument),
   };
-}
-
-function validIso(clock: () => Date): string {
-  const value = clock().toISOString();
-  if (Number.isNaN(Date.parse(value))) throw new Error('FILE_GENERATION_FAILED');
-  return value;
-}
-
-export function buildDeliveryDto(document: Readonly<SteleDocument>, clock: () => Date = () => new Date()): Readonly<DeliveryDto> {
-  const verified = validateRawDocument(document);
-  if (!verified.ok) throw new Error(`${verified.field}:${verified.action}`);
-  return Object.freeze({ schemaVersion: 1, generatedAt: validIso(clock), document: verified.document });
 }
 
 export function buildOrderRef(orderId: unknown): string {

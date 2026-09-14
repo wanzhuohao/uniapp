@@ -135,7 +135,6 @@
               <el-button @click="onPreview">刷新预览</el-button>
               <el-button @click="goTo3D">3D预览</el-button>
               <el-button @click="onCopyImage" :loading="exporting">复制图片</el-button>
-              <SteleExportCenter :document="previewData" :order-id="idRef" />
               <el-button type="primary" @click="requestSave()" :loading="saving">提交</el-button>
             </div>
           </div>
@@ -203,7 +202,6 @@ import draggable from 'vuedraggable';
 import { appellationOptions } from '../../utils/stele/stele-utils';
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
-import SteleExportCenter from '../../components/stele/SteleExportCenter.vue';
 import SteleTemplateManager from '../../components/stele/SteleTemplateManager.vue';
 import type { PageLoadState, SaveFeedback, PreviewData, SteleTemplateData } from '../../types/order';
 import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';

@@ -72,12 +72,6 @@ export interface SteleDocument {
   date: string;
 }
 
-export interface DeliveryDto {
-  schemaVersion: 1;
-  generatedAt: string;
-  document: SteleDocument;
-}
-
 export interface SteleTemplateData {
   selected: string;
   father: ParentInfo;

@@ -14,13 +14,15 @@
 - 建议合并附件 package.json 的 devDependencies（jszip/@vue/compiler-sfc/gltf-validator）
 - P1 发布记录元信息登记（公网地址/发布时间/源码基线/HBuilderX版本/主资源名/托管环境）
 
-## 2026-09-14 收工：删除未使用的"客户确认长图"导出功能
+## 2026-09-14 收工：删除"客户确认长图"和"交付包 ZIP"导出（保留单图/复制导出）
 
-- 用户确认"客户确认长图"（长图导出）无用，保留"交付包"ZIP 导出（已够用）
-- `components/stele/SteleExportCenter.vue`：删除"客户确认长图"按钮、确认对话框、`openConfirmation`/`confirmImage`/`confirmationVisible`/`confirmationDto` 及 `.confirmation-capture` 样式，保留交付包(ZIP)功能
-- `types/order.ts`：删除 `ConfirmationDto` 接口
-- `utils/stele/document-contract.ts`：删除 `buildConfirmationDto`；保留 `buildOrderRef`（test-direct-capabilities 仍断言）
-- 验证：grep 确认源码无 `ConfirmationDto`/`buildConfirmationDto`/长图残留；测试 `buildOrderRef` 断言未破坏；编译验证待 HBuilderX
+- 用户确认"客户确认长图"（长图导出）与"交付包 ZIP"导出均无用，删除；保留 `WordPreview` 的单图导出/复制图片功能（已够用）
+- 删除 `components/stele/SteleExportCenter.vue` 整个组件（长图 + 交付包两个导出弹窗），并从 `pages/stele/index.vue`、`pages/stele/detail.vue` 移除挂载与 import
+- `types/order.ts`：删除 `ConfirmationDto`、`DeliveryDto` 接口
+- `utils/stele/document-contract.ts`：删除 `buildConfirmationDto`、`buildDeliveryDto`、私有 `validIso`；保留 `validateRawDocument`、`buildOrderRef`（测试仍断言）
+- `utils/stele/delivery.ts`：删除 `DeliveryDto` 依赖、`DELIVERY_FILES`、`buildDeliveryJson/Text/Zip` 及 `ZIP_GENERATION_FAILED`；保留公用的 `capturePng`/`downloadBlob`/`getExportFailureMessage`（复制/导出图、models 下载仍用）
+- `tools/test-direct-capabilities.mjs`：移除交付包、ZIP、SteleExportCenter 相关断言，`buildDeliveryDto` 断言改由 `validateRawDocument` 承接
+- 验证：grep 确认源码无 `SteleExportCenter`/`DeliveryDto`/`buildDeliveryZip`/`buildDeliveryDto`/长图残留；编译验证待 HBuilderX
 
 ## 2026-09-12 首页精简 + 飞书附件修复
 

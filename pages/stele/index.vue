@@ -164,7 +164,6 @@
               <button type="button" class="toolbar-btn" @click="onExportImage" :disabled="exporting">
                 {{ exporting ? '导出中...' : '保存图片' }}
               </button>
-              <SteleExportCenter :document="previewData" :order-id="editId" />
             </div>
           </div>
         </div>
@@ -196,7 +195,6 @@ import draggable from 'vuedraggable';
 import { appellationOptions } from '../../utils/stele/stele-utils';
 import { getUrlParam, useOrderForm } from '../../composables/stele/useOrderForm';
 import WordPreview from '../../components/stele/WordPreview.vue';
-import SteleExportCenter from '../../components/stele/SteleExportCenter.vue';
 import SteleTemplateManager from '../../components/stele/SteleTemplateManager.vue';
 import SmallTextPreview from '../../components/stele/SmallTextPreview.vue';
 import type { PageLoadState, SaveFeedback, PreviewData, SteleTemplateData } from '../../types/order';
