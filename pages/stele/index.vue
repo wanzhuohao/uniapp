@@ -161,9 +161,6 @@
             <span class="preview-bar-label">操作:</span>
             <div class="preview-bar-btns">
               <button type="button" class="toolbar-btn" @click="goTo3D">3D预览</button>
-              <button type="button" class="toolbar-btn" @click="onExportImage" :disabled="exporting">
-                {{ exporting ? '导出中...' : '保存图片' }}
-              </button>
             </div>
           </div>
         </div>
@@ -203,7 +200,6 @@ import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
 import { checkSteleQuality } from '../../utils/stele/quality-check';
 import { getSaveFailureMessage, runQualitySaveGuard } from '../../utils/stele/quality-save-guard';
 import { recordDiagnosticError } from '../../utils/common/diagnostics';
-import { getExportFailureMessage } from '../../utils/stele/delivery';
 
 const {
   form, currentYear,
@@ -225,30 +221,12 @@ const showPhoneDialog = ref(false);
 const phoneInput = ref('');
 const previewTheme = ref<'dark' | 'light'>('dark');
 const previewRef = ref<InstanceType<typeof WordPreview> | null>(null);
-const exporting = ref(false);
 const loadState = ref<PageLoadState>('loading');
 const saveFeedback = reactive<SaveFeedback>({ state: 'idle', message: '' });
 let loadEpoch = 0;
 
 onBeforeUnmount(() => { loadEpoch++; });
 
-
-async function onExportImage() {
-  if (!previewRef.value) return;
-  exporting.value = true;
-  try {
-    const fatherName = form.father?.name || '';
-    const motherName = form.mother?.name || '';
-    const filename = (fatherName || motherName) ? `${fatherName}${motherName}_碑文.png` : '碑文预览.png';
-    await previewRef.value.exportImage(filename);
-  } catch (error: any) {
-    const code = error?.message === 'DOWNLOAD_UNAVAILABLE' ? 'DOWNLOAD_UNAVAILABLE' : 'IMAGE_CAPTURE_FAILED';
-    recordDiagnosticError(code, 'export');
-    toast.error(getExportFailureMessage(code));
-  } finally {
-    exporting.value = false;
-  }
-}
 
 // 预览数据：响应式计算
 const previewData = computed<PreviewData>(() => buildPreview());
