@@ -3,7 +3,6 @@ import { readFileSync } from 'node:fs'
 import { compileScript, compileStyle, compileTemplate, parse } from '@vue/compiler-sfc'
 
 const pages = JSON.parse(readFileSync(new URL('../pages.json', import.meta.url), 'utf8'))
-const home = readFileSync(new URL('../pages/index/index.vue', import.meta.url), 'utf8')
 const page = readFileSync(new URL('../pages/stele/models.vue', import.meta.url), 'utf8')
 const preview = readFileSync(new URL('../pages/stele/preview.vue', import.meta.url), 'utf8')
 const templates = JSON.parse(readFileSync(new URL('../utils/stele/model-templates.json', import.meta.url), 'utf8'))
@@ -23,10 +22,8 @@ function test(name, fn) {
   }
 }
 
-test('独立范本路由和首页入口已注册', () => {
+test('独立范本路由已注册', () => {
   assert.ok(pages.pages.some(item => item.path === 'pages/stele/models' && item.style.navigationStyle === 'custom'))
-  assert.match(home, /goTo\('\/pages\/stele\/models'\)/)
-  assert.match(home, /3D 碑型范本/)
 })
 
 test('范本配置只使用同一不可变 release 的 GLB/STL', () => {

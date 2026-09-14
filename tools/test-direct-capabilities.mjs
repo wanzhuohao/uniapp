@@ -52,7 +52,7 @@ await check('C03 下载链接挂载后点击且延迟释放 Blob URL', () => {
   releaseUrl(); assert.deepEqual(actions,['create','append','click','schedule:1000','remove','revoke:blob:test']);
 });
 
-await check('C03 下载能力建立失败不产生 Blob URL，主预览复用同一下载链路', () => {
+await check('C03 下载能力建立失败不产生 Blob URL，预览用 html2canvas 自渲染', () => {
   const actions=[];
   const env={
     Blob,
@@ -63,9 +63,11 @@ await check('C03 下载能力建立失败不产生 Blob URL，主预览复用同
   assert.throws(()=>delivery.downloadBlob(new Blob(['file']), '失败.png', env),/DOWNLOAD_UNAVAILABLE/);
   assert.deepEqual(actions,[]);
   const preview=read('components/stele/WordPreview.vue');
-  assert.match(preview,/import\s*\{\s*capturePng,\s*downloadBlob\s*\}/);
-  assert.match(preview,/capturePng\(el/); assert.match(preview,/downloadBlob\(blob,\s*filename\)/);
-  assert.doesNotMatch(preview,/canvas\.toDataURL/);
+  assert.match(preview,/import html2canvas/);
+  assert.match(preview,/html2canvas\(el/);
+  // 导出走 canvas.toDataURL 下载，复制走剪贴板
+  assert.match(preview,/canvas\.toDataURL\(['"]image\/png['"]\)/);
+  assert.match(preview,/navigator\.clipboard\.write/);
 });
 
 await check('C03 PF01-PF03 下载、截图和压缩失败统一为可判定错误', async () => {

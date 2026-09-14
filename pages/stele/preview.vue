@@ -22,6 +22,7 @@ import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue';
 import { WebGLRenderer, Scene, PerspectiveCamera, Mesh, Color, AmbientLight, DirectionalLight, BoxGeometry, MeshPhongMaterial, MeshBasicMaterial, CanvasTexture, SRGBColorSpace } from 'three';
 // @ts-ignore
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { STELE_STORAGE_KEYS } from '../../utils/stele/storage-registry';
 
 const onBack = () => {
   window.history.back();
@@ -325,7 +326,7 @@ function renderThreeStele(preview: any) {
 onMounted(async () => {
   hintTimer = window.setTimeout(() => { showHint.value = false; }, 4000);
   try {
-    const preview = localStorage.getItem('stele-3d-preview');
+    const preview = localStorage.getItem(STELE_STORAGE_KEYS.preview3d);
     if (preview) {
       const data = JSON.parse(preview);
       hasData.value = true;

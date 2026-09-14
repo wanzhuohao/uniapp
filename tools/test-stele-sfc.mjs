@@ -11,9 +11,10 @@ const files = [
   'pages/stele/detail.vue',
 ]
 
+const root = resolve(import.meta.dirname, '..')
 let passed = 0
 for (const file of files) {
-  const filename = resolve(file)
+  const filename = resolve(root, file)
   const source = await readFile(filename, 'utf8')
   const { descriptor, errors } = parse(source, { filename })
   assert.deepEqual(errors, [], `${file} parse failed`)
